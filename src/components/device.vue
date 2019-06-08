@@ -58,7 +58,7 @@ export default {
     },
     addBase() {
       var geometry = new OBJLoader();
-      geometry.load("../../static/model/base.obj", obj => {
+      geometry.load("model/base.obj", obj => {
         obj.traverse(function(child) {
           if (child instanceof THREE.Mesh) {
             child.material = new THREE.MeshPhongMaterial({
@@ -81,10 +81,10 @@ export default {
     addbeaker() {
       var geometry = new OBJLoader();
       var map = new THREE.CubeTextureLoader()
-        .setPath("../../static/images/")
+        .setPath("images/")
         .load(["px.jpg", "nx.jpg", "py.jpg", "ny.jpg", "pz.jpg", "nz.jpg"]);
       map.mapping = THREE.CubeRefractionMapping;
-      geometry.load("../../static/model/beaker.obj", obj => {
+      geometry.load("model/beaker.obj", obj => {
         obj.traverse(function(child) {
           if (child instanceof THREE.Mesh) {
             child.material = new THREE.MeshPhongMaterial({
@@ -108,10 +108,10 @@ export default {
     },
     addFlask() {
       var fmtl = new MTLLoader();
-      fmtl.load("../../static/model/flask.mtl", mtl => {
+      fmtl.load("model/flask.mtl", mtl => {
         mtl.preload();
         var loadermodel = new OBJLoader();
-        loadermodel.load("../../static/model/flask.obj", obj => {
+        loadermodel.load("model/flask.obj", obj => {
           obj.material = mtl;
           this.scene.add(obj);
         });
@@ -175,6 +175,7 @@ export default {
       this.selectobj = [];
     },
     addRenderer() {
+      let container = document.getElementById("container");
       this.renderer = new THREE.WebGLRenderer({ antialias: true });
       this.renderer.setSize(container.clientWidth, container.clientHeight);
       container.appendChild(this.renderer.domElement);
