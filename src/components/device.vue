@@ -12,31 +12,41 @@ export default {
       scene: null,
       camera: null,
       renderer: null,
-      base:null,
+      weight:null,
       skybox:null,
-      beaker:null,
+      flask:null,
+      bottle:null,
       group:null,
-      selectobj:[]
+      spool:null,
+      oil_pot:null,
+      stand:null,
+      selectobjarray:[],
+      selectobj:null
     };
   },
   methods: {
     init() {
       this.group = new THREE.Group()
-      this.addCamera();
-      this.addScene();
-      this.addBase();
-      this.addbeaker();
+      this.addCamera()
+      this.addScene()
       //this.addaxis()
+      this.addStand()
+      this.addWeight()
       this.addFlask()
+      this.addBottle()
+      
+      this.addOilPot()
+      this.addSpool()
       //this.addAmbientLight()
       this.addlight()
-      this.addRenderer();
+      this.addRenderer()
       this.addlistener()
-      this.animate();
+      this.animate()
     },
     addCamera() {
-      this.camera = new THREE.OrthographicCamera(-2, 2, 1.5, -1.5, 1, 10);
-      this.camera.position.set(0, 0, 5);
+      this.camera = new THREE.OrthographicCamera(-2, 2, 1, -1, 1, 10)
+      //left right bottom top near far
+      this.camera.position.set(0, 0, 5)
       // let container = document.getElementById("container")
       // this.camera = new THREE.PerspectiveCamera(
       //   70,
@@ -56,58 +66,49 @@ export default {
       this.scene.add(this.axis);
       //X red Z blue Y greenc
     },
-    addBase() {
+    addWeight() {
       var geometry = new OBJLoader()
-      geometry.load("../../static/model/base.obj",(obj)=>{
-        obj.traverse(function(child) {
-                        if (child instanceof THREE.Mesh) {
-                            child.material = new THREE.MeshPhongMaterial({opacity:1,transparent:true})
-                        }
-                    })
-        this.base = obj
-        this.base.position.set(-1,0,0)
-        this.scene.add(this.base)
+      geometry.load("../../static/model/weight.obj",(obj)=>{
+        this.weight = obj
+        this.scene.add(this.weight)
         })
-      
-      // let geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
-      // var texture = new THREE.MeshBasicMaterial({map:new THREE.TextureLoader().load("../../static/images/base.png"),transparent:true})
-      // this.base = new THREE.Mesh(geometry,texture)
-      // this.base.position.set(-1,0,0)
-      // this.scene.add(this.base)
-    },
-    addbeaker(){
-      var geometry = new OBJLoader()
-      var map = new THREE.CubeTextureLoader().setPath("../../static/images/").load(['px.jpg', 'nx.jpg', 'py.jpg', 'ny.jpg', 'pz.jpg', 'nz.jpg'])
-      map.mapping = THREE.CubeRefractionMapping
-      geometry.load("../../static/model/beaker.obj",(obj)=>{
-         obj.traverse(function(child) {
-                        if (child instanceof THREE.Mesh) {
-                          
-                            child.material = new THREE.MeshPhongMaterial({color: 0xccfffd,envMap:map,refractionRatio:0,reflectivity:1,side:THREE.BackSide})
-                            
-                        }
-                    })
-        this.beaker = obj
-        this.beaker.position.set(1,0,0)
-        this.scene.add(this.beaker)
-      })
-      
-      // let geometry = new THREE.BoxGeometry(0.2, 0.4, 0.2)
-      // var texture = new THREE.MeshBasicMaterial({map:new THREE.TextureLoader().load("../../static/images/beaker.png"),transparent:true})
-      // this.beaker = new THREE.Mesh(geometry,texture)
-      // this.beaker.position.set(0,0,0)
     },
     addFlask(){
-      var fmtl = new MTLLoader()
-      fmtl.load('../../static/model/flask.mtl',(mtl)=>{
-          mtl.preload()
-          var loadermodel = new OBJLoader()
-          loadermodel.load('../../static/model/flask.obj',(obj)=>{
-          obj.material=mtl
-          this.scene.add(obj)
-          })
+      var loadmodel = new OBJLoader()
+      loadmodel.load("../../static/model/flask.obj",(obj)=>{
+        this.flask = obj
+        this.scene.add(this.flask)
+      })        
+    },
+    addBottle(){
+      var modelloder = new OBJLoader()
+      modelloder.load("../../static/model/bottle.obj",(obj)=>{
+        this.bottle = obj
+        this.scene.add(this.bottle)
       })
-        
+    },
+    addStand(){
+      var modelloder = new OBJLoader()
+      modelloder.load("../../static/model/stand.obj",(obj)=>{
+        this.stand = obj
+        this.scene.add(this.stand)
+      })
+      
+    },
+    addOilPot(){
+      var modelloder = new OBJLoader()
+      modelloder.load("../../static/model/oil.obj",(obj)=>{
+        this.oil_pot = obj
+        this.scene.add(this.oil_pot)
+      })
+    },
+    addSpool(){
+      var modelloder = new OBJLoader()
+      modelloder.load("../../static/model/spool.obj",(obj)=>{
+
+        this.spool = obj
+        this.scene.add(this.spool)
+      })
     },
     addAmbientLight(){
       var light= new THREE.AmbientLight(0xffffff)
@@ -132,7 +133,17 @@ export default {
         this.camera.updateProjectionMatrix()
         this.renderer.setSize(window.innerWidth, window.innerHeight)
     },
-
+    checkThings(){
+      var name = this.selectobjarray[0].object.name
+      if(name=='Cylinder002' || name=='Box002'|| name =='Torus001'){
+          this.selectobj = this.stand
+          }else{
+        this.selectobj=this.scene.getObjectByName(name)
+      }
+      //stand包含三个object，其他物体只有一个object
+      //如果选中了stand这三个object中的任何一个 让整个stand组拖动
+      //以后如果再遇到一个object包含多个组件的情况只需要添加else if
+    },
     onMouseDown(event){
       event.preventDefault()
       var x = (event.clientX/window.innerWidth)*2-1
@@ -142,7 +153,7 @@ export default {
       
       var raycaster = new THREE.Raycaster()
       raycaster.setFromCamera( mouseVector, this.camera );
-      var scensObjs = [];
+      var scensObjs = []
       this.scene.children.forEach(child => {
       for (var i = 0; i < child.children.length; i++) {
         var obj=child.children[i]
@@ -150,8 +161,11 @@ export default {
         }
       })
       //添加了一个this.selectobj全局变量,里面放的是object，使用selectobj[i].object可获取对象
-      this.selectobj = raycaster.intersectObjects(scensObjs)
-      console.log(this.selectobj.length)
+      this.selectobjarray = raycaster.intersectObjects(scensObjs)
+      if(this.selectobjarray.length!=0){
+        this.checkThings()
+      }
+      console.log(this.selectobjarray.length)
     },
     onMouseMove(event){
       event.preventDefault()
@@ -159,12 +173,13 @@ export default {
       var y = -(event.clientY/window.innerHeight)*2+1
       var mv = new THREE.Vector3(x,y,0)
       mv.unproject(this.camera)
-      for(var i=0;i<this.selectobj.length;i++){
-        this.selectobj[i].object.position.copy(mv)
+      if(this.selectobj!=null){
+        this.selectobj.position.copy(mv)
       }
     },
     onMouseUp(event){
-      this.selectobj = []
+      this.selectobj = null
+      this.selectobjarray=[]
     },
     addRenderer() {
       this.renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -172,14 +187,13 @@ export default {
       container.appendChild(this.renderer.domElement);
     },
     animate() {
-      requestAnimationFrame(this.animate);
-      
-      this.renderer.render(this.scene, this.camera);
+      requestAnimationFrame(this.animate)
+      this.renderer.render(this.scene, this.camera)
     }
   },
   mounted() {
-    this.init();
+    this.init()
   }
-};
+}
 </script>
 
