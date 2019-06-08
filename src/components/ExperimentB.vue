@@ -8,6 +8,11 @@
           </v-responsive>
         </v-card>
       </v-flex>
+      <v-flex xs2>
+        <v-card>
+          <v-card-title class="font-weight-black subheading">工具</v-card-title>
+        </v-card>
+      </v-flex>
     </v-layout>
   </v-container>
 </template>
@@ -53,15 +58,16 @@ export default {
         "Camera",
         -Math.PI / 2,
         Math.PI / 3,
-        10,
+        5,
         BABYLON.Vector3.Zero(),
         scene
       );
+
       // limit zoom
-      // this.camera.lowerRadiusLimit = 5;
-      // this.camera.upperRadiusLimit = 60;
-      // this.camera.useBouncingBehavior = true;
-      this.camera.attachControl(canvas, true);
+      this.camera.lowerRadiusLimit = 5;
+      this.camera.upperRadiusLimit = 60;
+      this.camera.useBouncingBehavior = true;
+      // this.camera.attachControl(canvas, true);
     },
     async createLight(scene, canvas) {
       var light1 = new BABYLON.HemisphericLight(
@@ -77,8 +83,17 @@ export default {
       light2.intensity = 0.15;
     },
     async createModel(scene, canvas) {
-      var newScene = await BABYLON.SceneLoader.AppendAsync("", "model/base.obj", scene);
-      console.log(newScene.meshes);
+      var newScene = await BABYLON.SceneLoader.AppendAsync(
+        "",
+        "model/weight.obj",
+        scene
+      );
+      newScene = await BABYLON.SceneLoader.AppendAsync(
+        "",
+        "model/flask.obj",
+        scene
+      );
+      console.log(scene.meshes);
       var redMat = new BABYLON.StandardMaterial("redMat", scene);
       redMat.diffuseColor = new BABYLON.Color3(0.9, 0.9, 0.9);
       newScene.meshes.forEach(e => {
