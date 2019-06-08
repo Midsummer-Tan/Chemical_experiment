@@ -15,22 +15,26 @@
     "vuex": "^3.0.1"
   },
   "devDependencies": {
+    "@babylonjs/core": "^4.0.3",
+    "@babylonjs/gui": "^4.0.3",
+    "@babylonjs/loaders": "^4.0.3",
+    "@babylonjs/materials": "^4.0.3",
     "@vue/cli-plugin-babel": "^3.8.0",
     "@vue/cli-plugin-eslint": "^3.8.0",
     "@vue/cli-service": "^3.8.0",
     "babel-eslint": "^10.0.1",
+    "dat-gui": "^0.5.0",
+    "dat.gui": "^0.7.6",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.1",
-    "vue-cli-plugin-vuetify": "^0.5.0",
-    "vue-template-compiler": "^2.6.10",
-    "vuetify-loader": "^1.0.5",
-    "dat-gui": "^0.5.0",
-    "dat.gui": "^0.7.6",
     "three": "^0.105.2",
     "three-obj-mtl-loader": "^1.0.3",
-    "three-orbit-controls": "^82.1.0"
+    "three-orbit-controls": "^82.1.0",
+    "vue-cli-plugin-vuetify": "^0.5.0",
+    "vue-template-compiler": "^2.6.10",
+    "vuetify-loader": "^1.0.5"
   },
   "eslintConfig": {
     "root": true,

@@ -20,6 +20,10 @@ export default new Router({
         {
           path: "/experiment/:id",
           component: () => import("./components/Experiment")
+        },
+        {
+          path: "/experiment_b/:id",
+          component: () => import("./components/ExperimentB")
         }
       ]
     }
