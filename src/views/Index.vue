@@ -2,18 +2,15 @@
   <v-app>
     <v-toolbar app absolute class="transparent" flat>
       <v-toolbar-side-icon class="hidden-lg-and-up" @click="drawer = !drawer"></v-toolbar-side-icon>
-      <span class="title font-weight-bold ml-1 mr-5">
-        INSBIM
-        <span class="dim-subtitle">| {{name}}</span>
-      </span>
+      <span class="title font-weight-bold ml-1 mr-5">虚拟实验平台</span>
       <v-spacer></v-spacer>
-      <!-- <v-btn icon class="ml-3">
-        <v-icon>notifications</v-icon>
-      </v-btn>
       <v-btn icon>
-        <v-icon>help_outline</v-icon>
-      </v-btn>-->
+        <v-avatar color="primary" size="32px">A</v-avatar>
+      </v-btn>
     </v-toolbar>
+    <v-content>
+      <router-view></router-view>
+    </v-content>
   </v-app>
 </template>
 
