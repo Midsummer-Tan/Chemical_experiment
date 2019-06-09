@@ -4,7 +4,7 @@
 
 <script>
 import * as THREE from "three";
-import { MTLLoader, OBJLoader } from "three-obj-mtl-loader";
+import { OBJLoader } from "three-obj-mtl-loader";
 export default {
   name: "device",
   data() {
@@ -16,17 +16,16 @@ export default {
       skybox: null,
       flask: null,
       bottle: null,
-      group: null,
       spool: null,
       oil_pot: null,
       stand: null,
       selectobjarray: [],
-      selectobj: null
+      selectobj: null,
+      scensObjs:[],
     };
   },
   methods: {
     init() {
-      this.group = new THREE.Group();
       this.addCamera();
       this.addScene();
       //this.addaxis()
@@ -37,10 +36,13 @@ export default {
 
       this.addOilPot();
       this.addSpool();
+      
       //this.addAmbientLight()
       this.addlight();
       this.addRenderer();
+      
       this.addlistener();
+      
       this.animate();
     },
     addCamera() {
@@ -116,9 +118,9 @@ export default {
       var pointLight = new THREE.PointLight(0x2a4895, 1);
       pointLight.position.set(100, 100, 100);
       this.scene.add(pointLight);
-      var pointLight = new THREE.PointLight(0xffaaaa, 1);
-      pointLight.position.set(-100, 100, 100);
-      this.scene.add(pointLight);
+      var pointLight2 = new THREE.PointLight(0xffaaaa, 1);
+      pointLight2.position.set(-100, 100, 100);
+      this.scene.add(pointLight2);
     },
     addlistener() {
       window.addEventListener("mousedown", this.onMouseDown, false);
@@ -131,6 +133,14 @@ export default {
       this.camera.updateProjectionMatrix();
       this.renderer.setSize(window.innerWidth, window.innerHeight);
     },
+    getSceneModelNum(){
+       this.scene.children.forEach(child => {
+        for (var i = 0; i < child.children.length; i++) {
+          var obj = child.children[i];
+          this.scensObjs.push(obj);
+        }
+      });
+    },
     checkThings() {
       var name = this.selectobjarray[0].object.name;
       if (name == "Cylinder002" || name == "Box002" || name == "Torus001") {
@@ -138,11 +148,34 @@ export default {
       } else {
         this.selectobj = this.scene.getObjectByName(name);
       }
+      
       //stand包含三个object，其他物体只有一个object
       //如果选中了stand这三个object中的任何一个 让整个stand组拖动
       //以后如果再遇到一个object包含多个组件的情况只需要添加else if
     },
+    hasnothing(x,y){
+      var raycaster = new THREE.Raycaster();
+      var r=0.1;
+      var x0 = x-r;
+      var y0 = y+r;
+      var dr = 0.02;
+      while(y0>=y-r){
+        if(x0>=x+r){
+          y0-=dr;
+          x0=x-r;
+        }
+        var mouseVector = new THREE.Vector3().set(x0,y0,0);
+        raycaster.setFromCamera(mouseVector, this.camera);
+        this.selectobjarray = raycaster.intersectObjects(this.scensObjs);
+        if(this.selectobjarray.length!=0){
+          this.checkThings();
+          return;
+        }
+        x0+=dr;
+      }
+    },
     onMouseDown(event) {
+      this.getSceneModelNum();
       event.preventDefault();
       var x = (event.clientX / window.innerWidth) * 2 - 1;
       var y = -(event.clientY / window.innerHeight) * 2 + 1;
@@ -151,19 +184,15 @@ export default {
 
       var raycaster = new THREE.Raycaster();
       raycaster.setFromCamera(mouseVector, this.camera);
-      var scensObjs = [];
-      this.scene.children.forEach(child => {
-        for (var i = 0; i < child.children.length; i++) {
-          var obj = child.children[i];
-          scensObjs.push(obj);
-        }
-      });
       //添加了一个this.selectobj全局变量,里面放的是object，使用selectobj[i].object可获取对象
-      this.selectobjarray = raycaster.intersectObjects(scensObjs);
+      this.selectobjarray = raycaster.intersectObjects(this.scensObjs);
       if (this.selectobjarray.length != 0) {
         this.checkThings();
       }
-      console.log(this.selectobjarray.length);
+      else{
+        this.hasnothing(x,y);
+        //对于勺子这些小东西 不太好拾取 所以在光标周围的正方形区域内发射射线
+      }
     },
     onMouseMove(event) {
       event.preventDefault();
@@ -175,7 +204,7 @@ export default {
         this.selectobj.position.copy(mv);
       }
     },
-    onMouseUp(event) {
+    onMouseUp() {
       this.selectobj = null;
       this.selectobjarray = [];
     },

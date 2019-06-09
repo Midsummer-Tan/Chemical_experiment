@@ -161,9 +161,6 @@ export default {
     }, 500);
   },
 
-  mounted() {
-    this.init();
-  }
 };
 </script>
 
