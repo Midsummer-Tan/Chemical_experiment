@@ -22,6 +22,8 @@ export default {
       selectobjarray: [],
       selectobj: null,
       scensObjs:[],
+      spoolangle:0,
+      spoolflag:0
     };
   },
   methods: {
@@ -155,7 +157,7 @@ export default {
     },
     hasnothing(x,y){
       var raycaster = new THREE.Raycaster();
-      var r=0.1;
+      var r=0.05;
       var x0 = x-r;
       var y0 = y+r;
       var dr = 0.02;
@@ -193,20 +195,46 @@ export default {
         this.hasnothing(x,y);
         //对于勺子这些小东西 不太好拾取 所以在光标周围的正方形区域内发射射线
       }
+      if(this.selectobj!=null && this.selectobj.name =="spool" ){
+        this.spool.rotateZ(Math.PI/6);
+      }
+    },
+    rotatedMove(x,y,theta){
+      var r = Math.sqrt(x*x+y*y);
+      var alpha;
+      if(x >0){
+        alpha = Math.asin(y/r)-theta;
+      }else{
+        alpha = Math.acos(x/r)*(y)/Math.abs(y)-theta;
+      }
+      x = r*Math.cos(alpha); 
+      y = r*Math.sin(alpha);
+      var mv = new THREE.Vector3(x,y,0);
+      return mv;
     },
     onMouseMove(event) {
-      event.preventDefault();
+      event.preventDefault(); 
       var x = (event.clientX / window.innerWidth) * 2 - 1;
       var y = -(event.clientY / window.innerHeight) * 2 + 1;
       var mv = new THREE.Vector3(x, y, 0);
-      mv.unproject(this.camera);
       if (this.selectobj != null) {
+        if(this.selectobj.name == 'spool'){
+        var theta=Math.PI/6;
+        //发射射线判断瓶子是否和勺子发生重叠 如果重叠 勺子就会拿物体出来
+        //{}
+        mv = this.rotatedMove(x,y,theta);
+        }
+        mv.unproject(this.camera);
         this.selectobj.position.copy(mv);
       }
     },
     onMouseUp() {
+      if(this.selectobj.name =="spool" ){
+        this.spool.rotateZ(-Math.PI/6); 
+      }
       this.selectobj = null;
       this.selectobjarray = [];
+      
     },
     addRenderer() {
       let container = document.getElementById("container");
