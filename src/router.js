@@ -18,8 +18,12 @@ export default new Router({
           component: () => import("./components/Collection")
         },
         {
-          path: "/experiment/:id",
+          path: "/experiment/1",
           component: () => import("./components/Experiment")
+        },
+        {
+          path:"/experiment/2",
+          component:()=>import("./components/Testgltf")
         },
         {
           path: "/experiment_b/:id",

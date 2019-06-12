@@ -19,7 +19,8 @@
 
 <script>
 import * as THREE from "three";
-import { OBJLoader } from "three-obj-mtl-loader";
+import { OBJLoader ,MTLLoader,OBJMTLLoader} from "three-obj-mtl-loader";
+import GLTFLoader from 'three-gltf-loader';
 export default {
   name: "device",
   data() {
@@ -86,10 +87,25 @@ export default {
       //X red Z blue Y greenc
     },
     addWeight() {
-      var geometry = new OBJLoader();
-      geometry.load("model/weight.obj", obj => {
-        this.weight = obj;
-        this.scene.add(this.weight);
+      var image = new THREE.TextureLoader().load("model/weightmap.jpg");
+      // new OBJMTLLoader().load("model/weight.obj","model/weightwithmap.mtl",obj=>{
+      //   obj.children[0].material = new THREE.MeshLambertMaterial({
+      //     map:image
+      //   })
+      //   obj.geometry.computeVertexNormals();
+      //   this.weight = obj;
+      //   this.scene.add(this.weight);
+      // })
+     
+       new MTLLoader().load("model/weightwithmap.mtl",mtl => {
+        new OBJLoader().load("model/weight.obj", obj => {
+          obj.material = mtl;
+          obj.children[0].material = new THREE.MeshLambertMaterial({
+            map:image
+          });
+          this.weight = obj;
+          this.scene.add(this.weight);
+        });
       });
     },
     addFlask() {
@@ -243,8 +259,8 @@ export default {
       }
     },
     onMouseUp() {
-      if (this.selectobj.name == "spool") {
-        this.spool.rotateZ(-Math.PI / 6);
+      if( this.selectobj!=null && this.selectobj.name =="spool" ){
+        this.spool.rotateZ(-Math.PI/6); 
       }
       this.selectobj = null;
       this.selectobjarray = [];
@@ -257,6 +273,11 @@ export default {
     },
     animate() {
       requestAnimationFrame(this.animate);
+      if(this.weight!=null){
+         this.weight.rotateY(0.02);
+         this.weight.rotateX(0.02);
+      }
+     
       this.renderer.render(this.scene, this.camera);
     }
   },
