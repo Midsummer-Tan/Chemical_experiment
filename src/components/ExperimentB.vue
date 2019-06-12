@@ -19,6 +19,7 @@
 
 <script>
 import * as BABYLON from "@babylonjs/core/Legacy/legacy";
+import "@babylonjs/loaders/glTF";
 import "@babylonjs/loaders/OBJ";
 export default {
   data() {
@@ -58,16 +59,16 @@ export default {
         "Camera",
         -Math.PI / 2,
         Math.PI / 3,
-        5,
+        1,
         BABYLON.Vector3.Zero(),
         scene
       );
 
       // limit zoom
-      this.camera.lowerRadiusLimit = 5;
+      this.camera.lowerRadiusLimit = 2;
       this.camera.upperRadiusLimit = 60;
       this.camera.useBouncingBehavior = true;
-      // this.camera.attachControl(canvas, true);
+      this.camera.attachControl(canvas, true);
     },
     async createLight(scene, canvas) {
       var light1 = new BABYLON.HemisphericLight(
@@ -83,23 +84,14 @@ export default {
       light2.intensity = 0.15;
     },
     async createModel(scene, canvas) {
-      var newScene = await BABYLON.SceneLoader.AppendAsync(
-        "",
-        "model/weight.obj",
-        scene
-      );
-      newScene = await BABYLON.SceneLoader.AppendAsync(
-        "",
-        "model/flask.obj",
-        scene
-      );
-      console.log(scene.meshes);
-      var redMat = new BABYLON.StandardMaterial("redMat", scene);
-      redMat.diffuseColor = new BABYLON.Color3(0.9, 0.9, 0.9);
-      newScene.meshes.forEach(e => {
-        e.material = redMat;
-        e.material.backFaceCulling = false;
-      });
+      var newScene = await BABYLON.SceneLoader.AppendAsync("model/", "flask.gltf", scene);
+      console.log(newScene);
+      // var redMat = new BABYLON.StandardMaterial("redMat", scene);
+      // redMat.diffuseColor = new BABYLON.Color3(0.9, 0.9, 0.9);
+      // newScene.meshes.forEach(e => {
+      //   e.material = redMat;
+      //   e.material.backFaceCulling = false;
+      // });
     },
     async createUx(scene) {
       // Create the 3D UI manager
@@ -159,8 +151,7 @@ export default {
     setTimeout(() => {
       this.engine.resize();
     }, 500);
-  },
-
+  }
 };
 </script>
 
