@@ -59,7 +59,7 @@ export default {
         "Camera",
         -Math.PI / 2,
         Math.PI / 3,
-        1,
+        15,
         BABYLON.Vector3.Zero(),
         scene
       );
@@ -68,7 +68,7 @@ export default {
       this.camera.lowerRadiusLimit = 2;
       this.camera.upperRadiusLimit = 60;
       this.camera.useBouncingBehavior = true;
-      this.camera.attachControl(canvas, true);
+      // this.camera.attachControl(canvas, true);
     },
     async createLight(scene, canvas) {
       var light1 = new BABYLON.HemisphericLight(
