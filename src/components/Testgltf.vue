@@ -53,7 +53,7 @@ export default {
       //X red Z blue Y greenc
     },
     addmodel(){
-      var loader = new GLTFLoader().load("model/flask.gltf",obj => {
+      var loader = new GLTFLoader().load("model/glb/flask.glb",obj => {
         this.test = obj.scene;
         console.log(this.test)
         this.scene.add(this.test);
@@ -90,7 +90,10 @@ export default {
       raycaster.setFromCamera(mouseVector, this.camera);
       //添加了一个this.selectobj全局变量,里面放的是object，使用selectobj[i].object可获取对象
       var array= raycaster.intersectObjects(this.scene.children,true);
-      this.selectobj = this.scene.getObjectByName(array[1].object.name)
+      if(array.length!=0){
+        this.selectobj = this.scene.getObjectByName(array[0].object.name)
+      }
+      
     },
     onMouseMove(event) {
       event.preventDefault(); 
