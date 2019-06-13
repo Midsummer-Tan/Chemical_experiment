@@ -1,5 +1,20 @@
 <template>
-  <div id="container" style="height:100%;width:100%"></div>
+  <v-container fluid grid-list-lg>
+    <v-layout>
+      <v-flex xs10>
+        <v-card>
+          <v-responsive :aspect-ratio="16/9">
+            <div id="container" style="height:100%;width:100%"></div>
+          </v-responsive>
+        </v-card>
+      </v-flex>
+      <v-flex xs2>
+        <v-card>
+          <v-card-title class="font-weight-black subheading">工具</v-card-title>
+        </v-card>
+      </v-flex>
+    </v-layout>
+  </v-container>
 </template>
 
 <script>
@@ -22,9 +37,9 @@ export default {
       stand: null,
       selectobjarray: [],
       selectobj: null,
-      scensObjs:[],
-      spoolangle:0,
-      spoolflag:0
+      scensObjs: [],
+      spoolangle: 0,
+      spoolflag: 0
     };
   },
   methods: {
@@ -39,13 +54,13 @@ export default {
 
       this.addOilPot();
       this.addSpool();
-      
+
       //this.addAmbientLight()
       this.addlight();
       this.addRenderer();
-      
+
       this.addlistener();
-      
+
       this.animate();
     },
     addCamera() {
@@ -151,8 +166,8 @@ export default {
       this.camera.updateProjectionMatrix();
       this.renderer.setSize(window.innerWidth, window.innerHeight);
     },
-    getSceneModelNum(){
-       this.scene.children.forEach(child => {
+    getSceneModelNum() {
+      this.scene.children.forEach(child => {
         for (var i = 0; i < child.children.length; i++) {
           var obj = child.children[i];
           this.scensObjs.push(obj);
@@ -166,30 +181,30 @@ export default {
       } else {
         this.selectobj = this.scene.getObjectByName(name);
       }
-      
+
       //stand包含三个object，其他物体只有一个object
       //如果选中了stand这三个object中的任何一个 让整个stand组拖动
       //以后如果再遇到一个object包含多个组件的情况只需要添加else if
     },
-    hasnothing(x,y){
+    hasnothing(x, y) {
       var raycaster = new THREE.Raycaster();
-      var r=0.05;
-      var x0 = x-r;
-      var y0 = y+r;
+      var r = 0.05;
+      var x0 = x - r;
+      var y0 = y + r;
       var dr = 0.02;
-      while(y0>=y-r){
-        if(x0>=x+r){
-          y0-=dr;
-          x0=x-r;
+      while (y0 >= y - r) {
+        if (x0 >= x + r) {
+          y0 -= dr;
+          x0 = x - r;
         }
-        var mouseVector = new THREE.Vector3().set(x0,y0,0);
+        var mouseVector = new THREE.Vector3().set(x0, y0, 0);
         raycaster.setFromCamera(mouseVector, this.camera);
         this.selectobjarray = raycaster.intersectObjects(this.scensObjs);
-        if(this.selectobjarray.length!=0){
+        if (this.selectobjarray.length != 0) {
           this.checkThings();
           return;
         }
-        x0+=dr;
+        x0 += dr;
       }
     },
     onMouseDown(event) {
@@ -206,39 +221,38 @@ export default {
       this.selectobjarray = raycaster.intersectObjects(this.scensObjs);
       if (this.selectobjarray.length != 0) {
         this.checkThings();
-      }
-      else{
-        this.hasnothing(x,y);
+      } else {
+        this.hasnothing(x, y);
         //对于勺子这些小东西 不太好拾取 所以在光标周围的正方形区域内发射射线
       }
-      if(this.selectobj!=null && this.selectobj.name =="spool" ){
-        this.spool.rotateZ(Math.PI/6);
+      if (this.selectobj != null && this.selectobj.name == "spool") {
+        this.spool.rotateZ(Math.PI / 6);
       }
     },
-    rotatedMove(x,y,theta){
-      var r = Math.sqrt(x*x+y*y);
+    rotatedMove(x, y, theta) {
+      var r = Math.sqrt(x * x + y * y);
       var alpha;
-      if(x >0){
-        alpha = Math.asin(y/r)-theta;
-      }else{
-        alpha = Math.acos(x/r)*(y)/Math.abs(y)-theta;
+      if (x > 0) {
+        alpha = Math.asin(y / r) - theta;
+      } else {
+        alpha = (Math.acos(x / r) * y) / Math.abs(y) - theta;
       }
-      x = r*Math.cos(alpha); 
-      y = r*Math.sin(alpha);
-      var mv = new THREE.Vector3(x,y,0);
+      x = r * Math.cos(alpha);
+      y = r * Math.sin(alpha);
+      var mv = new THREE.Vector3(x, y, 0);
       return mv;
     },
     onMouseMove(event) {
-      event.preventDefault(); 
+      event.preventDefault();
       var x = (event.clientX / window.innerWidth) * 2 - 1;
       var y = -(event.clientY / window.innerHeight) * 2 + 1;
       var mv = new THREE.Vector3(x, y, 0);
       if (this.selectobj != null) {
-        if(this.selectobj.name == 'spool'){
-        var theta=Math.PI/6;
-        //发射射线判断瓶子是否和勺子发生重叠 如果重叠 勺子就会拿物体出来
-        //{}
-        mv = this.rotatedMove(x,y,theta);
+        if (this.selectobj.name == "spool") {
+          var theta = Math.PI / 6;
+          //发射射线判断瓶子是否和勺子发生重叠 如果重叠 勺子就会拿物体出来
+          //{}
+          mv = this.rotatedMove(x, y, theta);
         }
         mv.unproject(this.camera);
         this.selectobj.position.copy(mv);
@@ -250,7 +264,6 @@ export default {
       }
       this.selectobj = null;
       this.selectobjarray = [];
-      
     },
     addRenderer() {
       let container = document.getElementById("container");
