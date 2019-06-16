@@ -58,14 +58,14 @@ export default {
       this.camera = new BABYLON.ArcRotateCamera(
         "Camera",
         -Math.PI / 2,
-        Math.PI / 3,
-        15,
+        Math.PI / 5,
+        1,
         BABYLON.Vector3.Zero(),
         scene
       );
 
       // limit zoom
-      this.camera.lowerRadiusLimit = 2;
+      this.camera.lowerRadiusLimit = 1;
       this.camera.upperRadiusLimit = 60;
       this.camera.useBouncingBehavior = true;
       // this.camera.attachControl(canvas, true);
@@ -84,13 +84,66 @@ export default {
       light2.intensity = 0.15;
     },
     async createModel(scene, canvas) {
-      var newScene = await BABYLON.SceneLoader.AppendAsync("model/", "flask.gltf", scene);
-      console.log(newScene);
-      // var redMat = new BABYLON.StandardMaterial("redMat", scene);
-      // redMat.diffuseColor = new BABYLON.Color3(0.9, 0.9, 0.9);
-      // newScene.meshes.forEach(e => {
-      //   e.material = redMat;
-      //   e.material.backFaceCulling = false;
+      var ground = BABYLON.Mesh.CreateGround(
+        "ground",
+        1000,
+        1000,
+        1,
+        scene,
+        false
+      );
+      var groundMaterial = new BABYLON.StandardMaterial("ground", scene);
+      groundMaterial.specularColor = BABYLON.Color3.Black();
+      ground.material = groundMaterial;
+
+      await BABYLON.SceneLoader.AppendAsync("model/glb/", "flask.glb", scene);
+      await BABYLON.SceneLoader.AppendAsync("model/glb/", "bottle.glb", scene);
+      await BABYLON.SceneLoader.AppendAsync("model/glb/", "oil.glb", scene);
+      await BABYLON.SceneLoader.AppendAsync("model/glb/", "spool.glb", scene);
+      await BABYLON.SceneLoader.AppendAsync("model/glb/", "stand.glb", scene);
+      await BABYLON.SceneLoader.AppendAsync("model/glb/", "weight.glb", scene);
+
+      scene.meshes
+        .find(e => {
+          return e.id == "oil";
+        })
+        .addBehavior(
+          new BABYLON.PointerDragBehavior({
+            dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+          })
+        );
+
+      scene.meshes
+        .find(e => {
+          return e.id == "flask";
+        })
+        .addBehavior(
+          new BABYLON.PointerDragBehavior({
+            dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+          })
+        );
+
+      scene.meshes
+        .find(e => {
+          return e.id == "bottle";
+        })
+        .addBehavior(
+          new BABYLON.PointerDragBehavior({
+            dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+          })
+        );
+      // var flask = scene.meshes.find(e => {
+      //   if()
+      //   e
+      //   return e.id == "flask";
+      // });
+      // var oil = scene.meshes.find(e => {
+      //   e.addBehavior(
+      //     new BABYLON.PointerDragBehavior({
+      //       dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+      //     })
+      //   );
+      //   return e.id == "oil";
       // });
     },
     async createUx(scene) {
