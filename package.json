@@ -11,6 +11,7 @@
     "babylon": "^6.18.0",
     "babylonjs": "^4.0.3",
     "core-js": "^2.6.5",
+    "npm": "^6.9.2",
     "stats-js": "^1.0.1",
     "three-orbitcontrols": "^2.102.1",
     "vue": "^2.6.10",

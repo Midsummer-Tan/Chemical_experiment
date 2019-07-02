@@ -26,7 +26,9 @@ export default {
     return {
       canvas: null,
       engine: null,
-      scene: null
+      scene: null,
+      stand: null,
+      weight: null
     };
   },
   methods: {
@@ -58,8 +60,8 @@ export default {
       this.camera = new BABYLON.ArcRotateCamera(
         "Camera",
         -Math.PI / 2,
-        Math.PI / 5,
-        1,
+        Math.PI*2/5,
+        0,
         BABYLON.Vector3.Zero(),
         scene
       );
@@ -86,8 +88,8 @@ export default {
     async createModel(scene, canvas) {
       var ground = BABYLON.Mesh.CreateGround(
         "ground",
-        1000,
-        1000,
+        8,
+        8,
         1,
         scene,
         false
@@ -96,13 +98,43 @@ export default {
       groundMaterial.specularColor = BABYLON.Color3.Black();
       ground.material = groundMaterial;
 
-      await BABYLON.SceneLoader.AppendAsync("model/glb/", "flask.glb", scene);
+      BABYLON.SceneLoader.ImportMesh("","model/glb/", "flask.glb", scene);
       await BABYLON.SceneLoader.AppendAsync("model/glb/", "bottle.glb", scene);
       await BABYLON.SceneLoader.AppendAsync("model/glb/", "oil.glb", scene);
       await BABYLON.SceneLoader.AppendAsync("model/glb/", "spool.glb", scene);
-      await BABYLON.SceneLoader.AppendAsync("model/glb/", "stand.glb", scene);
-      await BABYLON.SceneLoader.AppendAsync("model/glb/", "weight.glb", scene);
-
+      BABYLON.SceneLoader.ImportMesh("","model/glb/", "stand.glb", scene,(obj) => {
+        this.stand = obj;
+        for(var i=0;i<this.stand.length;i++){
+          this.stand[i].addBehavior(
+          new BABYLON.PointerDragBehavior({
+            dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+          })
+        );
+        }
+      });
+      BABYLON.SceneLoader.ImportMesh("","model/glb/", "weight.glb", scene,(obj) => {
+        this.weight = obj;
+        for(var i=0;i<this.weight.length;i++){
+          this.weight[i].rotation = new BABYLON.Vector3(0,0,0);
+          this.weight[i].addBehavior(
+          new BABYLON.PointerDragBehavior({
+            dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+          })
+        );
+        }
+        
+      });
+      
+      scene.meshes
+        .find(e => {
+          return e.id == "spool";
+        })
+        .addBehavior(
+          new BABYLON.PointerDragBehavior({
+            dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+          })
+        );
+//spool Cylinder002 Box002 Torus001 Screen weight (1)
       scene.meshes
         .find(e => {
           return e.id == "oil";
@@ -122,6 +154,9 @@ export default {
             dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
           })
         );
+
+      
+        
 
       scene.meshes
         .find(e => {
