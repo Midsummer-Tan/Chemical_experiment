@@ -1,16 +1,41 @@
 <template>
   <v-container fluid grid-list-lg>
     <v-layout>
-      <v-flex xs10>
+      <v-flex xs9>
         <v-card>
           <v-responsive :aspect-ratio="16/9">
             <canvas id="renderCanvas"></canvas>
           </v-responsive>
         </v-card>
       </v-flex>
-      <v-flex xs2>
+      <v-flex xs3>
         <v-card>
           <v-card-title class="font-weight-black subheading">工具</v-card-title>
+          <v-hover >
+            <v-card
+              slot-scope="{ hover }"
+              :class="`elevation-${hover ? 12 : 2}`"
+              >
+              <electronic-scale ref="es">
+              </electronic-scale>
+              <v-card-title>
+                  电子称示数
+              </v-card-title>
+              <v-btn
+                color="pink"
+                dark
+                small
+                absolute
+                bottom
+                right
+                fab
+                @click="toZero()"
+              >
+              <v-icon>fa fa-refresh</v-icon>
+              </v-btn>
+         
+            </v-card>
+          </v-hover>
         </v-card>
       </v-flex>
     </v-layout>
@@ -101,7 +126,7 @@ export default {
           for (var i = 0; i < this.flask.length; i++) {
             this.flask[i].addBehavior(
               new BABYLON.PointerDragBehavior({
-                dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+                dragPlaneNormal: new BABYLON.Vector3(0, 0, 0)
               })
             );
           }
@@ -237,11 +262,19 @@ export default {
     },
     async zoomMinus() {
       this.camera.radius += 10;
+    },
+    modifyElectronicScaleNumber(num1,num2,num3,num4){
+      //这用于修改电子秤示数
+      this.$refs.es.setAllNumber(num1,num2,num3,num4);
+    },
+    toZero(){
+      this.modifyElectronicScaleNumber(0,0,0,0);
     }
   },
 
   mounted() {
     this.init();
+    this.modifyElectronicScaleNumber(0,0,1,1);
     setTimeout(() => {
       this.engine.resize();
     }, 500);
