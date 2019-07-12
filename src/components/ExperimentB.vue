@@ -263,18 +263,18 @@ export default {
     async zoomMinus() {
       this.camera.radius += 10;
     },
-    modifyElectronicScaleNumber(num1,num2,num3,num4){
+    modifyElectronicScale(num1,num2,num3,num4){
       //这用于修改电子秤示数
       this.$refs.es.setAllNumber(num1,num2,num3,num4);
     },
     toZero(){
-      this.modifyElectronicScaleNumber(0,0,0,0);
+      this.$refs.es.setAllNumber(0,0,0,0);
     }
   },
 
   mounted() {
     this.init();
-    this.modifyElectronicScaleNumber(0,0,1,1);
+    this.modifyElectronicScale(0,0,1,1);
     setTimeout(() => {
       this.engine.resize();
     }, 500);

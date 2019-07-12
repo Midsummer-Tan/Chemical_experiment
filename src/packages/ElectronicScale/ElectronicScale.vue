@@ -61,66 +61,22 @@
 
 
 <script>
+import { setAllNumber } from "./js/digital-clock.js";
+//setNumber是由setAllNumber调用的 也需要引用
 export default {
   name:'electronic-scale',
   data() {
     return {
-		timer:null,
+		
 	}
   },
-  methods: {
-	init(){
-		//这样使用电子称
-		this.setAllNumber(0, 0, 0, 0);
-	},
-
-	setAllNumber(num1, num2, num3, num4) {
-		var _big = document.querySelectorAll('.big');
-		var _small = document.querySelectorAll('.small');
-		var _g = document.querySelectorAll('.g');
-		this.setNumber(_big[0], num1, 1);
-
-		this.setNumber(_small[0], num2, 1);
-		this.setNumber(_small[1], num3, 1);
-		this.setNumber(_small[2], num4, 1);
-
-		this.setNumber(_g[0], 10, 1);
-	},
-
-	setNumber(digit, number, on) {
-		var digitSegments=[
-		[1, 2, 3, 4, 5, 6],
-		[2, 3],
-		[1, 2, 7, 5, 4],
-		[1, 2, 7, 3, 4],
-		[6, 7, 2, 3],
-		[1, 6, 7, 3, 4],
-		[1, 6, 5, 4, 3, 7],
-		[1, 2, 3],
-		[1, 2, 3, 4, 5, 6, 7],
-		[1, 2, 7, 3, 6],
-		[1, 2, 7, 3, 6, 4],
-		]
-		var segments = digit.querySelectorAll('.segment');
-		var current = parseInt(digit.getAttribute('data-value'));
-		if (isNaN(current) || current != number) {
-			//set new number after
-			this.clock = setTimeout(function () {
-			digitSegments[number].forEach(function (digitSegment, index) {
-				setTimeout(function () {
-				segments[digitSegment - 1].classList.add('on');
-				}, index * 45)
-			});
-			}, 250);
-			digit.setAttribute('data-value', number);
-		}
-	}
-	},
-	destroyed(){
-		clearInterval(this.timer);        
-        this.timer = null;
-	}
+  methods:{
+	  setAllNumber(num1,num2,num3,num4){
+		  setAllNumber(num1,num2,num3,num4)
+		  //用法 0.000g
+		  //对应 num1.num2 num3 num4 g
+	  }
   }
-
+  }
 
 </script>
