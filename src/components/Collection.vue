@@ -6,7 +6,7 @@
           <v-card
             slot-scope="{ hover }"
             :class="`elevation-${hover ? 12 : 2}`"
-            :to="`/experiment/${item.id}`"
+            :to="`/experiment_b/${item.id}`"
           >
             <v-img
               class="white--text"

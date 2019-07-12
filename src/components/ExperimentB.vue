@@ -60,7 +60,7 @@ export default {
       this.camera = new BABYLON.ArcRotateCamera(
         "Camera",
         -Math.PI / 2,
-        Math.PI*2/5,
+        (Math.PI * 2) / 5,
         0,
         BABYLON.Vector3.Zero(),
         scene
@@ -70,7 +70,7 @@ export default {
       this.camera.lowerRadiusLimit = 1;
       this.camera.upperRadiusLimit = 60;
       this.camera.useBouncingBehavior = true;
-      // this.camera.attachControl(canvas, true);
+      this.camera.attachControl(canvas, true);
     },
     async createLight(scene, canvas) {
       var light1 = new BABYLON.HemisphericLight(
@@ -86,45 +86,64 @@ export default {
       light2.intensity = 0.15;
     },
     async createModel(scene, canvas) {
-      var ground = BABYLON.Mesh.CreateGround(
-        "ground",
-        8,
-        8,
-        1,
-        scene,
-        false
-      );
+      var ground = BABYLON.Mesh.CreateGround("ground", 8, 8, 1, scene, false);
       var groundMaterial = new BABYLON.StandardMaterial("ground", scene);
       groundMaterial.specularColor = BABYLON.Color3.Black();
       ground.material = groundMaterial;
 
-      BABYLON.SceneLoader.ImportMesh("","model/glb/", "flask.glb", scene);
+      BABYLON.SceneLoader.ImportMesh(
+        "",
+        "model/glb/",
+        "flask.glb",
+        scene,
+        obj => {
+          this.flask = obj;
+          for (var i = 0; i < this.flask.length; i++) {
+            this.flask[i].addBehavior(
+              new BABYLON.PointerDragBehavior({
+                dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+              })
+            );
+          }
+        }
+      );
       await BABYLON.SceneLoader.AppendAsync("model/glb/", "bottle.glb", scene);
       await BABYLON.SceneLoader.AppendAsync("model/glb/", "oil.glb", scene);
       await BABYLON.SceneLoader.AppendAsync("model/glb/", "spool.glb", scene);
-      BABYLON.SceneLoader.ImportMesh("","model/glb/", "stand.glb", scene,(obj) => {
-        this.stand = obj;
-        for(var i=0;i<this.stand.length;i++){
-          this.stand[i].addBehavior(
-          new BABYLON.PointerDragBehavior({
-            dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
-          })
-        );
+      BABYLON.SceneLoader.ImportMesh(
+        "",
+        "model/glb/",
+        "stand.glb",
+        scene,
+        obj => {
+          this.stand = obj;
+          for (var i = 0; i < this.stand.length; i++) {
+            this.stand[i].addBehavior(
+              new BABYLON.PointerDragBehavior({
+                dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+              })
+            );
+          }
         }
-      });
-      BABYLON.SceneLoader.ImportMesh("","model/glb/", "weight.glb", scene,(obj) => {
-        this.weight = obj;
-        for(var i=0;i<this.weight.length;i++){
-          this.weight[i].rotation = new BABYLON.Vector3(0,0,0);
-          this.weight[i].addBehavior(
-          new BABYLON.PointerDragBehavior({
-            dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
-          })
-        );
+      );
+      BABYLON.SceneLoader.ImportMesh(
+        "",
+        "model/glb/",
+        "weight.glb",
+        scene,
+        obj => {
+          this.weight = obj;
+          for (var i = 0; i < this.weight.length; i++) {
+            this.weight[i].rotation = new BABYLON.Vector3(0, 0, 0);
+            this.weight[i].addBehavior(
+              new BABYLON.PointerDragBehavior({
+                dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+              })
+            );
+          }
         }
-        
-      });
-      
+      );
+
       scene.meshes
         .find(e => {
           return e.id == "spool";
@@ -134,7 +153,7 @@ export default {
             dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
           })
         );
-//spool Cylinder002 Box002 Torus001 Screen weight (1)
+      //spool Cylinder002 Box002 Torus001 Screen weight (1)
       scene.meshes
         .find(e => {
           return e.id == "oil";
@@ -144,19 +163,6 @@ export default {
             dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
           })
         );
-
-      scene.meshes
-        .find(e => {
-          return e.id == "flask";
-        })
-        .addBehavior(
-          new BABYLON.PointerDragBehavior({
-            dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
-          })
-        );
-
-      
-        
 
       scene.meshes
         .find(e => {

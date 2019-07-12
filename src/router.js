@@ -22,8 +22,8 @@ export default new Router({
           component: () => import("./components/Experiment")
         },
         {
-          path:"/experiment/2",
-          component:()=>import("./components/Testgltf")
+          path: "/experiment/2",
+          component: () => import("./components/Testgltf")
         },
         {
           path: "/experiment_b/:id",
