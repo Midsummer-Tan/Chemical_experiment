@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid grid-list-lg>
+  <v-container fluid grid-list-lg  class="avoid_select">
     <v-layout>
       <v-flex xs9>
         <v-card>
@@ -9,36 +9,152 @@
         </v-card>
       </v-flex>
       <v-flex xs3>
+        <!--步骤条-->
+        <!--一共分为三大步骤-->
+        <v-hover >
+          <v-card
+            slot-scope="{ hover }"
+            :class="`elevation-${hover ? 12 : 2}`"
+            >
+            <v-stepper v-model="e1">
+              <v-stepper-header  >
+                <v-stepper-step :complete="e1 > 1"  color="cyan" step="1">
+                  {{step[0]}}
+                </v-stepper-step>
+                <v-divider></v-divider>
+                <v-stepper-step :complete="e1 > 2" color="cyan" step="2">
+                  {{step[1]}}
+                </v-stepper-step>
+                <v-divider></v-divider>
+                <v-stepper-step color="cyan" step="3">
+                  {{step[2]}}
+                </v-stepper-step>
+                
+              </v-stepper-header>
+              <v-btn 
+                style="float:right"
+                :disabled="btn_post"
+                dark color="cyan"
+                @click="post()"
+              >
+                提交
+              </v-btn>
+              <v-btn 
+                style="float:right"
+                :disabled="btn_nextstep"
+                fab dark small color="cyan"
+                @click="openDialog1()"
+              >
+                <v-icon>fa fa-chevron-right</v-icon>
+              </v-btn>
+            </v-stepper>
+          </v-card>
+        </v-hover>
+        <!--步骤条-->
+
+        <!--电子称示数-->
+        <v-hover >
+          <v-card
+            slot-scope="{ hover }"
+            :class="`elevation-${hover ? 12 : 2}`"
+            >
+            <electronic-scale ref="es">
+            </electronic-scale>
+            <v-card-title>
+                电子称示数
+            </v-card-title>
+            <v-btn
+              color="pink"
+              dark
+              small
+              absolute
+              bottom
+              right
+              fab
+              @click="toZero()"
+            >
+            <v-icon>fa fa-refresh</v-icon>
+            </v-btn>
+          </v-card>
+        </v-hover>
+        <!--电子称示数-->
+
+        <!--工具栏-->
         <v-card>
           <v-card-title class="font-weight-black subheading">工具</v-card-title>
-          <v-hover >
-            <v-card
-              slot-scope="{ hover }"
-              :class="`elevation-${hover ? 12 : 2}`"
-              >
-              <electronic-scale ref="es">
-              </electronic-scale>
-              <v-card-title>
-                  电子称示数
-              </v-card-title>
-              <v-btn
-                color="pink"
-                dark
-                small
-                absolute
-                bottom
-                right
-                fab
-                @click="toZero()"
-              >
-              <v-icon>fa fa-refresh</v-icon>
-              </v-btn>
-         
+          <v-layout row>
+          <v-flex xs4>
+            <v-card>
+              <v-card-text>
+                <v-img
+                src="images/flask.png"
+                aspect-ratio="1"
+                >
+                </v-img>
+                <div style="font-size:15px;text-align:center">圆底烧瓶</div>
+              </v-card-text>
             </v-card>
-          </v-hover>
+          </v-flex>
+
+          <v-flex xs4>
+            <v-card>
+              <v-card-text>
+                <v-img
+                src="images/weightpaper.png"
+                aspect-ratio="1"
+                >
+                </v-img>
+                <div style="font-size:15px;text-align:center">称量纸</div>
+              </v-card-text>
+            </v-card>
+          </v-flex>
+
+          <v-flex xs4>
+            <v-card>
+              <v-card-text>
+                <v-img
+                src="images/oilbath.png"
+                aspect-ratio="1"
+                >
+                </v-img>
+                <div style="font-size:15px;text-align:center">油浴锅</div>
+              </v-card-text>
+            </v-card>
+          </v-flex>
+          </v-layout>  
         </v-card>
       </v-flex>
     </v-layout>
+    <!--对话框-->
+    <v-dialog
+      v-model="dialog_nextstep"
+      max-width="290"
+      >
+      <v-card>
+        <v-card-title class="headline">进入下一步？</v-card-title>
+        <v-card-text>
+          你本环节得分是xx,总分为xx,你确定进入下一个环节么？进入下一个环节后你没有办法回到本环节。
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="green darken-1"
+            flat="flat"
+            @click="dialog_nextstep  = false"
+          >
+            取消
+          </v-btn>
+          <v-btn
+            color="green darken-1"
+            flat="flat"
+            @click="nextStep()"
+          >
+            确定
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  <!--对话框-->
   </v-container>
 </template>
 
@@ -53,7 +169,16 @@ export default {
       engine: null,
       scene: null,
       stand: null,
-      weight: null
+      weight: null,
+      e1:1,
+      step:['反应前期准备','',''],
+      dialog_nextstep:false,
+      btn_nextstep:false,
+      btn_post:true,
+      step1:[0,0,0,0,0,0,0,0,0,0],//第一步——反应前期准备的分数
+      step1_allgood:[2,2,2,2,2,2,3,3,3,1],//第一步满分
+      step2:[0,0,0,0],//第二步——搭建反应装置
+
     };
   },
   methods: {
@@ -269,6 +394,23 @@ export default {
     },
     toZero(){
       this.$refs.es.setAllNumber(0,0,0,0);
+    },
+    openDialog1(){
+      this.dialog_nextstep = true;
+    },
+    nextStep(){
+      this.e1+=1;
+      if(this.e1==2){
+        console.log("me")
+        this.step = ['','搭建反应装置',''];
+      }
+      else if(this.e1==3){
+        this.step = ['','','聚合物合成'];
+        this.btn_nextstep = true;
+        this.btn_post = false;
+      }
+      this.dialog_nextstep = false;
+      
     }
   },
 
@@ -287,5 +429,13 @@ canvas {
   display: block;
   width: 100%;
   height: 100%;
+}
+.avoid_select{
+  -moz-user-select: none;
+  -o-user-select:none;
+  -khtml-user-select:none;
+  -webkit-user-select:none;
+  -ms-user-select:none;
+  user-select:none;
 }
 </style>
