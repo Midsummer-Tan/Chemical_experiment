@@ -162,6 +162,7 @@
 import * as BABYLON from "@babylonjs/core/Legacy/legacy";
 import "@babylonjs/loaders/glTF";
 import "@babylonjs/loaders/OBJ";
+import {newNode} from "../js/step1.js"
 export default {
   data() {
     return {
@@ -172,12 +173,10 @@ export default {
       weight: null,
       e1:1,
       step:['反应前期准备','',''],
+      step_finish:[0,0,0],//step1 step2 step3 是否执行完了？
       dialog_nextstep:false,
       btn_nextstep:false,
       btn_post:true,
-      step1:[0,0,0,0,0,0,0,0,0,0],//第一步——反应前期准备的分数
-      step1_allgood:[2,2,2,2,2,2,3,3,3,1],//第一步满分
-      step2:[0,0,0,0],//第二步——搭建反应装置
 
     };
   },
@@ -398,6 +397,9 @@ export default {
     openDialog1(){
       this.dialog_nextstep = true;
     },
+    step1(){
+      
+    },
     nextStep(){
       this.e1+=1;
       if(this.e1==2){
@@ -411,14 +413,26 @@ export default {
       }
       this.dialog_nextstep = false;
       
-    }
+    },
+    
   },
 
   mounted() {
     this.init();
     this.modifyElectronicScale(0,0,1,1);
+    newNode.setText("hello");
     setTimeout(() => {
       this.engine.resize();
+      if(this.step_finish == [0,0,0]){
+        this.step1();
+      }
+      else if(this.step_finish == [1,0,0]){
+        this.step2();
+      }
+      else if(this.step_finish == [1,1,0]){
+        this.step3();
+      }
+      
     }, 500);
   }
 };
