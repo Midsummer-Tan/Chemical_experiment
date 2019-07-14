@@ -1,6 +1,6 @@
 <template>
   <v-container fluid grid-list-lg  class="avoid_select">
-    <v-layout>
+    <v-layout >
       <v-flex xs9>
         <v-card>
           <v-responsive :aspect-ratio="16/9">
@@ -82,12 +82,13 @@
         <!--工具栏-->
         <v-card>
           <v-card-title class="font-weight-black subheading">工具</v-card-title>
+          <!--第一行-->
           <v-layout row>
           <v-flex xs4>
-            <v-card>
+            <v-card @click="addRound_flask()">
               <v-card-text>
-                <v-img
-                src="images/flask.png"
+                <v-img 
+                src="images/round_flask.png"
                 aspect-ratio="1"
                 >
                 </v-img>
@@ -97,7 +98,7 @@
           </v-flex>
 
           <v-flex xs4>
-            <v-card>
+            <v-card @click="addPaper()">
               <v-card-text>
                 <v-img
                 src="images/weightpaper.png"
@@ -110,10 +111,10 @@
           </v-flex>
 
           <v-flex xs4>
-            <v-card>
+            <v-card @click="addPot()">
               <v-card-text>
                 <v-img
-                src="images/oilbath.png"
+                src="images/pot.png"
                 aspect-ratio="1"
                 >
                 </v-img>
@@ -121,10 +122,125 @@
               </v-card-text>
             </v-card>
           </v-flex>
+          </v-layout> 
+
+          <!--第二行-->
+          <v-layout row>
+          <v-flex xs4>
+            <v-card @click="addWeight()">
+              <v-card-text>
+                <v-img
+                src="images/weight.png"
+                aspect-ratio="1"
+                >
+                </v-img>
+                <div style="font-size:15px;text-align:center">电子称</div>
+              </v-card-text>
+            </v-card>
+          </v-flex>
+
+          <v-flex xs4>
+            <v-card @click="addHeater()">
+              <v-card-text>
+                <v-img
+                src="images/heater.png"
+                aspect-ratio="1"
+                >
+                </v-img>
+                <div style="font-size:15px;text-align:center">磁力搅拌器</div>
+              </v-card-text>
+            </v-card>
+          </v-flex>
+
+          <v-flex xs4>
+            <v-card @click="addLiquidTransferor()">
+              <v-card-text>
+                <v-img
+                src="images/liquid_transferor.png"
+                aspect-ratio="1"
+                >
+                </v-img>
+                <div style="font-size:15px;text-align:center">移液枪</div>
+              </v-card-text>
+            </v-card>
+          </v-flex>
           </v-layout>  
+
+          <!--第三行-->
+          <v-layout row>
+          <v-flex xs4>
+            <v-card @click="addNeedle()">
+              <v-card-text>
+                <v-img
+                src="images/needle.png"
+                aspect-ratio="1"
+                >
+                </v-img>
+                <div style="font-size:15px;text-align:center">针管</div>
+              </v-card-text>
+            </v-card>
+          </v-flex>
+
+          <v-flex xs4>
+            <v-card @click="addTriFlask()">
+              <v-card-text>
+                <v-img
+                src="images/tri_flask.png"
+                aspect-ratio="1"
+                >
+                </v-img>
+                <div style="font-size:15px;text-align:center">锥形瓶</div>
+              </v-card-text>
+            </v-card>
+          </v-flex>
+
+          <v-flex xs4>
+            <v-card @click="addDropper()">
+              <v-card-text>
+                <v-img
+                src="images/dropper.png"
+                aspect-ratio="1"
+                >
+                </v-img>
+                <div style="font-size:15px;text-align:center">滴管</div>
+              </v-card-text>
+            </v-card>
+          </v-flex>
+          </v-layout>
+
+          <!--第四行-->
+          <v-layout row>
+          <v-flex xs4>
+            <v-card @click="addMeasuringCylinder()">
+              <v-card-text>
+                <v-img
+                src="images/measuring_cylinder.png"
+                aspect-ratio="1"
+                >
+                </v-img>
+                <div style="font-size:15px;text-align:center">量筒</div>
+              </v-card-text>
+            </v-card>
+          </v-flex>
+
+          <v-flex xs4>
+            <v-card @click="addStand()">
+              <v-card-text>
+                <v-img
+                src="images/stand.png"
+                aspect-ratio="1"
+                >
+                </v-img>
+                <div style="font-size:15px;text-align:center">铁架台</div>
+              </v-card-text>
+            </v-card>
+          </v-flex>
+          
+          </v-layout>
         </v-card>
       </v-flex>
     </v-layout>
+    
     <!--对话框-->
     <v-dialog
       v-model="dialog_nextstep"
@@ -162,7 +278,7 @@
 import * as BABYLON from "@babylonjs/core/Legacy/legacy";
 import "@babylonjs/loaders/glTF";
 import "@babylonjs/loaders/OBJ";
-import {newNode} from "../js/step1.js"
+import {step1} from "../js/step1.js"
 export default {
   data() {
     return {
@@ -171,6 +287,8 @@ export default {
       scene: null,
       stand: null,
       weight: null,
+      hl:null,
+      pickedObj:null,
       e1:1,
       step:['反应前期准备','',''],
       step_finish:[0,0,0],//step1 step2 step3 是否执行完了？
@@ -183,19 +301,49 @@ export default {
   methods: {
     async init() {
       this.canvas = document.getElementById("renderCanvas");
-      this.engine = new BABYLON.Engine(this.canvas, true);
+      this.engine = new BABYLON.Engine(this.canvas, true,{stencil:true});
       // var loadingScreen = new customLoadingScreen("test");
       // this.engine.loadingScreen = loadingScreen;
+      
       this.scene = await this.createScene();
+      this.hl = new BABYLON.HighlightLayer("hl1", this.scene,{mainTextureRatio:1}); //high light
+      this.hl.innerGlow = false;
       await this.createCamera(this.scene, this.canvas);
       await this.createLight(this.scene);
       await this.createModel(this.scene, this.canvas);
       // await this.createUx(this.scene);
+      
       this.engine.runRenderLoop(() => {
         this.scene.render();
       });
       window.addEventListener("resize", () => {
         this.engine.resize();
+      });
+      window.addEventListener("pointermove",()=>{
+        var pickResult = this.scene.pick(this.scene.pointerX, this.scene.pointerY);
+        if(this.pickedObj!=null){
+          this.hl.removeMesh(this.pickedObj);
+        }
+        if(pickResult.hit){
+          if(pickResult.pickedMesh.id != 'ground'){
+            this.hl.addMesh(pickResult.pickedMesh,BABYLON.Color3.Purple());
+            this.pickedObj = pickResult.pickedMesh;
+          }
+        } 
+      });
+      window.addEventListener("pointerup", () => {
+        if(this.pickedObj!=null){
+          this.hl.removeMesh(this.pickedObj);
+        }
+      });
+      window.addEventListener("pointerdown", () => {
+        var pickResult = this.scene.pick(this.scene.pointerX, this.scene.pointerY);
+        if(pickResult.hit){
+          if(pickResult.pickedMesh.id != 'ground'){
+            this.hl.addMesh(pickResult.pickedMesh,BABYLON.Color3.Purple())
+            this.pickedObj = pickResult.pickedMesh;
+          }
+        } 
       });
     },
     async createScene() {
@@ -208,15 +356,15 @@ export default {
     async createCamera(scene, canvas) {
       this.camera = new BABYLON.ArcRotateCamera(
         "Camera",
-        -Math.PI / 2,
-        (Math.PI * 2) / 5,
+        -Math.PI/2,
+        (Math.PI * 7) / 20,
         0,
         BABYLON.Vector3.Zero(),
         scene
       );
 
       // limit zoom
-      this.camera.lowerRadiusLimit = 1;
+      this.camera.lowerRadiusLimit = 0;
       this.camera.upperRadiusLimit = 60;
       this.camera.useBouncingBehavior = true;
       this.camera.attachControl(canvas, true);
@@ -240,33 +388,19 @@ export default {
       groundMaterial.specularColor = BABYLON.Color3.Black();
       ground.material = groundMaterial;
 
+      
       BABYLON.SceneLoader.ImportMesh(
-        "",
-        "model/glb/",
-        "flask.glb",
-        scene,
-        obj => {
-          this.flask = obj;
-          for (var i = 0; i < this.flask.length; i++) {
-            this.flask[i].addBehavior(
-              new BABYLON.PointerDragBehavior({
-                dragPlaneNormal: new BABYLON.Vector3(0, 0, 0)
-              })
-            );
-          }
-        }
-      );
-      await BABYLON.SceneLoader.AppendAsync("model/glb/", "bottle.glb", scene);
-      await BABYLON.SceneLoader.AppendAsync("model/glb/", "oil.glb", scene);
-      await BABYLON.SceneLoader.AppendAsync("model/glb/", "spool.glb", scene);
-      BABYLON.SceneLoader.ImportMesh(
+        //铁架台
         "",
         "model/glb/",
         "stand.glb",
         scene,
         obj => {
           this.stand = obj;
+          console.log(obj)
           for (var i = 0; i < this.stand.length; i++) {
+            this.stand[i].rotation = new BABYLON.Vector3(0, 0, 0);
+            this.stand[i].position = new BABYLON.Vector3(-0.3,0,0);//(左右,上下,前后)
             this.stand[i].addBehavior(
               new BABYLON.PointerDragBehavior({
                 dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
@@ -275,16 +409,19 @@ export default {
           }
         }
       );
+    },
+
+    addRound_flask(){
+      //圆底烧瓶
       BABYLON.SceneLoader.ImportMesh(
         "",
         "model/glb/",
-        "weight.glb",
-        scene,
+        "round_flask.glb",
+        this.scene,
         obj => {
-          this.weight = obj;
-          for (var i = 0; i < this.weight.length; i++) {
-            this.weight[i].rotation = new BABYLON.Vector3(0, 0, 0);
-            this.weight[i].addBehavior(
+          for (var i = 0; i < obj.length; i++) {
+            obj[i].rotation = new BABYLON.Vector3(0, 0, 0);
+            obj[i].addBehavior(
               new BABYLON.PointerDragBehavior({
                 dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
               })
@@ -292,49 +429,253 @@ export default {
           }
         }
       );
+    },
 
-      scene.meshes
-        .find(e => {
-          return e.id == "spool";
-        })
-        .addBehavior(
-          new BABYLON.PointerDragBehavior({
-            dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
-          })
-        );
-      //spool Cylinder002 Box002 Torus001 Screen weight (1)
-      scene.meshes
-        .find(e => {
-          return e.id == "oil";
-        })
-        .addBehavior(
-          new BABYLON.PointerDragBehavior({
-            dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
-          })
-        );
+    addWeight(){
+      BABYLON.SceneLoader.ImportMesh(
+        //电子称
+        "",
+        "model/glb/",
+        "weight.glb",
+        this.scene,
+        obj => {
+          for (var i = 0; i < obj.length; i++) {
+            
+            obj[i].rotation = new BABYLON.Vector3(0, 0, 0);
+            obj[i].addBehavior(
+              new BABYLON.PointerDragBehavior({
+                dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+              })
+            );
+          }
+        }
+      );
+    },
 
-      scene.meshes
-        .find(e => {
-          return e.id == "bottle";
-        })
-        .addBehavior(
-          new BABYLON.PointerDragBehavior({
-            dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
-          })
-        );
-      // var flask = scene.meshes.find(e => {
-      //   if()
-      //   e
-      //   return e.id == "flask";
-      // });
-      // var oil = scene.meshes.find(e => {
-      //   e.addBehavior(
-      //     new BABYLON.PointerDragBehavior({
-      //       dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
-      //     })
-      //   );
-      //   return e.id == "oil";
-      // });
+    addBottle(){
+       BABYLON.SceneLoader.ImportMesh(
+        //试剂瓶
+        "",
+        "model/glb/",
+        "bottle.glb",
+        this.scene,
+        obj => {
+          for (var i = 0; i < obj.length; i++) {
+            obj[i].rotation = new BABYLON.Vector3(0, 0, 0);
+            obj[i].addBehavior(
+              new BABYLON.PointerDragBehavior({
+                dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+              })
+            );
+          }
+        }
+      );
+    },
+
+    addStand(){
+      BABYLON.SceneLoader.ImportMesh(
+        //铁架台
+        "",
+        "model/glb/",
+        "stand.glb",
+        this.scene,
+        obj => {
+          for (var i = 0; i < obj.length; i++) {
+            obj[i].rotation = new BABYLON.Vector3(0, 0, 0);
+            obj[i].addBehavior(
+              new BABYLON.PointerDragBehavior({
+                dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+              })
+            );
+          }
+        }
+      );
+    },
+
+    addPot(){
+      BABYLON.SceneLoader.ImportMesh(
+        //油浴锅
+        "",
+        "model/glb/",
+        "pot.glb",
+        this.scene,
+        obj => {
+          for (var i = 0; i < obj.length; i++) {
+            obj[i].rotation = new BABYLON.Vector3(0, 0, 0);
+            obj[i].addBehavior(
+              new BABYLON.PointerDragBehavior({
+                dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+              })
+            );
+          }
+        }
+      );
+    },
+
+    addDropper(){
+      BABYLON.SceneLoader.ImportMesh(
+        //滴管
+        "",
+        "model/glb/",
+        "dropper.glb",
+        this.scene,
+        obj => {
+          for (var i = 0; i < obj.length; i++) {
+            obj[i].scaling = new BABYLON.Vector3(1.5,1.5,1.5)
+            obj[i].rotation = new BABYLON.Vector3(0, 0, 0);
+            obj[i].position = new BABYLON.Vector3(0,0.1,0);//左右 上下 前后
+            obj[i].addBehavior(
+              new BABYLON.PointerDragBehavior({
+                dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+              })
+            );
+          }
+        }
+      );
+    },
+
+    addHeater(){
+      BABYLON.SceneLoader.ImportMesh(
+        //磁力搅拌器
+        "",
+        "model/glb/",
+        "heater.glb",
+        this.scene,
+        obj => {
+          for (var i = 0; i < obj.length; i++) {
+            obj[i].rotation = new BABYLON.Vector3(0, 0, 0);
+            obj[i].addBehavior(
+              new BABYLON.PointerDragBehavior({
+                dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+              })
+            );
+          }
+        }
+      );
+    },
+
+    addLiquidTransferor(){
+      BABYLON.SceneLoader.ImportMesh(
+      //移液枪
+        "",
+        "model/glb/",
+        "liquid_transferor.glb",
+        this.scene,
+        obj => {
+          for (var i = 0; i < obj.length; i++) {
+            obj[i].rotation = new BABYLON.Vector3(0, 0, 0);
+            obj[i].addBehavior(
+              new BABYLON.PointerDragBehavior({
+                dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+              })
+            );
+          }
+        }
+      );
+    },
+
+    addMeasuringCylinder(){
+       BABYLON.SceneLoader.ImportMesh(
+        //量筒
+        "",
+        "model/glb/",
+        "measuring_cylinder.glb",
+        this.scene,
+        obj => {
+          for (var i = 0; i < obj.length; i++) {
+            obj[i].rotation = new BABYLON.Vector3(0, 0, 0)
+            obj[i].addBehavior(
+              new BABYLON.PointerDragBehavior({
+                dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+              })
+            );
+          }
+        }
+      );
+    },
+
+    addNeedle(){
+      BABYLON.SceneLoader.ImportMesh(
+        //针管
+        "",
+        "model/glb/",
+        "needle.glb",
+        this.scene,
+        obj => {
+          for (var i = 0; i < obj.length; i++) {
+            obj[i].rotation = new BABYLON.Vector3(0, 0, 0)
+            obj[i].addBehavior(
+              new BABYLON.PointerDragBehavior({
+                dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+              })
+            );
+          }
+        }
+      );
+    },
+
+    addPaper(){
+      BABYLON.SceneLoader.ImportMesh(
+      //称量纸
+        "",
+        "model/glb/",
+        "paper.glb",
+        this.scene,
+        obj => {
+          for (var i = 0; i < obj.length; i++) {
+            obj[i].rotation = new BABYLON.Vector3(0, 0, 0)
+            obj[i].position = new BABYLON.Vector3(0, 0.05, 0)
+            obj[i].addBehavior(
+              new BABYLON.PointerDragBehavior({
+                dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+              })
+            );
+          }
+        }
+      );
+    },
+
+    addSpoon(){
+      BABYLON.SceneLoader.ImportMesh(
+        //药匙
+        "",
+        "model/glb/",
+        "spoon.glb",
+        this.scene,
+        obj => {
+          this.spoon = obj;
+          for (var i = 0; i < obj.length; i++) {
+            obj[i].scaling = new BABYLON.Vector3(1.2,1.2,1.2);
+            obj[i].rotation = new BABYLON.Vector3(0, 0, 0);
+            obj[i].position = new BABYLON.Vector3(0,0.1,0);
+            obj[i].addBehavior(
+              new BABYLON.PointerDragBehavior({
+                dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+              })
+            );
+          }
+        }
+      );
+    },
+
+    addTriFlask(){
+      BABYLON.SceneLoader.ImportMesh(
+      //锥形瓶
+        "",
+        "model/glb/",
+        "tri_flask.glb",
+        this.scene,
+        obj => {
+          for (var i = 0; i < obj.length; i++) {
+            obj[i].rotation = new BABYLON.Vector3(0, 0, 0);
+            obj[i].addBehavior(
+              new BABYLON.PointerDragBehavior({
+                dragPlaneNormal: new BABYLON.Vector3(0, 2, 0)
+              })
+            );
+          }
+        }
+      );
     },
     async createUx(scene) {
       // Create the 3D UI manager
@@ -420,7 +761,7 @@ export default {
   mounted() {
     this.init();
     this.modifyElectronicScale(0,0,1,1);
-    newNode.setText("hello");
+    
     setTimeout(() => {
       this.engine.resize();
       if(this.step_finish == [0,0,0]){
@@ -451,5 +792,8 @@ canvas {
   -webkit-user-select:none;
   -ms-user-select:none;
   user-select:none;
+}
+.img{
+  width:50%
 }
 </style>
