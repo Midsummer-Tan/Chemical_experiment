@@ -1,14 +1,15 @@
 <template>
   <v-container fluid grid-list-lg  class="avoid_select">
     <v-layout >
-      <v-flex xs9>
+      <v-flex xs8>
         <v-card>
           <v-responsive :aspect-ratio="16/9">
             <canvas id="renderCanvas"></canvas>
           </v-responsive>
+          <div style="float:right;font-family:KaiTi">当前选中：<span style="color:#666666">{{(pickedObj!=null)?map[pickedObj.id]:'无'}}</span></div>
         </v-card>
       </v-flex>
-      <v-flex xs3>
+      <v-flex xs4>
         <!--步骤条-->
         <!--一共分为三大步骤-->
         <v-hover >
@@ -84,7 +85,7 @@
           <v-card-title class="font-weight-black subheading">工具</v-card-title>
           <!--第一行-->
           <v-layout row>
-          <v-flex xs4>
+          <v-flex xs3>
             <v-card @click="addRound_flask()">
               <v-card-text>
                 <v-img 
@@ -97,7 +98,7 @@
             </v-card>
           </v-flex>
 
-          <v-flex xs4>
+          <v-flex xs3>
             <v-card @click="addPaper()">
               <v-card-text>
                 <v-img
@@ -110,7 +111,7 @@
             </v-card>
           </v-flex>
 
-          <v-flex xs4>
+          <v-flex xs3>
             <v-card @click="addPot()">
               <v-card-text>
                 <v-img
@@ -122,11 +123,8 @@
               </v-card-text>
             </v-card>
           </v-flex>
-          </v-layout> 
 
-          <!--第二行-->
-          <v-layout row>
-          <v-flex xs4>
+          <v-flex xs3>
             <v-card @click="addWeight()">
               <v-card-text>
                 <v-img
@@ -139,7 +137,13 @@
             </v-card>
           </v-flex>
 
-          <v-flex xs4>
+          </v-layout> 
+
+          <!--第二行-->
+          <v-layout row>
+          
+
+          <v-flex xs3>
             <v-card @click="addHeater()">
               <v-card-text>
                 <v-img
@@ -152,7 +156,7 @@
             </v-card>
           </v-flex>
 
-          <v-flex xs4>
+          <v-flex xs3>
             <v-card @click="addLiquidTransferor()">
               <v-card-text>
                 <v-img
@@ -164,11 +168,8 @@
               </v-card-text>
             </v-card>
           </v-flex>
-          </v-layout>  
-
-          <!--第三行-->
-          <v-layout row>
-          <v-flex xs4>
+          
+          <v-flex xs3>
             <v-card @click="addNeedle()">
               <v-card-text>
                 <v-img
@@ -181,7 +182,7 @@
             </v-card>
           </v-flex>
 
-          <v-flex xs4>
+          <v-flex xs3>
             <v-card @click="addTriFlask()">
               <v-card-text>
                 <v-img
@@ -194,7 +195,12 @@
             </v-card>
           </v-flex>
 
-          <v-flex xs4>
+          </v-layout>  
+
+          <!--第三行-->
+          <v-layout row>
+
+          <v-flex xs3>
             <v-card @click="addDropper()">
               <v-card-text>
                 <v-img
@@ -206,11 +212,8 @@
               </v-card-text>
             </v-card>
           </v-flex>
-          </v-layout>
 
-          <!--第四行-->
-          <v-layout row>
-          <v-flex xs4>
+          <v-flex xs3>
             <v-card @click="addMeasuringCylinder()">
               <v-card-text>
                 <v-img
@@ -223,7 +226,7 @@
             </v-card>
           </v-flex>
 
-          <v-flex xs4>
+          <v-flex xs3>
             <v-card @click="addStand()">
               <v-card-text>
                 <v-img
@@ -235,8 +238,9 @@
               </v-card-text>
             </v-card>
           </v-flex>
-          
+
           </v-layout>
+
         </v-card>
       </v-flex>
     </v-layout>
@@ -278,7 +282,9 @@
 import * as BABYLON from "@babylonjs/core/Legacy/legacy";
 import "@babylonjs/loaders/glTF";
 import "@babylonjs/loaders/OBJ";
+import * as GUI from "@babylonjs/gui";
 import {step1} from "../js/step1.js"
+import { Vector3 } from '@babylonjs/core/Legacy/legacy';
 export default {
   data() {
     return {
@@ -288,14 +294,25 @@ export default {
       stand: null,
       weight: null,
       hl:null,
+      hoveredObj:null,
       pickedObj:null,
       e1:1,
       step:['反应前期准备','',''],
+      map:{'pot':'油浴锅','round_flask':'圆底烧瓶','weight':'电子称','bottle':'试剂瓶',
+      'stand':'铁架台','dropper':'滴管','heater':'磁力搅拌器','measuring_cylinder':'量筒',
+      'needle':'针管','paper':'称量纸','spoon':'药匙','tri_flask':'锥形瓶'
+      ,'liquid_transferor':'移液枪','weight_merged':'电子秤组合体'},
+      quality:{'paper':[null,null,0,0,0,1],'tri_flask':[null,2,0,0,0,0]},//20.000g
       step_finish:[0,0,0],//step1 step2 step3 是否执行完了？
       dialog_nextstep:false,
       btn_nextstep:false,
       btn_post:true,
-
+      advancedTexture:null,
+      controller:null,
+      mesh_back:null,
+      mesh_front:null,
+      spliced_meshes:[],
+      electronicScaleQuality:[null,null,0,0,0,0]
     };
   },
   methods: {
@@ -308,11 +325,13 @@ export default {
       this.scene = await this.createScene();
       this.hl = new BABYLON.HighlightLayer("hl1", this.scene,{mainTextureRatio:1}); //high light
       this.hl.innerGlow = false;
+      this.hl2 = new BABYLON.HighlightLayer("hl2", this.scene,{mainTextureRatio:1}); //high light the connected mesh
+      this.hl2.outerGlow = false;
       await this.createCamera(this.scene, this.canvas);
       await this.createLight(this.scene);
       await this.createModel(this.scene, this.canvas);
+      this.advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
       // await this.createUx(this.scene);
-      
       this.engine.runRenderLoop(() => {
         this.scene.render();
       });
@@ -321,30 +340,165 @@ export default {
       });
       window.addEventListener("pointermove",()=>{
         var pickResult = this.scene.pick(this.scene.pointerX, this.scene.pointerY);
-        if(this.pickedObj!=null){
-          this.hl.removeMesh(this.pickedObj);
+        if(this.hoveredObj!=null){
+          this.hl.removeMesh(this.hoveredObj);
+          this.hoveredObj=null;
         }
         if(pickResult.hit){
+          var array1 = ['weight.round_flask','weight.paper','stand.tri_flask','weight.round_flask','weight.pot','weight.tri_flask'];
           if(pickResult.pickedMesh.id != 'ground'){
             this.hl.addMesh(pickResult.pickedMesh,BABYLON.Color3.Purple());
-            this.pickedObj = pickResult.pickedMesh;
+            if(this.pickedObj!=null && this.pickedObj.id!=pickResult.pickedMesh.id){
+              this.addGui(this.pickedObj.id,pickResult.pickedMesh.id);
+            }
+            else if(array1.includes(pickResult.pickedMesh.id)){
+              this.addGui2(pickResult.pickedMesh.id);
+            }
+            this.hoveredObj = pickResult.pickedMesh;
           }
-        } 
+          else{
+            if(this.pickedObj!=null && this.controller!=null){
+              this.advancedTexture.removeControl(this.controller);
+              this.controller = null;
+            }
+          }
+        }
       });
       window.addEventListener("pointerup", () => {
         if(this.pickedObj!=null){
           this.hl.removeMesh(this.pickedObj);
+          this.pickedObj=null;
         }
       });
       window.addEventListener("pointerdown", () => {
         var pickResult = this.scene.pick(this.scene.pointerX, this.scene.pointerY);
         if(pickResult.hit){
           if(pickResult.pickedMesh.id != 'ground'){
+            console.log(pickResult.pickedMesh.id)
             this.hl.addMesh(pickResult.pickedMesh,BABYLON.Color3.Purple())
             this.pickedObj = pickResult.pickedMesh;
           }
         } 
       });
+    },
+    addGui2(hoverid){
+      if(this.controller!=null){
+        this.advancedTexture.removeControl(this.controller);
+        this.controller = null;
+      }
+      var button1 = GUI.Button.CreateSimpleButton("btn2",'分离');
+      this.advancedTexture.addControl(button1);
+      button1.width = '40px';
+      button1.height = '20px';
+      button1.fontSize = 16;
+      button1.cornerRadius = 20;
+      button1.background = 'gray';
+      button1.linkWithMesh(this.scene.getMeshByID(hoverid));  
+      button1.linkOffsetY = -50;
+      button1.linkOffsetX = -50;
+      button1.color = 'black';
+      this.controller = button1;
+      button1.onPointerClickObservable.add(()=>{});
+    },
+    addGui(pickid,hoverid){
+      if(this.controller!=null){
+        this.advancedTexture.removeControl(this.controller);
+        this.controller = null;
+      }
+      var button1 = GUI.Button.CreateSimpleButton("btn1",'拼接');
+      this.advancedTexture.addControl(button1);
+      button1.width = '60px';
+      button1.height = '40px';
+      button1.fontSize = 16;
+      button1.cornerRadius = 20;
+      button1.background = 'white';
+      button1.linkWithMesh(this.scene.getMeshByID(hoverid));  
+      button1.linkOffsetY = -50;
+      button1.linkOffsetX = -50;
+      button1.color = 'black';
+      this.controller = button1;
+      button1.onPointerClickObservable.add(()=>{
+        var x = this.scene.getMeshByID(hoverid).position.x;
+        var y = this.scene.getMeshByID(hoverid).position.y;
+        var z = this.scene.getMeshByID(hoverid).position.z;
+        if(hoverid == 'weight' || hoverid =='weight_merged'){
+          var array1=new Array(6);
+          if(this.quality.hasOwnProperty(pickid)){
+            for(var i=0;i<6;i++){
+              if(this.quality[pickid][i] !=null && this.electronicScaleQuality[i]!=null){
+                array1[i] = this.quality[pickid][i]+this.electronicScaleQuality[i]
+              }
+              else if(this.quality[pickid][i] ==null || this.electronicScaleQuality[i]==null){
+                var a = (this.quality[pickid][i]==null)?this.electronicScaleQuality[i]:this.quality[pickid][i];
+                array1[i] = a;
+              }
+              else{
+                array1[i] = null;
+              }
+            }
+          }
+          this.modifyElectronicScale(array1[0],array1[1],array1[2],array1[3],array1[4],array1[5]);
+        }
+        if(pickid =='paper' && hoverid =='weight'){
+          this.scene.getMeshByID(pickid).position = new BABYLON.Vector3(x,y+0.07,z);//(左右,上下,前后)  
+          var mesh = BABYLON.Mesh.MergeMeshes([this.scene.getMeshByID(hoverid), this.scene.getMeshByID(pickid)],true, true, undefined, false, true);
+          mesh.id = 'weight.paper';
+          mesh.addBehavior(
+            new BABYLON.PointerDragBehavior({
+              dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+            })
+          );
+          
+        }
+        else if(pickid =='round_flask' && hoverid =='stand'){
+          this.scene.getMeshByID(pickid).position = new BABYLON.Vector3(x-0.175,y+0.18,z);//(左右,上下,前后)
+          var mesh = BABYLON.Mesh.MergeMeshes([this.scene.getMeshByID(hoverid), this.scene.getMeshByID(pickid)],true, true, undefined, false, true); 
+          mesh.id = 'weight.round_flask'
+          this.hl2.addMesh(mesh,BABYLON.Color3.Black());
+        }
+        else if(pickid =='tri_flask' && hoverid =='stand'){
+          this.scene.getMeshByID(pickid).position = new BABYLON.Vector3(x-0.175,y+0.18,z);
+          var mesh = BABYLON.Mesh.MergeMeshes([this.scene.getMeshByID(hoverid), this.scene.getMeshByID(pickid)],true, true, undefined, false, true); 
+          mesh.id = 'stand.tri_flask';
+          this.hl2.addMesh(mesh,BABYLON.Color3.Black());
+        }
+        else if(pickid =='round_flask' && hoverid =='weight'){
+          this.scene.getMeshByID(pickid).position = new BABYLON.Vector3(x,y+0.06,z);
+          var mesh = BABYLON.Mesh.MergeMeshes([this.scene.getMeshByID(hoverid), this.scene.getMeshByID(pickid)],true, true, undefined, false, true); 
+          mesh.id = 'weight.round_flask';
+          mesh.addBehavior(
+            new BABYLON.PointerDragBehavior({
+              dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+            })
+          );
+        }
+        else if(pickid =='pot' && hoverid =='weight'){
+          this.scene.getMeshByID(pickid).position = new BABYLON.Vector3(x,y+0.07,z-0.02);
+          var mesh = BABYLON.Mesh.MergeMeshes([this.scene.getMeshByID(hoverid), this.scene.getMeshByID(pickid)],true, true, undefined, false, true); 
+          mesh.id = 'weight.pot';
+          mesh.addBehavior(
+            new BABYLON.PointerDragBehavior({
+              dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+            })
+          );
+        }
+        else if(pickid =='tri_flask' && hoverid =='weight'){
+          this.scene.getMeshByID(pickid).position = new BABYLON.Vector3(x,y+0.06,z);
+          var mesh = BABYLON.Mesh.MergeMeshes([this.scene.getMeshByID(hoverid), this.scene.getMeshByID(pickid)],true, true, undefined, false, true); 
+          mesh.id = 'weight.tri_flask';
+          mesh.addBehavior(
+            new BABYLON.PointerDragBehavior({
+              dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+            })
+          );
+        }
+        
+        this.advancedTexture.removeControl(this.controller)
+        this.controller = null;
+        
+        
+      });
+      
     },
     async createScene() {
       var scene = new BABYLON.Scene(this.engine);
@@ -356,17 +510,18 @@ export default {
     async createCamera(scene, canvas) {
       this.camera = new BABYLON.ArcRotateCamera(
         "Camera",
-        -Math.PI/2,
-        (Math.PI * 7) / 20,
         0,
+        0,
+        10,
         BABYLON.Vector3.Zero(),
         scene
       );
 
       // limit zoom
-      this.camera.lowerRadiusLimit = 0;
-      this.camera.upperRadiusLimit = 60;
-      this.camera.useBouncingBehavior = true;
+      this.camera.setPosition(new BABYLON.Vector3(0, Math.PI/3, -2));
+      //this.camera.lowerRadiusLimit = 0;
+      //this.camera.upperRadiusLimit = 60;
+      //this.camera.useBouncingBehavior = true;
       this.camera.attachControl(canvas, true);
     },
     async createLight(scene, canvas) {
@@ -383,12 +538,10 @@ export default {
       light2.intensity = 0.15;
     },
     async createModel(scene, canvas) {
-      var ground = BABYLON.Mesh.CreateGround("ground", 8, 8, 1, scene, false);
+      var ground = BABYLON.Mesh.CreateGround("ground", 8, 8, 2, scene, false);
       var groundMaterial = new BABYLON.StandardMaterial("ground", scene);
       groundMaterial.specularColor = BABYLON.Color3.Black();
       ground.material = groundMaterial;
-
-      
       BABYLON.SceneLoader.ImportMesh(
         //铁架台
         "",
@@ -397,16 +550,8 @@ export default {
         scene,
         obj => {
           this.stand = obj;
-          console.log(obj)
-          for (var i = 0; i < this.stand.length; i++) {
-            this.stand[i].rotation = new BABYLON.Vector3(0, 0, 0);
-            this.stand[i].position = new BABYLON.Vector3(-0.3,0,0);//(左右,上下,前后)
-            this.stand[i].addBehavior(
-              new BABYLON.PointerDragBehavior({
-                dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
-              })
-            );
-          }
+          this.scene.getMeshByID('stand').rotation = new BABYLON.Vector3(0,Math.PI,0);
+          this.scene.getMeshByID('stand').position = new BABYLON.Vector3(1,0,0);
         }
       );
     },
@@ -419,39 +564,32 @@ export default {
         "round_flask.glb",
         this.scene,
         obj => {
-          for (var i = 0; i < obj.length; i++) {
-            obj[i].rotation = new BABYLON.Vector3(0, 0, 0);
-            obj[i].addBehavior(
+          this.scene.getMeshByID('round_flask').addBehavior(
               new BABYLON.PointerDragBehavior({
                 dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
               })
             );
-          }
         }
       );
     },
 
     addWeight(){
+      //电子称
       BABYLON.SceneLoader.ImportMesh(
-        //电子称
         "",
         "model/glb/",
         "weight.glb",
         this.scene,
         obj => {
-          for (var i = 0; i < obj.length; i++) {
-            
-            obj[i].rotation = new BABYLON.Vector3(0, 0, 0);
-            obj[i].addBehavior(
+          this.scene.getMeshByID('weight').rotation = new BABYLON.Vector3(0,Math.PI,0);
+          this.scene.getMeshByID('weight').addBehavior(
               new BABYLON.PointerDragBehavior({
                 dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
               })
-            );
+          );
           }
-        }
-      );
+        )
     },
-
     addBottle(){
        BABYLON.SceneLoader.ImportMesh(
         //试剂瓶
@@ -460,14 +598,11 @@ export default {
         "bottle.glb",
         this.scene,
         obj => {
-          for (var i = 0; i < obj.length; i++) {
-            obj[i].rotation = new BABYLON.Vector3(0, 0, 0);
-            obj[i].addBehavior(
+          this.scene.getMeshByID('bottle').addBehavior(
               new BABYLON.PointerDragBehavior({
                 dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
               })
             );
-          }
         }
       );
     },
@@ -480,14 +615,11 @@ export default {
         "stand.glb",
         this.scene,
         obj => {
-          for (var i = 0; i < obj.length; i++) {
-            obj[i].rotation = new BABYLON.Vector3(0, 0, 0);
-            obj[i].addBehavior(
+          this.scene.getMeshByID('stand').addBehavior(
               new BABYLON.PointerDragBehavior({
                 dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
               })
             );
-          }
         }
       );
     },
@@ -500,14 +632,11 @@ export default {
         "pot.glb",
         this.scene,
         obj => {
-          for (var i = 0; i < obj.length; i++) {
-            obj[i].rotation = new BABYLON.Vector3(0, 0, 0);
-            obj[i].addBehavior(
+          this.scene.getMeshByID('pot').addBehavior(
               new BABYLON.PointerDragBehavior({
                 dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
               })
             );
-          }
         }
       );
     },
@@ -520,16 +649,13 @@ export default {
         "dropper.glb",
         this.scene,
         obj => {
-          for (var i = 0; i < obj.length; i++) {
-            obj[i].scaling = new BABYLON.Vector3(1.5,1.5,1.5)
-            obj[i].rotation = new BABYLON.Vector3(0, 0, 0);
-            obj[i].position = new BABYLON.Vector3(0,0.1,0);//左右 上下 前后
-            obj[i].addBehavior(
+          this.scene.getMeshByID('dropper').scaling = new BABYLON.Vector3(1.5,1.5,1.5)
+          this.scene.getMeshByID('dropper').position = new BABYLON.Vector3(0,0.1,0);//左右 上下 前后
+          this.scene.getMeshByID('dropper').addBehavior(
               new BABYLON.PointerDragBehavior({
                 dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
               })
             );
-          }
         }
       );
     },
@@ -542,14 +668,13 @@ export default {
         "heater.glb",
         this.scene,
         obj => {
-          for (var i = 0; i < obj.length; i++) {
-            obj[i].rotation = new BABYLON.Vector3(0, 0, 0);
-            obj[i].addBehavior(
+          var mesh = BABYLON.Mesh.MergeMeshes([this.scene.getMeshByID('heater_primitive1'), this.scene.getMeshByID('heater_primitive0')],true, true, undefined, false, true);
+          mesh.id = 'heater';
+          mesh.addBehavior(
               new BABYLON.PointerDragBehavior({
                 dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
               })
             );
-          }
         }
       );
     },
@@ -562,14 +687,13 @@ export default {
         "liquid_transferor.glb",
         this.scene,
         obj => {
-          for (var i = 0; i < obj.length; i++) {
-            obj[i].rotation = new BABYLON.Vector3(0, 0, 0);
-            obj[i].addBehavior(
+          var mesh = BABYLON.Mesh.MergeMeshes([this.scene.getMeshByID('liquid transferor_primitive0'), this.scene.getMeshByID('liquid transferor_primitive1')],true, true, undefined, false, true);
+          mesh.id = 'liquid_transferor';
+          mesh.addBehavior(
               new BABYLON.PointerDragBehavior({
                 dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
               })
             );
-          }
         }
       );
     },
@@ -582,14 +706,11 @@ export default {
         "measuring_cylinder.glb",
         this.scene,
         obj => {
-          for (var i = 0; i < obj.length; i++) {
-            obj[i].rotation = new BABYLON.Vector3(0, 0, 0)
-            obj[i].addBehavior(
+          this.scene.getMeshByID('measuring_cylinder').addBehavior(
               new BABYLON.PointerDragBehavior({
                 dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
               })
             );
-          }
         }
       );
     },
@@ -602,14 +723,13 @@ export default {
         "needle.glb",
         this.scene,
         obj => {
-          for (var i = 0; i < obj.length; i++) {
-            obj[i].rotation = new BABYLON.Vector3(0, 0, 0)
-            obj[i].addBehavior(
+          var mesh = BABYLON.Mesh.MergeMeshes([this.scene.getMeshByID('needle_primitive1'), this.scene.getMeshByID('needle_primitive0')],true, true, undefined, false, true);
+          mesh.id = 'needle';
+          mesh.addBehavior(
               new BABYLON.PointerDragBehavior({
                 dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
               })
             );
-          }
         }
       );
     },
@@ -622,15 +742,13 @@ export default {
         "paper.glb",
         this.scene,
         obj => {
-          for (var i = 0; i < obj.length; i++) {
-            obj[i].rotation = new BABYLON.Vector3(0, 0, 0)
-            obj[i].position = new BABYLON.Vector3(0, 0.05, 0)
-            obj[i].addBehavior(
+          this.scene.getMeshByID('paper').position = new BABYLON.Vector3(0,0.05,0);
+          this.scene.getMeshByID('paper').addBehavior(
               new BABYLON.PointerDragBehavior({
                 dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
               })
             );
-          }
+          
         }
       );
     },
@@ -643,17 +761,13 @@ export default {
         "spoon.glb",
         this.scene,
         obj => {
-          this.spoon = obj;
-          for (var i = 0; i < obj.length; i++) {
-            obj[i].scaling = new BABYLON.Vector3(1.2,1.2,1.2);
-            obj[i].rotation = new BABYLON.Vector3(0, 0, 0);
-            obj[i].position = new BABYLON.Vector3(0,0.1,0);
-            obj[i].addBehavior(
+          this.scene.getMeshByID('spoon').scaling = new BABYLON.Vector3(1.2,1.2,1.2);
+          this.scene.getMeshByID('spoon').position = new BABYLON.Vector3(0,0.05,0);
+          this.scene.getMeshByID('spoon').addBehavior(
               new BABYLON.PointerDragBehavior({
                 dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
               })
             );
-          }
         }
       );
     },
@@ -666,14 +780,11 @@ export default {
         "tri_flask.glb",
         this.scene,
         obj => {
-          for (var i = 0; i < obj.length; i++) {
-            obj[i].rotation = new BABYLON.Vector3(0, 0, 0);
-            obj[i].addBehavior(
+          this.scene.getMeshByID('tri_flask').addBehavior(
               new BABYLON.PointerDragBehavior({
-                dragPlaneNormal: new BABYLON.Vector3(0, 2, 0)
+                dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
               })
             );
-          }
         }
       );
     },
@@ -728,12 +839,15 @@ export default {
     async zoomMinus() {
       this.camera.radius += 10;
     },
-    modifyElectronicScale(num1,num2,num3,num4){
+    modifyElectronicScale(num1,num2,num3,num4,num5,num6){
+      this.electronicScaleQuality = [num1,num2,num3,num4,num5,num6];
       //这用于修改电子秤示数
-      this.$refs.es.setAllNumber(num1,num2,num3,num4);
+      //不想填就填null
+      this.$refs.es.setAllNumber(num1,num2,num3,num4,num5,num6);
     },
     toZero(){
-      this.$refs.es.setAllNumber(0,0,0,0);
+      this.electronicScaleQuality = [null,null,0,0,0,0];
+      this.$refs.es.setAllNumber(null,null,0,0,0,0);
     },
     openDialog1(){
       this.dialog_nextstep = true;
@@ -760,7 +874,7 @@ export default {
 
   mounted() {
     this.init();
-    this.modifyElectronicScale(0,0,1,1);
+    this.modifyElectronicScale(null,null,0,0,0,0);
     
     setTimeout(() => {
       this.engine.resize();

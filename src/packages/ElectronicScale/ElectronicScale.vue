@@ -9,6 +9,26 @@
 			<div class="segment"></div>
 			<div class="segment"></div>
 		</div>
+
+		<div class="digit big">
+			<div class="segment"></div>
+			<div class="segment"></div>
+			<div class="segment"></div>
+			<div class="segment"></div>
+			<div class="segment"></div>
+			<div class="segment"></div>
+			<div class="segment"></div>
+		</div>
+
+		<div class="digit big">
+			<div class="segment"></div>
+			<div class="segment"></div>
+			<div class="segment"></div>
+			<div class="segment"></div>
+			<div class="segment"></div>
+			<div class="segment"></div>
+			<div class="segment"></div>
+		</div>
 	
 		<div class="separator"></div>
 		
@@ -71,10 +91,10 @@ export default {
 	}
   },
   methods:{
-	  setAllNumber(num1,num2,num3,num4){
-		  setAllNumber(num1,num2,num3,num4)
-		  //用法 0.000g
-		  //对应 num1.num2 num3 num4 g
+	  setAllNumber(num1,num2,num3,num4,num5,num6){
+		  setAllNumber(num1,num2,num3,num4,num5,num6)
+		  //用法 000.000g
+		  //对应 num1 num2 num3.num4 num5,num6g
 	  }
   }
   }

@@ -10,36 +10,43 @@ var digitSegments = [
   [1, 2, 3, 4, 5, 6, 7],
   [1, 2, 7, 3, 6],
   [1, 2, 7, 3, 6, 4],
+  [],
 ]
 
-var setAllNumber = function (num1, num2, num3, num4) {
-  var _big = document.querySelectorAll('.big');
+var setAllNumber = function (num1,num2,num3, num4, num5, num6) {
+  var segments = document.getElementsByClassName('segment');
+  
+  if (document.getElementsByClassName('on').length!=0){
+    for (var i = 0; i < segments.length; i++) {
+      segments[i].classList.remove('on')
+    }
+  }
   var _small = document.querySelectorAll('.small');
+  var _big = document.querySelectorAll('.big');
   var _g = document.querySelectorAll('.g');
   setNumber(_big[0], num1, 1);
+  setNumber(_big[1], num2, 1);
+  setNumber(_big[2], num3, 1);
 
-  setNumber(_small[0], num2, 1);
-  setNumber(_small[1], num3, 1);
-  setNumber(_small[2], num4, 1);
+  setNumber(_small[0], num4, 1);
+  setNumber(_small[1], num5, 1);
+  setNumber(_small[2], num6, 1);
 
   setNumber(_g[0], 10, 1);
 }
 
 var setNumber = function (digit, number, on) {
+  if(number ==null) number =11;
   var segments = digit.querySelectorAll('.segment');
-  var current = parseInt(digit.getAttribute('data-value'));
-  //only switch if number has changed or wasn't set
-  if (isNaN(current) || current != number) {
-    //set new number after
-    setTimeout(function () {
-      digitSegments[number].forEach(function (digitSegment, index) {
-        setTimeout(function () {
-          segments[digitSegment - 1].classList.add('on');
-        }, index * 45)
-      });
-    }, 250);
-    digit.setAttribute('data-value', number);
-  }
+  setTimeout(function () {
+    digitSegments[number].forEach(function (digitSegment, index) {
+      setTimeout(function () {
+        segments[digitSegment - 1].classList.add('on');
+      }, index * 45)
+    });
+  }, 250);
+  digit.setAttribute('data-value', number);
+  
 }
 
 export{
