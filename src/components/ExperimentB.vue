@@ -58,8 +58,8 @@
         <v-card>
           <v-card-title class="font-weight-black subheading">工具</v-card-title>
 
-          <v-container style="padding:5px">
-            <v-layout row wrap>
+          <v-container style = 'padding:2px;height:300px;'>
+            <v-layout style="overflow-y:scroll;height:300px"  row wrap>
               <v-flex xs3>
                 <v-card @click="addRound_flask()">
                   <v-card-text>
@@ -158,6 +158,25 @@
                   </v-card-text>
                 </v-card>
               </v-flex>
+
+              <v-flex xs3>
+                <v-card @click="addBottle()">
+                  <v-card-text>
+                    <v-img src="images/bottle.png" aspect-ratio="1"></v-img>
+                    <div class="body-2 text-xs-center">硫辛酸</div>
+                  </v-card-text>
+                </v-card>
+              </v-flex>
+
+              <v-flex xs3>
+                <v-card @click="addSpoon()">
+                  <v-card-text>
+                    <v-img src="images/spoon.png" aspect-ratio="1"></v-img>
+                    <div class="body-2 text-xs-center">药匙</div>
+                  </v-card-text>
+                </v-card>
+              </v-flex>
+
             </v-layout>
           </v-container>
         </v-card>
@@ -204,7 +223,7 @@ export default {
         pot: "油浴锅",
         round_flask: "圆底烧瓶",
         weight: "电子称",
-        bottle: "试剂瓶",
+        bottle: "硫辛酸",
         stand: "铁架台",
         dropper: "滴管",
         heater: "磁力搅拌器",
@@ -214,7 +233,9 @@ export default {
         spoon: "药匙",
         tri_flask: "锥形瓶",
         liquid_transferor: "移液枪",
-        weight_merged: "电子秤组合体"
+        weight_merged: "电子秤组合体",
+        spoon:'药匙',
+        trash_can:'垃圾桶'
       },
       quality: {
         paper: [null, null, 0, 0, 0, 1],
@@ -229,7 +250,8 @@ export default {
       mesh_back: null,
       mesh_front: null,
       spliced_meshes: [],
-      electronicScaleQuality: [null, null, 0, 0, 0, 0]
+      electronicScaleQuality: [null, null, 0, 0, 0, 0],
+      stable:0 //产生分离按钮的时候鼠标滑动不太稳定 这个等于一个flag
     };
   },
   methods: {
@@ -250,6 +272,7 @@ export default {
       this.hl2.outerGlow = false;
       await this.createCamera(this.scene, this.canvas);
       await this.createLight(this.scene);
+       
       await this.createModel(this.scene, this.canvas);
       this.advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI(
         "UI"
@@ -278,7 +301,7 @@ export default {
             "weight.round_flask",
             "weight.paper",
             "stand.tri_flask",
-            "weight.round_flask",
+            "stand.round_flask",
             "weight.pot",
             "weight.tri_flask"
           ];
@@ -289,12 +312,19 @@ export default {
               this.pickedObj.id != pickResult.pickedMesh.id
             ) {
               this.addGui(this.pickedObj.id, pickResult.pickedMesh.id);
-            } else if (array1.includes(pickResult.pickedMesh.id)) {
+              this.stable = 0;
+            } else if (array1.includes(pickResult.pickedMesh.id) && this.stable ==0 ) {
               this.addGui2(pickResult.pickedMesh.id);
+              this.stable = 1;
             }
             this.hoveredObj = pickResult.pickedMesh;
           } else {
+            this.stable = 0;
             if (this.pickedObj != null && this.controller != null) {
+              this.advancedTexture.removeControl(this.controller);
+              this.controller = null;
+            }
+            else if(this.controller!=null && this.controller.name =='btn2'){
               this.advancedTexture.removeControl(this.controller);
               this.controller = null;
             }
@@ -334,18 +364,46 @@ export default {
       button1.cornerRadius = 20;
       button1.background = "gray";
       button1.linkWithMesh(this.scene.getMeshByID(hoverid));
-      button1.linkOffsetY = -50;
-      button1.linkOffsetX = -50;
       button1.color = "black";
       this.controller = button1;
-      button1.onPointerClickObservable.add(() => {});
+      button1.onPointerClickObservable.add(() => {
+        this.scene.removeMesh(this.scene.getMeshByID(hoverid));
+        var array1 = hoverid.split(".");
+        for(var i=0;i<array1.length;i++){
+            switch (array1[i]) {
+              case 'weight':
+                this.addWeight();
+                this.toZero();
+                break;
+              case 'paper':
+                this.addPaper();
+                break;
+              case 'round_flask':
+                this.addRound_flask();
+                break;
+              case 'stand':
+                this.addStand();
+                break;
+              case 'tri_flask':
+                this.addTriFlask();
+                break;
+              default:
+                break;
+            }
+        }
+        console.log();
+      });
     },
     addGui(pickid, hoverid) {
       if (this.controller != null) {
         this.advancedTexture.removeControl(this.controller);
         this.controller = null;
       }
-      var button1 = GUI.Button.CreateSimpleButton("btn1", "拼接");
+      var str  ="拼接"
+      if(hoverid =='weight')str = "放置";
+      else if(hoverid =='trash_can')str = "移除";
+      else if(pickid == 'spoon')str =  "拾取";
+      var button1 = GUI.Button.CreateSimpleButton("btn1", str);
       this.advancedTexture.addControl(button1);
       button1.width = "60px";
       button1.height = "40px";
@@ -428,7 +486,7 @@ export default {
             false,
             true
           );
-          mesh.id = "weight.round_flask";
+          mesh.id = "stand.round_flask";
           this.hl2.addMesh(mesh, BABYLON.Color3.Black());
         } else if (pickid == "tri_flask" && hoverid == "stand") {
           this.scene.getMeshByID(pickid).position = new BABYLON.Vector3(
@@ -506,6 +564,11 @@ export default {
               dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
             })
           );
+        }else if(pickid =='spoon' && hoverid =='bottle'){
+
+        }
+        else if(hoverid == 'trash_can'){
+          this.scene.removeMesh(this.scene.getMeshByID(pickid));
         }
 
         this.advancedTexture.removeControl(this.controller);
@@ -533,7 +596,7 @@ export default {
       this.camera.setPosition(new BABYLON.Vector3(0, Math.PI / 3, -2));
       this.camera.lowerRadiusLimit = 0;
       //this.camera.upperRadiusLimit = 60;
-      //this.camera.useBouncingBehavior = true;
+      this.camera.useBouncingBehavior = true;
       this.camera.attachControl(canvas, true);
     },
     async createLight(scene, canvas) {
@@ -554,6 +617,7 @@ export default {
       var groundMaterial = new BABYLON.StandardMaterial("ground", scene);
       groundMaterial.specularColor = BABYLON.Color3.Black();
       ground.material = groundMaterial;
+      this.addTrash_can();
       BABYLON.SceneLoader.ImportMesh(
         //铁架台
         "",
@@ -576,7 +640,7 @@ export default {
       );
     },
 
-    addModel(name, scaling, position, rolation, behavior, scene) {
+    addModel(name, scaling, position, rotation, behavior, scene) {
       /*
         name String
         scaling BABYLON.Vector3
@@ -600,12 +664,26 @@ export default {
           }
           if (position) model.position = position;
           if (scaling) model.scaling = scaling;
-
+          if(rotation)model.rotation = rotation;
           return model;
         }
       );
     },
-
+    addTrash_can(){
+      BABYLON.SceneLoader.ImportMesh(
+        "",
+        "model/glb/",
+        "trash_can.glb",
+        this.scene,
+        obj => {
+          this.scene.getMeshByID("trashcan.1").id = 'trash_can';
+          this.scene.getMeshByID("trash_can").scaling = new BABYLON.Vector3(2,2,2);
+          this.scene.getMeshByID("trash_can").rotation =  new BABYLON.Vector3(0,Math.PI,0);
+          this.scene.getMeshByID("trash_can").position =  new BABYLON.Vector3(-200,0,200);
+          
+        }
+      );
+    },
     addRound_flask() {
       //圆底烧瓶
       BABYLON.SceneLoader.ImportMesh(
@@ -622,7 +700,6 @@ export default {
         }
       );
     },
-
     addWeight() {
       //电子称
       BABYLON.SceneLoader.ImportMesh(
@@ -669,6 +746,11 @@ export default {
         "stand.glb",
         this.scene,
         obj => {
+          this.scene.getMeshByID("stand").rotation = new BABYLON.Vector3(
+            0,
+            Math.PI,
+            0
+          );
           this.scene.getMeshByID("stand").addBehavior(
             new BABYLON.PointerDragBehavior({
               dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
@@ -796,36 +878,6 @@ export default {
         }
       );
     },
-
-    addNeedle() {
-      BABYLON.SceneLoader.ImportMesh(
-        //针管
-        "",
-        "model/glb/",
-        "needle.glb",
-        this.scene,
-        obj => {
-          var mesh = BABYLON.Mesh.MergeMeshes(
-            [
-              this.scene.getMeshByID("needle_primitive1"),
-              this.scene.getMeshByID("needle_primitive0")
-            ],
-            true,
-            true,
-            undefined,
-            false,
-            true
-          );
-          mesh.id = "needle";
-          mesh.addBehavior(
-            new BABYLON.PointerDragBehavior({
-              dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
-            })
-          );
-        }
-      );
-    },
-
     addPaper() {
       BABYLON.SceneLoader.ImportMesh(
         //称量纸
@@ -847,7 +899,35 @@ export default {
         }
       );
     },
-
+    addNeedle() {
+      BABYLON.SceneLoader.ImportMesh(
+        //针管
+        "",
+        "model/glb/",
+        "needle.glb",
+        this.scene,
+        obj => {
+          var mesh = BABYLON.Mesh.MergeMeshes(
+            [
+              this.scene.getMeshByID("node2"),
+              this.scene.getMeshByID("node3")
+            ],
+            true,
+            true,
+            undefined,
+            false,
+            true
+          );
+          mesh.id = "needle";
+          this.scene.getMeshByID("needle").scaling = new BABYLON.Vector3(0.3,0.3,0.3);
+          mesh.addBehavior(
+            new BABYLON.PointerDragBehavior({
+              dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+            })
+          );
+        }
+      );
+    },
     addSpoon() {
       BABYLON.SceneLoader.ImportMesh(
         //药匙
@@ -857,9 +937,9 @@ export default {
         this.scene,
         obj => {
           this.scene.getMeshByID("spoon").scaling = new BABYLON.Vector3(
-            1.2,
-            1.2,
-            1.2
+            1.5,
+            1.5,
+            1.5
           );
           this.scene.getMeshByID("spoon").position = new BABYLON.Vector3(
             0,
