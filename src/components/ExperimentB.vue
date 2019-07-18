@@ -8,7 +8,7 @@
           </v-responsive>
           <div style="float:right;font-family:KaiTi">
             当前选中：
-            <span style="color:#666666">{{(pickedObj!=null)?map[pickedObj.id]:'无'}}</span>
+            <span style="color:#666666">{{(pickingObj!=null)?map[pickingObj.id]:'无'}}</span>
           </div>
         </v-card>
       </v-flex>
@@ -43,17 +43,31 @@
         <!--步骤条-->
 
         <!--电子称示数-->
-        <v-hover>
+        <v-hover v-if="hasWeight()">
           <v-card slot-scope="{ hover }" :class="`elevation-${hover ? 12 : 2}`">
             <electronic-scale ref="es"></electronic-scale>
-            <v-card-title>电子称示数</v-card-title>
             <v-btn color="pink" dark small absolute bottom right fab @click="toZero()">
               <v-icon>fa fa-refresh</v-icon>
             </v-btn>
           </v-card>
         </v-hover>
         <!--电子称示数-->
-
+        <v-hover v-else>
+          <v-card slot-scope="{ hover }" :class="`elevation-${hover ? 12 : 2}`"  >
+            <v-alert 
+                  :value="true"
+                  type="warning"
+                  outline
+                  >
+                  <v-avatar
+                  size="60px"
+                  >
+                    <img src="images/bb8.png" alt="avatar">
+                  </v-avatar>
+                    &emsp;实验中请穿好实验服，戴好护目镜
+                  </v-alert>
+          </v-card>
+        </v-hover>
         <!--工具栏-->
         <v-card>
           <v-card-title class="font-weight-black subheading">工具</v-card-title>
@@ -216,26 +230,28 @@ export default {
       weight: null,
       hl: null,
       hoveredObj: null,
-      pickedObj: null,
+      pickingObj: null,
+      pickedObj:null,//上一次拾取的物品
       e1: 1,
       step: ["反应前期准备", "", ""],
       map: {
-        pot: "油浴锅",
-        round_flask: "圆底烧瓶",
-        weight: "电子称",
-        bottle: "硫辛酸",
-        stand: "铁架台",
-        dropper: "滴管",
-        heater: "磁力搅拌器",
-        measuring_cylinder: "量筒",
-        needle: "针管",
-        paper: "称量纸",
-        spoon: "药匙",
-        tri_flask: "锥形瓶",
-        liquid_transferor: "移液枪",
-        weight_merged: "电子秤组合体",
-        spoon:'药匙',
-        trash_can:'垃圾桶'
+        'pot': "油浴锅",
+        'round_flask': "圆底烧瓶",
+        'weight': "电子称",
+        'bottle': "硫辛酸",
+        'stand': "铁架台",
+        'dropper': "滴管",
+        'heater': "磁力搅拌器",
+        'measuring_cylinder': "量筒",
+        'needle': "针管",
+        'paper': "称量纸",
+        'spoon': "药匙",
+        'tri_flask': "锥形瓶",
+        'liquid_transferor': "移液枪",
+        'weight_merged': "电子秤组合体",
+        'spoon':'药匙',
+        'trash_can':'垃圾桶',
+        'spoon.Cone':'有硫辛酸的药匙'
       },
       quality: {
         paper: [null, null, 0, 0, 0, 1],
@@ -281,7 +297,6 @@ export default {
       this.engine.runRenderLoop(() => {
         this.scene.render();
       });
-
       // this.addModel("round_flask", null, null, null, null, this.scene);
 
       window.addEventListener("resize", () => {
@@ -308,19 +323,20 @@ export default {
           if (pickResult.pickedMesh.id != "ground") {
             this.hl.addMesh(pickResult.pickedMesh, BABYLON.Color3.Purple());
             if (
-              this.pickedObj != null &&
-              this.pickedObj.id != pickResult.pickedMesh.id
+              this.pickingObj != null &&
+              this.pickingObj.id != pickResult.pickedMesh.id
             ) {
-              this.addGui(this.pickedObj.id, pickResult.pickedMesh.id);
+              this.addGui(this.pickingObj.id, pickResult.pickedMesh.id);
               this.stable = 0;
-            } else if (array1.includes(pickResult.pickedMesh.id) && this.stable ==0 ) {
+            } else if (array1.includes(pickResult.pickedMesh.id) && this.stable ==0 && this.controller==null ) {
+              //this.controller==null is neccesary!
               this.addGui2(pickResult.pickedMesh.id);
               this.stable = 1;
             }
             this.hoveredObj = pickResult.pickedMesh;
           } else {
             this.stable = 0;
-            if (this.pickedObj != null && this.controller != null) {
+            if (this.pickingObj != null && this.controller != null) {
               this.advancedTexture.removeControl(this.controller);
               this.controller = null;
             }
@@ -332,9 +348,9 @@ export default {
         }
       });
       window.addEventListener("pointerup", () => {
-        if (this.pickedObj != null) {
-          this.hl.removeMesh(this.pickedObj);
-          this.pickedObj = null;
+        if (this.pickingObj != null) {
+          this.hl.removeMesh(this.pickingObj);
+          this.pickingObj = null;
         }
       });
       window.addEventListener("pointerdown", () => {
@@ -346,10 +362,22 @@ export default {
           if (pickResult.pickedMesh.id != "ground") {
             console.log(pickResult.pickedMesh.id);
             this.hl.addMesh(pickResult.pickedMesh, BABYLON.Color3.Purple());
-            this.pickedObj = pickResult.pickedMesh;
+            this.pickingObj = pickResult.pickedMesh;
+            
           }
         }
       });
+    },
+    hasWeight(){
+      if(this.scene==null || this.scene.getMeshByID('weight')==null){
+        if(this.scene!=null){
+          for(var i=0;i<this.scene.meshes.length;i++){
+            if(this.scene.meshes[i].id.split('.').includes('weight'))return true;
+          }
+        }
+        return false;
+      }
+      else return true;
     },
     addGui2(hoverid) {
       if (this.controller != null) {
@@ -373,7 +401,6 @@ export default {
             switch (array1[i]) {
               case 'weight':
                 this.addWeight();
-                this.toZero();
                 break;
               case 'paper':
                 this.addPaper();
@@ -400,7 +427,7 @@ export default {
         this.controller = null;
       }
       var str  ="拼接"
-      if(hoverid =='weight')str = "放置";
+      if(hoverid =='weight'||hoverid =='weight.paper')str = "放置";
       else if(hoverid =='trash_can')str = "移除";
       else if(pickid == 'spoon')str =  "拾取";
       var button1 = GUI.Button.CreateSimpleButton("btn1", str);
@@ -472,6 +499,7 @@ export default {
               dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
             })
           );
+
         } else if (pickid == "round_flask" && hoverid == "stand") {
           this.scene.getMeshByID(pickid).position = new BABYLON.Vector3(
             x - 0.175,
@@ -565,10 +593,21 @@ export default {
             })
           );
         }else if(pickid =='spoon' && hoverid =='bottle'){
-
+          var x = this.scene.getMeshByID('spoon').position.x;
+          var y = this.scene.getMeshByID('spoon').position.y;
+          var z = this.scene.getMeshByID('spoon').position.z;
+          this.scene.removeMesh(this.scene.getMeshByID('spoon'));
+          this.addSpoonMerged(new BABYLON.Vector3(x,y,z));
+        }
+        else if(hoverid =='weight.paper' && pickid == 'spoon.Cone'){
+          var x=this.scene.getMeshByID('weight.paper').position.x;
+          var y=this.scene.getMeshByID('weight.paper').position.y;
+          var z=this.scene.getMeshByID('weight.paper').position.z;
+          this.addModel('cone',new BABYLON.Vector3(0.02,0.02,0.02),new BABYLON.Vector3(x,y,z),null,null,this.scene);
         }
         else if(hoverid == 'trash_can'){
           this.scene.removeMesh(this.scene.getMeshByID(pickid));
+          this.hasWeight();
         }
 
         this.advancedTexture.removeControl(this.controller);
@@ -655,7 +694,8 @@ export default {
         `${name}.glb`,
         scene,
         obj => {
-          let model = scene.getMeshByID(name);
+          var id = obj[1].id;
+          let model = scene.getMeshByID(id);
 
           if (behavior) {
             for (let i = 0; i < behavior.length; i++) {
@@ -668,6 +708,23 @@ export default {
           return model;
         }
       );
+    },
+    addPlate(){
+      BABYLON.SceneLoader.ImportMesh(
+        "",
+        "model/glb/",
+        "transparent.glb",
+        this.scene,
+        obj => {
+          console.log(obj)
+          //this.scene.getMeshByID("透明盘").id = 'plate';
+          this.scene.getMeshByID("Cylinder001").scaling = new BABYLON.Vector3(100,100,100);
+          // this.scene.getMeshByID("trash_can").rotation =  new BABYLON.Vector3(0,Math.PI,0);
+          
+          
+        }
+      );
+     // this.addModel("transparent",new BABYLON.Vector3(2,2,2), null, null, null, this.scene);
     },
     addTrash_can(){
       BABYLON.SceneLoader.ImportMesh(
@@ -718,6 +775,8 @@ export default {
               dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
             })
           );
+          this.hasWeight();
+          this.toZero();
         }
       );
     },
@@ -954,7 +1013,47 @@ export default {
         }
       );
     },
-
+    addSpoonMerged(position){
+      BABYLON.SceneLoader.ImportMesh(
+        //药匙
+        "",
+        "model/glb/",
+        "spoon.glb",
+        this.scene,
+        async obj => {
+          this.scene.getMeshByID("spoon").scaling = new BABYLON.Vector3(
+            1.5,
+            1.5,
+            1.5
+          );
+          BABYLON.SceneLoader.ImportMesh(//粉末
+            "",
+            "model/glb/",
+            "cone.glb",
+            this.scene,
+            obj => {
+              this.scene.getMeshByID('Cone').scaling = new BABYLON.Vector3(0.02,0.02,0.02);
+              this.scene.getMeshByID('Cone').position = new BABYLON.Vector3(-0.055,0.02,0);
+              var mesh = BABYLON.Mesh.MergeMeshes(
+                [this.scene.getMeshByID('Cone'), this.scene.getMeshByID('spoon')],
+                true,
+                true,
+                undefined,
+                false,
+                true
+              );
+              mesh.addBehavior(
+                new BABYLON.PointerDragBehavior({
+                  dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+                })
+              );
+              mesh.id = 'spoon.Cone';
+              this.scene.getMeshByID(mesh.id).position = position;
+            }
+          );
+        }
+      );
+    },
     addTriFlask() {
       BABYLON.SceneLoader.ImportMesh(
         //锥形瓶
@@ -1052,7 +1151,7 @@ export default {
 
   mounted() {
     this.init();
-    this.modifyElectronicScale(null, null, 0, 0, 0, 0);
+    
 
     setTimeout(() => {
       this.engine.resize();
