@@ -37,6 +37,11 @@
               >
                 <v-icon>fa fa-chevron-right</v-icon>
               </v-btn>
+              <div style="padding:5px;">
+                <span style="color:teal"><strong>本步骤总得分:&nbsp;<span style="color:orange">{{all_score}}</span><br>
+                当前得分:&nbsp;<span style="color:orange">{{now_score}}</span></strong></span> 
+              </div>
+              
             </v-stepper>
           </v-card>
         </v-hover>
@@ -201,7 +206,7 @@
     <v-dialog v-model="dialog_nextstep" max-width="290">
       <v-card>
         <v-card-title class="headline">进入下一步？</v-card-title>
-        <v-card-text>你本环节得分是xx,总分为xx,你确定进入下一个环节么？进入下一个环节后你没有办法回到本环节。</v-card-text>
+        <v-card-text>你本环节得分是<span style="color:orange">{{now_score}}</span>分,总分为<span style="color:orange">{{all_score}}</span>分,你确定进入下一个环节么？进入下一个环节后你没有办法回到本环节。</v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="green darken-1" flat="flat" @click="dialog_nextstep  = false">取消</v-btn>
@@ -210,6 +215,19 @@
       </v-card>
     </v-dialog>
     <!--对话框-->
+    <v-dialog v-model="dialog_result" max-width="290">
+      <v-card>
+        <v-card-title class="headline">本环节总结</v-card-title>
+        <v-card-text>你本环节得分是<span style="color:orange">{{now_score}}</span>分,总分为<span style="color:orange">{{all_score}}</span>分<br>
+        <div v-for="(item,index) in errortext" :key="index">{{i}}<br></div>
+        
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="green darken-1" flat="flat" @click="dialog_result = false">确定</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -218,11 +236,14 @@ import * as BABYLON from "@babylonjs/core/Legacy/legacy";
 import "@babylonjs/loaders/glTF";
 import "@babylonjs/loaders/OBJ";
 import * as GUI from "@babylonjs/gui";
-import { step1 } from "../js/step1.js";
+import { step1,node0 } from "../js/step1.js";
 import { Vector3 } from "@babylonjs/core/Legacy/legacy";
+import { Message } from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css'
 export default {
   data() {
     return {
+      timer:null,
       canvas: null,
       engine: null,
       scene: null,
@@ -257,8 +278,12 @@ export default {
         paper: [null, null, 0, 0, 0, 1],
         tri_flask: [null, 2, 0, 0, 0, 0]
       }, //20.000g
-      step_finish: [0, 0, 0], //step1 step2 step3 是否执行完了？
+      step_finish: [0,0,0], //step1 step2 step3 是否执行完了？
+      all_score:null,
+      now_score:0,
       dialog_nextstep: false,
+      dialog_result:false,
+      errortext:[],
       btn_nextstep: false,
       btn_post: true,
       advancedTexture: null,
@@ -1134,35 +1159,66 @@ export default {
     openDialog1() {
       this.dialog_nextstep = true;
     },
-    step1() {},
     nextStep() {
+      this.dialog_nextstep = false;
       this.e1 += 1;
       if (this.e1 == 2) {
-        console.log("me");
         this.step = ["", "搭建反应装置", ""];
+        this.errortext = step1.getAllNodeErrorText();
+        this.dialog_result = true;
+        console.log(this.errortext )
       } else if (this.e1 == 3) {
         this.step = ["", "", "聚合物合成"];
         this.btn_nextstep = true;
         this.btn_post = false;
       }
-      this.dialog_nextstep = false;
+      
+      
+
     }
   },
 
   mounted() {
     this.init();
-    
-
     setTimeout(() => {
       this.engine.resize();
-      if (this.step_finish == [0, 0, 0]) {
-        this.step1();
-      } else if (this.step_finish == [1, 0, 0]) {
-        this.step2();
-      } else if (this.step_finish == [1, 1, 0]) {
-        this.step3();
-      }
     }, 500);
+  },
+  created(){
+    clearInterval(this.timer)
+    this.timer = null
+    if(this.timer == null) {
+      this.timer = setInterval( () => {
+        if(this.scene!=null){
+          if (this.step_finish.toString() == [0,0,0].toString()) {
+            this.all_score=step1.all_score;
+            step1.setStepNeed(this.scene,this.electronicScaleQuality);
+            var node = step1.checkAllNodeScore();
+            if(node !=null){
+              Message({
+                dangerouslyUseHTMLString: true,
+                message: '<strong><span style="color:black;">'+node.successtext+'</span>&emsp;'+'<span style="color: teal">得分+1</span></strong>',
+                type:'success'
+              });
+              this.now_score = step1.getNowScore();
+            }
+          } else if (this.step_finish.toString() == [1,0,0].toString()) {
+            this.all_score=step2.all_score;
+            this.step2.setStep1Need(this.scene,this.electronicScaleQuality);
+          } else if (this.step_finish.toString() == [1,1,0].toString()) {
+            this.all_score=step3.all_score;
+            this.step3.setStep1Need(this.scene,this.electronicScaleQuality);
+          } else {
+            
+          }
+        }
+      }, 500)//500ms检测一下是否能得到每步分数
+    }
+  },
+  destroyed() {
+      // 每次离开当前界面时，清除定时器
+      clearInterval(this.timer)
+      this.timer = null
   }
 };
 </script>
