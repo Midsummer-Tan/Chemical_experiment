@@ -22,8 +22,9 @@ class Node{
 class Node0 extends Node{
     errortext = '你未调零';
     successtext = "调零";
+    //这步也有可能产生Bug !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     getScore(){
-        if (this.scene.getMeshByID('weight.paper') != null && this.electronicScaleQuality.toString() == [null, null, 0, 0, 0, 0].toString())
+        if (this.scene.getMeshByID('round_flask.Cone') == null && this.scene.getMeshByID('weight.paper') != null && this.electronicScaleQuality.toString() == [null, null, 0, 0, 0, 0].toString())
         {
             this.setScore(1);
             return 1;
@@ -31,10 +32,55 @@ class Node0 extends Node{
         else return 0;
     }
 }
+class Node1 extends Node{
+    errortext = '你未称量硫辛酸药品';
+    successtext = '称量硫辛酸药品';
+    getScore(){
+        if(this.scene.getMeshByID('weight.paper_Cone')!=null){
+            this.setScore(1);
+            return 1;
+        }
+        return 0;
+    }
+}
+class Node2 extends Node{
+    errortext = '硫辛酸药品未到5.000g';
+    successtext = '量取5.000g硫辛酸药品';
+    getScore(){
+        if (this.scene.getMeshByID('weight.paper_Cone') != null && this.electronicScaleQuality.toString() == [null,null,5,0,0,0]){
+            this.setScore(1);
+            return 1;
+        }
+        return 0;
+    }
+}
+class Node3 extends Node{
+    errortext = '没有将硫辛酸药品倒入10ml烧瓶中';
+    successtext = '将硫辛酸药品倒入10ml烧瓶中';
+    getScore(){
+        if(this.scene.getMeshByID('round_flask.Cone')!=null){
+            this.setScore(1);
+            return 1;
+        }
+        return 0;
+    }
+}
+class Node4 extends Node{
+    errortext = '称量氯化铁之前未调零';
+    successtext = '称量前调零';
+    //这步有可能产生bug 因为有的人可能会先称氯化铁！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！以后再改
+    getScore(){
+        if (this.scene.getMeshByID('round_flask.Cone') != null && this.scene.getMeshByID('weight.paper') != null && this.electronicScaleQuality.toString() == [null, null, 0, 0, 0, 0].toString()){
+            this.setScore(1);
+            return 1;
+        }
+        return 0;
+    }
+}
 class Step1{
-    // textarray = ['你未调零', '你未用药匙取硫辛酸药品'
+    // textarray = ['你未调零', '你未称量硫辛酸药品'
     //     , '硫辛酸药品未到5.000g', '没有将硫辛酸药品倒入10ml烧瓶中',
-    //     '未进行第二次调零', '没有用药匙取出三氯化铁药品并放于称量纸上',
+    //     '称量氯化铁之前未调零', '没有用药匙取出三氯化铁药品并放于称量纸上',
     //     '三氯化铁质量未达到0.100g', '三氯化铁药品未放入25ml锥形瓶中', '未用滴管量取丙酮并放入25ml锥形瓶中',
     //     '丙酮液面未达到量筒的14ml刻度处', '未将丙酮与三氯化铁混合', '没有左右震荡丙酮与三氯化铁混合溶液',
     //     '未用塑料薄膜将锥形瓶口封口', '未用针管吸取DIB交联剂', 'DIB试剂并未达到针管的0.35ml刻度处'];
@@ -83,8 +129,12 @@ class Step1{
     }
 }
 var node0 = new Node0(0);
-var step1 = new Step1([node0]); 
+var node1 = new Node1(1);
+var node2 = new Node2(2);
+var node3 = new Node3(3);
+var node4 = new Node4(4);
+var step1 = new Step1([node0,node1,node2,node3,node4]); 
 
 export {
-    step1,node0
+    step1
 }

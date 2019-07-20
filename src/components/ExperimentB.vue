@@ -83,7 +83,7 @@
                 <v-card @click="addRound_flask()">
                   <v-card-text>
                     <v-img src="images/round_flask.png" aspect-ratio="1"></v-img>
-                    <div class="body-2 text-xs-center">圆底烧瓶</div>
+                    <div class="body-2 text-xs-center">圆底烧瓶(10ml)</div>
                   </v-card-text>
                 </v-card>
               </v-flex>
@@ -236,7 +236,7 @@ import * as BABYLON from "@babylonjs/core/Legacy/legacy";
 import "@babylonjs/loaders/glTF";
 import "@babylonjs/loaders/OBJ";
 import * as GUI from "@babylonjs/gui";
-import { step1,node0 } from "../js/step1.js";
+import { step1 } from "../js/step1.js";
 import { Vector3 } from "@babylonjs/core/Legacy/legacy";
 import { Message } from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css'
@@ -272,11 +272,14 @@ export default {
         'weight_merged': "电子秤组合体",
         'spoon':'药匙',
         'trash_can':'垃圾桶',
-        'spoon.Cone':'有硫辛酸的药匙'
+        'spoon.Cone':'有硫辛酸的药匙',
+        'weight.paper_Cone':'有硫辛酸的电子称',
+        'paper_Cone':'带有硫辛酸的称量纸'
       },
       quality: {
-        paper: [null, null, 0, 0, 0, 1],
-        tri_flask: [null, 2, 0, 0, 0, 0]
+        'paper': [null, null, 0, 0, 0, 1],
+        'tri_flask': [null, 2, 0, 0, 0, 0],
+        'Cone':[null,null,1,0,0,0]
       }, //20.000g
       step_finish: [0,0,0], //step1 step2 step3 是否执行完了？
       all_score:null,
@@ -307,10 +310,6 @@ export default {
         mainTextureRatio: 1
       }); //high light
       this.hl.innerGlow = false;
-      this.hl2 = new BABYLON.HighlightLayer("hl2", this.scene, {
-        mainTextureRatio: 1
-      }); //high light the connected mesh
-      this.hl2.outerGlow = false;
       await this.createCamera(this.scene, this.canvas);
       await this.createLight(this.scene);
        
@@ -343,7 +342,8 @@ export default {
             "stand.tri_flask",
             "stand.round_flask",
             "weight.pot",
-            "weight.tri_flask"
+            "weight.tri_flask",
+            'weight.paper_Cone'
           ];
           if (pickResult.pickedMesh.id != "ground") {
             this.hl.addMesh(pickResult.pickedMesh, BABYLON.Color3.Purple());
@@ -372,12 +372,6 @@ export default {
           }
         }
       });
-      window.addEventListener("pointerup", () => {
-        if (this.pickingObj != null) {
-          this.hl.removeMesh(this.pickingObj);
-          this.pickingObj = null;
-        }
-      });
       window.addEventListener("pointerdown", () => {
         var pickResult = this.scene.pick(
           this.scene.pointerX,
@@ -390,6 +384,12 @@ export default {
             this.pickingObj = pickResult.pickedMesh;
             
           }
+        }
+      });
+      window.addEventListener("pointerup", () => {
+        if (this.pickingObj != null) {
+          this.hl.removeMesh(this.pickingObj);
+          this.pickingObj = null;
         }
       });
     },
@@ -439,6 +439,8 @@ export default {
               case 'tri_flask':
                 this.addTriFlask();
                 break;
+              case 'paper_Cone':
+                this.addPaperCone();
               default:
                 break;
             }
@@ -452,9 +454,10 @@ export default {
         this.controller = null;
       }
       var str  ="拼接"
-      if(hoverid =='weight'||hoverid =='weight.paper')str = "放置";
+      if(hoverid =='weight'||hoverid.indexOf('weight')!=-1)str = "放置";
       else if(hoverid =='trash_can')str = "移除";
       else if(pickid == 'spoon')str =  "拾取";
+      else if(pickid == 'paper_Cone' && hoverid == 'round_flask')str ='倒入';
       var button1 = GUI.Button.CreateSimpleButton("btn1", str);
       this.advancedTexture.addControl(button1);
       button1.width = "60px";
@@ -471,38 +474,36 @@ export default {
         var x = this.scene.getMeshByID(hoverid).position.x;
         var y = this.scene.getMeshByID(hoverid).position.y;
         var z = this.scene.getMeshByID(hoverid).position.z;
-        if (hoverid == "weight" || hoverid == "weight_merged") {
+        if (hoverid == "weight" || hoverid.indexOf("weight")!=-1) {
           var array1 = new Array(6);
-          if (this.quality.hasOwnProperty(pickid)) {
-            for (var i = 0; i < 6; i++) {
-              if (
-                this.quality[pickid][i] != null &&
-                this.electronicScaleQuality[i] != null
-              ) {
-                array1[i] =
-                  this.quality[pickid][i] + this.electronicScaleQuality[i];
-              } else if (
-                this.quality[pickid][i] == null ||
-                this.electronicScaleQuality[i] == null
-              ) {
-                var a =
-                  this.quality[pickid][i] == null
-                    ? this.electronicScaleQuality[i]
-                    : this.quality[pickid][i];
-                array1[i] = a;
-              } else {
-                array1[i] = null;
+          array1.fill(0);
+          var thing = pickid.split('.');
+          for(var j = 0 ; j < thing.length ; j++){
+            if (this.quality.hasOwnProperty(thing[j])) {
+              for (var i = 5; i >=0; i-- ) {
+                if(this.quality[thing[j]][i]==null && this.electronicScaleQuality[i]==null && array1[i]==0) array1[i]=null;
+                else{
+                  array1[i]+=(this.quality[thing[j]][i]+this.electronicScaleQuality[i])%10;
+                  if((this.quality[thing[j]][i]+this.electronicScaleQuality[i])>=10){
+                    if((i-1)<0){
+                      alert("电子称量度范围不足！");
+                    }
+                    else array1[i-1] += 1 ;
+                  }
+                }
               }
+              this.modifyElectronicScale(
+              array1[0],
+              array1[1],
+              array1[2],
+              array1[3],
+              array1[4],
+              array1[5]
+              );
             }
+            
           }
-          this.modifyElectronicScale(
-            array1[0],
-            array1[1],
-            array1[2],
-            array1[3],
-            array1[4],
-            array1[5]
-          );
+          
         }
         if (pickid == "paper" && hoverid == "weight") {
           this.scene.getMeshByID(pickid).position = new BABYLON.Vector3(
@@ -540,7 +541,22 @@ export default {
             true
           );
           mesh.id = "stand.round_flask";
-          this.hl2.addMesh(mesh, BABYLON.Color3.Black());
+        } else if (pickid =='round_flask.Cone' && hoverid == 'stand'){
+          //这步还没加分离
+          this.scene.getMeshByID(pickid).position = new BABYLON.Vector3(
+            -x + 0.175,
+            y + 0.18,
+            z
+          ); //(左右,上下,前后)
+          var mesh = BABYLON.Mesh.MergeMeshes(
+            [this.scene.getMeshByID(hoverid), this.scene.getMeshByID(pickid)],
+            true,
+            true,
+            undefined,
+            false,
+            true
+          );
+          mesh.id = "stand.round_flask.Cone";
         } else if (pickid == "tri_flask" && hoverid == "stand") {
           this.scene.getMeshByID(pickid).position = new BABYLON.Vector3(
             x - 0.175,
@@ -556,7 +572,6 @@ export default {
             true
           );
           mesh.id = "stand.tri_flask";
-          this.hl2.addMesh(mesh, BABYLON.Color3.Black());
         } else if (pickid == "round_flask" && hoverid == "weight") {
           this.scene.getMeshByID(pickid).position = new BABYLON.Vector3(
             x,
@@ -597,7 +612,8 @@ export default {
               dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
             })
           );
-        } else if (pickid == "tri_flask" && hoverid == "weight") {
+        }
+        else if (pickid == "tri_flask" && hoverid == "weight") {
           this.scene.getMeshByID(pickid).position = new BABYLON.Vector3(
             x,
             y + 0.06,
@@ -621,14 +637,103 @@ export default {
           var x = this.scene.getMeshByID('spoon').position.x;
           var y = this.scene.getMeshByID('spoon').position.y;
           var z = this.scene.getMeshByID('spoon').position.z;
-          this.scene.removeMesh(this.scene.getMeshByID('spoon'));
-          this.addSpoonMerged(new BABYLON.Vector3(x,y,z));
+          //this.scene.removeMesh(this.scene.getMeshByID('spoon'));
+          this.addModel('cone',new BABYLON.Vector3(0.02,0.02,0.02),new BABYLON.Vector3(x-0.055,y+0.02,z),null,null,this.scene);
+          setTimeout(()=>{var mesh = BABYLON.Mesh.MergeMeshes([this.scene.getMeshByID("Cone"),this.scene.getMeshByID("spoon")],
+            true,
+            true,
+            undefined,
+            false,
+            true
+          );
+          mesh.id = "spoon.Cone";
+          mesh.addBehavior(
+            new BABYLON.PointerDragBehavior({
+              dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+            })
+          );},500)
+          //this.addSpoonMerged(new BABYLON.Vector3(-x,y,z));//右手系变左手系 谁知道这怎么回事
         }
         else if(hoverid =='weight.paper' && pickid == 'spoon.Cone'){
-          var x=this.scene.getMeshByID('weight.paper').position.x;
-          var y=this.scene.getMeshByID('weight.paper').position.y;
-          var z=this.scene.getMeshByID('weight.paper').position.z;
-          this.addModel('cone',new BABYLON.Vector3(0.02,0.02,0.02),new BABYLON.Vector3(x,y,z),null,null,this.scene);
+          var mesh = this.scene.getMeshByID('weight.paper');
+          mesh.updateFacetData();
+          var po = mesh.getFacetPosition(Math.floor(mesh.facetNb/2));
+          var x=po.x;
+          var y=po.y;
+          var z=po.z;
+          this.addModel('cone',new BABYLON.Vector3(0.04,0.04,0.04),new BABYLON.Vector3(-x+0.08,y,z+0.18),null,null,this.scene);//右手系变左手系
+          mesh.disableFacetData();
+          
+          //移出带有粉末的勺子 加空勺子
+          var mesh = this.scene.getMeshByID('spoon.Cone')
+          mesh.updateFacetData();
+          var po = mesh.getFacetPosition(Math.floor(mesh.facetNb/2));
+          var x=po.x;
+          var y=po.y;
+          var z=po.z;
+          mesh.disableFacetData();
+          this.scene.removeMesh(mesh);
+          this.addModel('spoon',new BABYLON.Vector3(1.5,1.5,1.5),new BABYLON.Vector3(-x+0.08,y,z),null,[new BABYLON.PointerDragBehavior({dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)})],this.scene);
+
+          setTimeout(() => {
+            var mesh1 = BABYLON.Mesh.MergeMeshes(
+            [
+              this.scene.getMeshByID("weight.paper"),
+              this.scene.getMeshByID("Cone"),
+            ],
+            true,
+            true,
+            undefined,
+            false,
+            true
+            );
+            mesh1.id = 'weight.paper_Cone';
+            mesh1.addBehavior(
+              new BABYLON.PointerDragBehavior({
+                dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+              })
+            );
+          }, 500);
+        }
+        else if(hoverid =='weight.paper_Cone' && pickid == 'spoon.Cone'){
+          var mesh = this.scene.getMeshByID('spoon.Cone')
+          mesh.updateFacetData();
+          var po = mesh.getFacetPosition(Math.floor(mesh.facetNb/2));
+          var x=po.x;
+          var y=po.y;
+          var z=po.z;
+          mesh.disableFacetData();
+          this.scene.removeMesh(mesh);
+          //移出带有粉末的勺子 加空勺子
+          this.addModel('spoon',new BABYLON.Vector3(1.5,1.5,1.5),new BABYLON.Vector3(-x+0.08,y,z),null,[new BABYLON.PointerDragBehavior({dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)})],this.scene);
+        }
+        else if(pickid == 'paper_Cone' && hoverid =='round_flask'){
+          var mesh = this.scene.getMeshByID('round_flask');
+          var po = mesh.position;
+          var x = po.x;
+          var y = po.y;
+          var z = po.z;
+          this.scene.removeMesh(this.scene.getMeshByID('paper_Cone'));
+          this.addModel('cone',new BABYLON.Vector3(0.03,0.03,0.03),new BABYLON.Vector3(x,y+0.08,z),null,null,this.scene);
+          setTimeout(() => {
+            var mesh1 = BABYLON.Mesh.MergeMeshes(
+            [
+              this.scene.getMeshByID("Cone"),
+              this.scene.getMeshByID("round_flask"),
+            ],
+            true,
+            true,
+            undefined,
+            false,
+            true
+            );
+            mesh1.id = 'round_flask.Cone';
+            mesh1.addBehavior(
+              new BABYLON.PointerDragBehavior({
+                dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+              })
+            );
+          }, 500);
         }
         else if(hoverid == 'trash_can'){
           this.scene.removeMesh(this.scene.getMeshByID(pickid));
@@ -750,6 +855,30 @@ export default {
         }
       );
      // this.addModel("transparent",new BABYLON.Vector3(2,2,2), null, null, null, this.scene);
+    },
+    addPaperCone(){
+      this.addModel('paper',null,new BABYLON.Vector3(0,0.05,0),null,null,this.scene);
+      this.addModel('cone',new BABYLON.Vector3(0.02,0.02,0.02),new BABYLON.Vector3(0,0.07,0),null,null,this.scene);
+      setTimeout(() => {
+        var mesh = BABYLON.Mesh.MergeMeshes(
+            [
+              this.scene.getMeshByID("paper"),
+              this.scene.getMeshByID("Cone")
+            ],
+            true,
+            true,
+            undefined,
+            false,
+            true
+          );
+          mesh.id = "paper_Cone";
+          mesh.addBehavior(
+            new BABYLON.PointerDragBehavior({
+              dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+            })
+          );
+      }, 500);
+
     },
     addTrash_can(){
       BABYLON.SceneLoader.ImportMesh(
