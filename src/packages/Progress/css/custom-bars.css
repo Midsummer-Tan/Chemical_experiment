@@ -19,10 +19,10 @@
 }
 /* line 40, ../scss/custom-bars.scss */
 .flexy-grid:nth-of-type(odd) {
-  background-color: #D8DBE4;
+  background-color: #d8dbe4;
 }
 /* line 43, ../scss/custom-bars.scss */
-.flexy-grid input[type='checkbox'] {
+.flexy-grid input[type="checkbox"] {
   display: none;
 }
 
@@ -39,7 +39,8 @@
   background-color: rgba(255, 105, 0, 0.6);
   border: 1px solid rgba(153, 153, 153, 0.2);
   border-radius: 0.25em;
-  box-shadow: 0 0.1em 0.25em rgba(153, 153, 153, 0.6), inset 0 0.15em 0.05em rgba(254, 254, 254, 0.2);
+  box-shadow: 0 0.1em 0.25em rgba(153, 153, 153, 0.6),
+    inset 0 0.15em 0.05em rgba(254, 254, 254, 0.2);
 }
 /* line 61, ../scss/custom-bars.scss */
 .value-label:hover {
@@ -57,43 +58,58 @@
 
 /* line 74, ../scss/custom-bars.scss */
 .fa {
-  margin: 0 .1em;
+  margin: 0 0.1em;
   transition: transform 0.25s ease-in-out;
   transform-origin: 50% 55%;
 }
 
 /* line 80, ../scss/custom-bars.scss */
-input[type='checkbox']:checked ~ .value-label {
+input[type="checkbox"]:checked ~ .value-label {
   background: #444444;
   box-shadow: none;
 }
 
 /* line 86, ../scss/custom-bars.scss */
-input[type='checkbox']:checked ~ .flexy-column .bar[aria-valuenow] .percentage:before {
+input[type="checkbox"]:checked
+  ~ .flexy-column
+  .bar[aria-valuenow]
+  .percentage:before {
   width: 90%;
 }
 
 /* line 93, ../scss/custom-bars.scss */
-input[type='checkbox']:checked ~ .flexy-column .bar[aria-valuenow].heat-gradient .tooltip {
+input[type="checkbox"]:checked
+  ~ .flexy-column
+  .bar[aria-valuenow].heat-gradient
+  .tooltip {
   background-color: #ec0071;
   border-bottom: 1px solid #d30065;
 }
 /* line 97, ../scss/custom-bars.scss */
-input[type='checkbox']:checked ~ .flexy-column .bar[aria-valuenow].heat-gradient .tooltip:after {
+input[type="checkbox"]:checked
+  ~ .flexy-column
+  .bar[aria-valuenow].heat-gradient
+  .tooltip:after {
   border-bottom-color: #ec0071;
 }
 /* line 102, ../scss/custom-bars.scss */
-input[type='checkbox']:checked ~ .flexy-column .bar[aria-valuenow] .tooltip {
+input[type="checkbox"]:checked ~ .flexy-column .bar[aria-valuenow] .tooltip {
   left: 90%;
 }
 /* line 104, ../scss/custom-bars.scss */
-input[type='checkbox']:checked ~ .flexy-column .bar[aria-valuenow] .tooltip:before {
-  content: '90ml';
+input[type="checkbox"]:checked
+  ~ .flexy-column
+  .bar[aria-valuenow]
+  .tooltip:before {
+  content: "90ml";
 }
 
 /* line 110, ../scss/custom-bars.scss */
 .dots-pattern .percentage:before {
-  background: radial-gradient(rgba(254, 254, 254, 0.5) 10%, rgba(0, 0, 0, 0) 5%) 0 0, radial-gradient(rgba(254, 254, 254, 0.5) 10%, rgba(0, 0, 0, 0) 5%) 0.5em 0.5em;
+  background: radial-gradient(rgba(254, 254, 254, 0.5) 10%, rgba(0, 0, 0, 0) 5%)
+      0 0,
+    radial-gradient(rgba(254, 254, 254, 0.5) 10%, rgba(0, 0, 0, 0) 5%) 0.5em
+      0.5em;
   background-size: 1em 1em;
 }
 
@@ -106,17 +122,43 @@ input[type='checkbox']:checked ~ .flexy-column .bar[aria-valuenow] .tooltip:befo
   /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ec545b+0,ec5799+100 */
   background-color: rgba(241, 196, 15, 0.8);
   /* Old browsers */
-  background: -moz-linear-gradient(left, rgba(241, 196, 15, 0.8) 0%, rgba(236, 0, 113, 0.6) 100%);
+  background: -moz-linear-gradient(
+    left,
+    rgba(241, 196, 15, 0.8) 0%,
+    rgba(236, 0, 113, 0.6) 100%
+  );
   /* FF3.6+ */
-  background: -webkit-gradient(linear, left top, right top, color-stop(0%, rgba(241, 196, 15, 0.8)), color-stop(100%, rgba(236, 0, 113, 0.6)));
+  background: -webkit-gradient(
+    linear,
+    left top,
+    right top,
+    color-stop(0%, rgba(241, 196, 15, 0.8)),
+    color-stop(100%, rgba(236, 0, 113, 0.6))
+  );
   /* Chrome,Safari4+ */
-  background: -webkit-linear-gradient(left, rgba(241, 196, 15, 0.8) 0%, rgba(236, 0, 113, 0.6) 100%);
+  background: -webkit-linear-gradient(
+    left,
+    rgba(241, 196, 15, 0.8) 0%,
+    rgba(236, 0, 113, 0.6) 100%
+  );
   /* Chrome10+,Safari5.1+ */
-  background: -o-linear-gradient(left, rgba(241, 196, 15, 0.8) 0%, rgba(236, 0, 113, 0.6) 100%);
+  background: -o-linear-gradient(
+    left,
+    rgba(241, 196, 15, 0.8) 0%,
+    rgba(236, 0, 113, 0.6) 100%
+  );
   /* Opera 11.10+ */
-  background: -ms-linear-gradient(left, rgba(241, 196, 15, 0.8) 0%, rgba(236, 0, 113, 0.6) 100%);
+  background: -ms-linear-gradient(
+    left,
+    rgba(241, 196, 15, 0.8) 0%,
+    rgba(236, 0, 113, 0.6) 100%
+  );
   /* IE10+ */
-  background: linear-gradient(to right, rgba(241, 196, 15, 0.8) 0%, rgba(236, 0, 113, 0.6) 100%);
+  background: linear-gradient(
+    to right,
+    rgba(241, 196, 15, 0.8) 0%,
+    rgba(236, 0, 113, 0.6) 100%
+  );
   /* W3C */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$color1', endColorstr='$color2',GradientType=1 );
   /* IE6-9 */
@@ -124,7 +166,8 @@ input[type='checkbox']:checked ~ .flexy-column .bar[aria-valuenow] .tooltip:befo
 }
 /* line 136, ../scss/custom-bars.scss */
 .bar.heat-gradient .volume-lights.shine:before {
-  box-shadow: -2em 1.6em 3em -1em rgba(241, 196, 15, 0.3), 2em 1.6em 3em -1em rgba(236, 0, 113, 0.3);
+  box-shadow: -2em 1.6em 3em -1em rgba(241, 196, 15, 0.3),
+    2em 1.6em 3em -1em rgba(236, 0, 113, 0.3);
 }
 /* line 140, ../scss/custom-bars.scss */
 .bar.heat-gradient[valuenow="100"] .face-position.right {
@@ -133,20 +176,70 @@ input[type='checkbox']:checked ~ .flexy-column .bar[aria-valuenow] .tooltip:befo
 
 /* line 146, ../scss/custom-bars.scss */
 .bar.ruler .percentage:before {
-  background-image: linear-gradient(rgba(255, 255, 255, 0.1) 1px, rgba(0, 0, 0, 0) 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, rgba(0, 0, 0, 0) 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, rgba(0, 0, 0, 0) 1px);
-  background-size: 1em 1em, 1.6em 2em, .8em 2em;
+  background-image: linear-gradient(
+      rgba(255, 255, 255, 0.1) 1px,
+      rgba(0, 0, 0, 0) 1px
+    ),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, rgba(0, 0, 0, 0) 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, rgba(0, 0, 0, 0) 1px);
+  background-size: 1em 1em, 1.6em 2em, 0.8em 2em;
 }
 
 /* line 153, ../scss/custom-bars.scss */
 .bar.ruler-2 .percentage:before {
-  background-image: linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0.8em, rgba(0, 0, 0, 0) 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.14) 0.8em, rgba(0, 0, 0, 0) 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.18) 0.8em, rgba(0, 0, 0, 0) 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.22) 0.8em, rgba(0, 0, 0, 0) 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.26) 0.8em, rgba(0, 0, 0, 0) 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.3) 0.8em, rgba(0, 0, 0, 0) 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.34) 0.8em, rgba(0, 0, 0, 0) 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.38) 0.8em, rgba(0, 0, 0, 0) 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.42) 0.8em, rgba(0, 0, 0, 0) 1px);
+  background-image: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.1) 0.8em,
+      rgba(0, 0, 0, 0) 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.14) 0.8em,
+      rgba(0, 0, 0, 0) 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.18) 0.8em,
+      rgba(0, 0, 0, 0) 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.22) 0.8em,
+      rgba(0, 0, 0, 0) 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.26) 0.8em,
+      rgba(0, 0, 0, 0) 1px
+    ),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.3) 0.8em, rgba(0, 0, 0, 0) 1px),
+    linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.34) 0.8em,
+      rgba(0, 0, 0, 0) 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.38) 0.8em,
+      rgba(0, 0, 0, 0) 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.42) 0.8em,
+      rgba(0, 0, 0, 0) 1px
+    );
   background-size: 16em 1em;
-  background-position: 1.6em 0, 3.2em 0, 4.8em 0, 6.4em 0, 8em 0, 9.6em 0, 11.2em 0, 12.8em 0, 14.4em 0;
+  background-position: 1.6em 0, 3.2em 0, 4.8em 0, 6.4em 0, 8em 0, 9.6em 0,
+    11.2em 0, 12.8em 0, 14.4em 0;
 }
 
 /* line 167, ../scss/custom-bars.scss */
 .bar.ruler-3 .percentage:before {
-  background-image: linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0.8em, rgba(0, 0, 0, 0) 1px);
+  background-image: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.1) 0.8em,
+    rgba(0, 0, 0, 0) 1px
+  );
   background-size: 1.6em 2em;
 }
 
@@ -162,7 +255,9 @@ input[type='checkbox']:checked ~ .flexy-column .bar[aria-valuenow] .tooltip:befo
 }
 /* line 178, ../scss/custom-bars.scss */
 .bar.move:hover .bar-face.face-position.floor.volume-lights {
-  box-shadow: 0 -0.1em 1em rgba(0, 0, 0, 0.15), 0 0.35em 0.2em -8px rgba(0, 0, 0, 0.15), 0 -0.75em 1.75em rgba(254, 254, 254, 0.6);
+  box-shadow: 0 -0.1em 1em rgba(0, 0, 0, 0.15),
+    0 0.35em 0.2em -8px rgba(0, 0, 0, 0.15),
+    0 -0.75em 1.75em rgba(254, 254, 254, 0.6);
 }
 
 /* line 185, ../scss/custom-bars.scss */
@@ -173,7 +268,8 @@ input[type='checkbox']:checked ~ .flexy-column .bar[aria-valuenow] .tooltip:befo
 /* line 188, ../scss/custom-bars.scss */
 .bar.rotate.hover .bar-face.face-position.floor.volume-lights,
 .bar.rotate:hover .bar-face.face-position.floor.volume-lights {
-  box-shadow: 0 0 1em rgba(0, 0, 0, 0.3), 0.2em 0 0.1em -5px rgba(0, 0, 0, 0.3), -0.5em 0 1.75em rgba(254, 254, 254, 0.6);
+  box-shadow: 0 0 1em rgba(0, 0, 0, 0.3), 0.2em 0 0.1em -5px rgba(0, 0, 0, 0.3),
+    -0.5em 0 1.75em rgba(254, 254, 254, 0.6);
 }
 /* line 193, ../scss/custom-bars.scss */
 .bar.rotate.hover .bar-face.face-position.shine:before,
@@ -183,9 +279,9 @@ input[type='checkbox']:checked ~ .flexy-column .bar[aria-valuenow] .tooltip:befo
 
 /* line 199, ../scss/custom-bars.scss */
 .tooltip {
-  font-size: .65em;
+  font-size: 0.65em;
   font-weight: bold;
-  margin: 1.85em 0 0 -.5em;
+  margin: 1.85em 0 0 -0.5em;
   display: inline-block;
   position: absolute;
   line-height: 1em;
@@ -195,13 +291,15 @@ input[type='checkbox']:checked ~ .flexy-column .bar[aria-valuenow] .tooltip:befo
   background-color: #ff6db3;
   color: #fefefe;
   border-bottom: 1px solid #ff53a5;
-  box-shadow: 0 0.05em 0.1em -0.02em rgba(0, 0, 0, 0.4), 0 0.1em 0.6em rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0.05em 0.1em -0.02em rgba(0, 0, 0, 0.4),
+    0 0.1em 0.6em rgba(0, 0, 0, 0.3);
   transition: all 0.5s ease-out;
 }
 /* line 217, ../scss/custom-bars.scss */
-.tooltip:after, .tooltip:before {
+.tooltip:after,
+.tooltip:before {
   display: inline-block;
-  font-size: .25em;
+  font-size: 0.25em;
   position: absolute;
   left: 0;
   top: 0;
@@ -209,10 +307,10 @@ input[type='checkbox']:checked ~ .flexy-column .bar[aria-valuenow] .tooltip:befo
 }
 /* line 228, ../scss/custom-bars.scss */
 .tooltip:after {
-  content: '';
+  content: "";
   height: 0;
   width: 0;
-  margin: -.75em 0 0 1em;
+  margin: -0.75em 0 0 1em;
   border: 1em solid transparent;
   border-bottom-color: #ff6db3;
   border-top-width: 0;
@@ -226,7 +324,7 @@ input[type='checkbox']:checked ~ .flexy-column .bar[aria-valuenow] .tooltip:befo
 /* line 244, ../scss/custom-bars.scss */
 .tooltip.pos-2 {
   box-shadow: none;
-  margin-top: -.6em;
+  margin-top: -0.6em;
   transform: rotateX(-90deg) translateY(-0.5em);
   transform-origin: 50% 100%;
 }
@@ -242,7 +340,7 @@ input[type='checkbox']:checked ~ .flexy-column .bar[aria-valuenow] .tooltip:befo
 .tooltip.pos-2 .shadow {
   display: inline-block;
   width: 20%;
-  height: .02em;
+  height: 0.02em;
   background-color: transparent;
   position: absolute;
   left: 40%;
@@ -254,476 +352,489 @@ input[type='checkbox']:checked ~ .flexy-column .bar[aria-valuenow] .tooltip:befo
   background-color: #fefefe;
   border-bottom: 1px solid #e5e5e5;
   color: #444444;
-  box-shadow: 0 0.08em 0.1em 0em rgba(0, 0, 0, 0.2), 0 0.1em 1.6em rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0.08em 0.1em 0em rgba(0, 0, 0, 0.2),
+    0 0.1em 1.6em rgba(0, 0, 0, 0.2);
 }
 /* line 276, ../scss/custom-bars.scss */
 .tooltip.white:after {
   border-bottom-color: #fefefe;
 }
 /* line 286, ../scss/custom-bars.scss */
-.bar[aria-valuenow='0'] .tooltip {
+.bar[aria-valuenow="0"] .tooltip {
   left: 0%;
 }
 /* line 289, ../scss/custom-bars.scss */
-.bar[aria-valuenow='0'] .tooltip:before {
+.bar[aria-valuenow="0"] .tooltip:before {
   content: "0ml";
 }
 /* line 294, ../scss/custom-bars.scss */
-.bar[aria-valuenow='0'].heat-gradient .heat-gradient-tooltip {
+.bar[aria-valuenow="0"].heat-gradient .heat-gradient-tooltip {
   background-color: #f0c20f;
   border-bottom: 1px solid #d8af0e;
 }
 /* line 16, ../scss/custom-bars.scss */
-.bar[aria-valuenow='0'].heat-gradient .heat-gradient-tooltip:after {
+.bar[aria-valuenow="0"].heat-gradient .heat-gradient-tooltip:after {
   border-bottom-color: #f0c20f;
 }
 
 /* line 286, ../scss/custom-bars.scss */
-.bar[aria-valuenow='1'] .tooltip {
+.bar[aria-valuenow="1"] .tooltip {
   left: 4%;
 }
 /* line 289, ../scss/custom-bars.scss */
-.bar[aria-valuenow='1'] .tooltip:before {
+.bar[aria-valuenow="1"] .tooltip:before {
   content: "1ml";
 }
 /* line 294, ../scss/custom-bars.scss */
-.bar[aria-valuenow='1'].heat-gradient .heat-gradient-tooltip {
+.bar[aria-valuenow="1"].heat-gradient .heat-gradient-tooltip {
   background-color: #f0c20f;
   border-bottom: 1px solid #d8af0e;
 }
 /* line 16, ../scss/custom-bars.scss */
-.bar[aria-valuenow='1'].heat-gradient .heat-gradient-tooltip:after {
+.bar[aria-valuenow="1"].heat-gradient .heat-gradient-tooltip:after {
   border-bottom-color: #f0c20f;
 }
 
 /* line 286, ../scss/custom-bars.scss */
-.bar[aria-valuenow='2'] .tooltip {
+.bar[aria-valuenow="2"] .tooltip {
   left: 8%;
 }
 /* line 289, ../scss/custom-bars.scss */
-.bar[aria-valuenow='2'] .tooltip:before {
+.bar[aria-valuenow="2"] .tooltip:before {
   content: "2ml";
 }
 /* line 294, ../scss/custom-bars.scss */
-.bar[aria-valuenow='2'].heat-gradient .heat-gradient-tooltip {
+.bar[aria-valuenow="2"].heat-gradient .heat-gradient-tooltip {
   background-color: #f0c010;
   border-bottom: 1px solid #d9ad0e;
 }
 /* line 16, ../scss/custom-bars.scss */
-.bar[aria-valuenow='2'].heat-gradient .heat-gradient-tooltip:after {
+.bar[aria-valuenow="2"].heat-gradient .heat-gradient-tooltip:after {
   border-bottom-color: #f0c010;
 }
 
 /* line 286, ../scss/custom-bars.scss */
-.bar[aria-valuenow='3'] .tooltip {
+.bar[aria-valuenow="3"] .tooltip {
   left: 12%;
 }
 /* line 289, ../scss/custom-bars.scss */
-.bar[aria-valuenow='3'] .tooltip:before {
+.bar[aria-valuenow="3"] .tooltip:before {
   content: "3ml";
 }
 /* line 294, ../scss/custom-bars.scss */
-.bar[aria-valuenow='3'].heat-gradient .heat-gradient-tooltip {
+.bar[aria-valuenow="3"].heat-gradient .heat-gradient-tooltip {
   background-color: #f0be11;
   border-bottom: 1px solid #daac0e;
 }
 /* line 16, ../scss/custom-bars.scss */
-.bar[aria-valuenow='3'].heat-gradient .heat-gradient-tooltip:after {
+.bar[aria-valuenow="3"].heat-gradient .heat-gradient-tooltip:after {
   border-bottom-color: #f0be11;
 }
 
 /* line 286, ../scss/custom-bars.scss */
-.bar[aria-valuenow='4'] .tooltip {
+.bar[aria-valuenow="4"] .tooltip {
   left: 16%;
 }
 /* line 289, ../scss/custom-bars.scss */
-.bar[aria-valuenow='4'] .tooltip:before {
+.bar[aria-valuenow="4"] .tooltip:before {
   content: "4ml";
 }
 /* line 294, ../scss/custom-bars.scss */
-.bar[aria-valuenow='4'].heat-gradient .heat-gradient-tooltip {
+.bar[aria-valuenow="4"].heat-gradient .heat-gradient-tooltip {
   background-color: #f0bc12;
   border-bottom: 1px solid #dbab0e;
 }
 /* line 16, ../scss/custom-bars.scss */
-.bar[aria-valuenow='4'].heat-gradient .heat-gradient-tooltip:after {
+.bar[aria-valuenow="4"].heat-gradient .heat-gradient-tooltip:after {
   border-bottom-color: #f0bc12;
 }
 
 /* line 286, ../scss/custom-bars.scss */
-.bar[aria-valuenow='5'] .tooltip {
+.bar[aria-valuenow="5"] .tooltip {
   left: 20%;
 }
 /* line 289, ../scss/custom-bars.scss */
-.bar[aria-valuenow='5'] .tooltip:before {
+.bar[aria-valuenow="5"] .tooltip:before {
   content: "5ml";
 }
 /* line 294, ../scss/custom-bars.scss */
-.bar[aria-valuenow='5'].heat-gradient .heat-gradient-tooltip {
+.bar[aria-valuenow="5"].heat-gradient .heat-gradient-tooltip {
   background-color: #f0ba13;
   border-bottom: 1px solid #dca90e;
 }
 /* line 16, ../scss/custom-bars.scss */
-.bar[aria-valuenow='5'].heat-gradient .heat-gradient-tooltip:after {
+.bar[aria-valuenow="5"].heat-gradient .heat-gradient-tooltip:after {
   border-bottom-color: #f0ba13;
 }
 
 /* line 286, ../scss/custom-bars.scss */
-.bar[aria-valuenow='6'] .tooltip {
+.bar[aria-valuenow="6"] .tooltip {
   left: 24%;
 }
 /* line 289, ../scss/custom-bars.scss */
-.bar[aria-valuenow='6'] .tooltip:before {
+.bar[aria-valuenow="6"] .tooltip:before {
   content: "6ml";
 }
 /* line 294, ../scss/custom-bars.scss */
-.bar[aria-valuenow='6'].heat-gradient .heat-gradient-tooltip {
+.bar[aria-valuenow="6"].heat-gradient .heat-gradient-tooltip {
   background-color: #f0b814;
   border-bottom: 1px solid #dca80e;
 }
 /* line 16, ../scss/custom-bars.scss */
-.bar[aria-valuenow='6'].heat-gradient .heat-gradient-tooltip:after {
+.bar[aria-valuenow="6"].heat-gradient .heat-gradient-tooltip:after {
   border-bottom-color: #f0b814;
 }
 
 /* line 286, ../scss/custom-bars.scss */
-.bar[aria-valuenow='7'] .tooltip {
+.bar[aria-valuenow="7"] .tooltip {
   left: 28%;
 }
 /* line 289, ../scss/custom-bars.scss */
-.bar[aria-valuenow='7'] .tooltip:before {
+.bar[aria-valuenow="7"] .tooltip:before {
   content: "7ml";
 }
 /* line 294, ../scss/custom-bars.scss */
-.bar[aria-valuenow='7'].heat-gradient .heat-gradient-tooltip {
+.bar[aria-valuenow="7"].heat-gradient .heat-gradient-tooltip {
   background-color: #f0b615;
   border-bottom: 1px solid #dda60e;
 }
 /* line 16, ../scss/custom-bars.scss */
-.bar[aria-valuenow='7'].heat-gradient .heat-gradient-tooltip:after {
+.bar[aria-valuenow="7"].heat-gradient .heat-gradient-tooltip:after {
   border-bottom-color: #f0b615;
 }
 
 /* line 286, ../scss/custom-bars.scss */
-.bar[aria-valuenow='8'] .tooltip {
+.bar[aria-valuenow="8"] .tooltip {
   left: 32%;
 }
 /* line 289, ../scss/custom-bars.scss */
-.bar[aria-valuenow='8'] .tooltip:before {
+.bar[aria-valuenow="8"] .tooltip:before {
   content: "8ml";
 }
 /* line 294, ../scss/custom-bars.scss */
-.bar[aria-valuenow='8'].heat-gradient .heat-gradient-tooltip {
+.bar[aria-valuenow="8"].heat-gradient .heat-gradient-tooltip {
   background-color: #f0b416;
   border-bottom: 1px solid #dea50e;
 }
 /* line 16, ../scss/custom-bars.scss */
-.bar[aria-valuenow='8'].heat-gradient .heat-gradient-tooltip:after {
+.bar[aria-valuenow="8"].heat-gradient .heat-gradient-tooltip:after {
   border-bottom-color: #f0b416;
 }
 
 /* line 286, ../scss/custom-bars.scss */
-.bar[aria-valuenow='9'] .tooltip {
+.bar[aria-valuenow="9"] .tooltip {
   left: 36%;
 }
 /* line 289, ../scss/custom-bars.scss */
-.bar[aria-valuenow='9'] .tooltip:before {
+.bar[aria-valuenow="9"] .tooltip:before {
   content: "9ml";
 }
 /* line 294, ../scss/custom-bars.scss */
-.bar[aria-valuenow='9'].heat-gradient .heat-gradient-tooltip {
+.bar[aria-valuenow="9"].heat-gradient .heat-gradient-tooltip {
   background-color: #f0b217;
   border-bottom: 1px solid #dfa30e;
 }
 /* line 16, ../scss/custom-bars.scss */
-.bar[aria-valuenow='9'].heat-gradient .heat-gradient-tooltip:after {
+.bar[aria-valuenow="9"].heat-gradient .heat-gradient-tooltip:after {
   border-bottom-color: #f0b217;
 }
 
 /* line 286, ../scss/custom-bars.scss */
-.bar[aria-valuenow='10'] .tooltip {
+.bar[aria-valuenow="10"] .tooltip {
   left: 40%;
 }
 /* line 289, ../scss/custom-bars.scss */
-.bar[aria-valuenow='10'] .tooltip:before {
+.bar[aria-valuenow="10"] .tooltip:before {
   content: "10ml";
 }
 /* line 294, ../scss/custom-bars.scss */
-.bar[aria-valuenow='10'].heat-gradient .heat-gradient-tooltip {
+.bar[aria-valuenow="10"].heat-gradient .heat-gradient-tooltip {
   background-color: #f0b018;
   border-bottom: 1px solid #e0a20f;
 }
 /* line 16, ../scss/custom-bars.scss */
-.bar[aria-valuenow='10'].heat-gradient .heat-gradient-tooltip:after {
+.bar[aria-valuenow="10"].heat-gradient .heat-gradient-tooltip:after {
   border-bottom-color: #f0b018;
 }
 
 /* line 286, ../scss/custom-bars.scss */
-.bar[aria-valuenow='11'] .tooltip {
+.bar[aria-valuenow="11"] .tooltip {
   left: 44%;
 }
 /* line 289, ../scss/custom-bars.scss */
-.bar[aria-valuenow='11'] .tooltip:before {
+.bar[aria-valuenow="11"] .tooltip:before {
   content: "11ml";
 }
 /* line 294, ../scss/custom-bars.scss */
-.bar[aria-valuenow='11'].heat-gradient .heat-gradient-tooltip {
+.bar[aria-valuenow="11"].heat-gradient .heat-gradient-tooltip {
   background-color: #f0ae19;
   border-bottom: 1px solid #e1a00f;
 }
 /* line 16, ../scss/custom-bars.scss */
-.bar[aria-valuenow='11'].heat-gradient .heat-gradient-tooltip:after {
+.bar[aria-valuenow="11"].heat-gradient .heat-gradient-tooltip:after {
   border-bottom-color: #f0ae19;
 }
 
 /* line 286, ../scss/custom-bars.scss */
-.bar[aria-valuenow='12'] .tooltip {
+.bar[aria-valuenow="12"] .tooltip {
   left: 48%;
 }
 /* line 289, ../scss/custom-bars.scss */
-.bar[aria-valuenow='12'] .tooltip:before {
+.bar[aria-valuenow="12"] .tooltip:before {
   content: "12ml";
 }
 /* line 294, ../scss/custom-bars.scss */
-.bar[aria-valuenow='12'].heat-gradient .heat-gradient-tooltip {
+.bar[aria-valuenow="12"].heat-gradient .heat-gradient-tooltip {
   background-color: #f0ac1a;
   border-bottom: 1px solid #e29f0f;
 }
 /* line 16, ../scss/custom-bars.scss */
-.bar[aria-valuenow='12'].heat-gradient .heat-gradient-tooltip:after {
+.bar[aria-valuenow="12"].heat-gradient .heat-gradient-tooltip:after {
   border-bottom-color: #f0ac1a;
 }
 
 /* line 286, ../scss/custom-bars.scss */
-.bar[aria-valuenow='13'] .tooltip {
+.bar[aria-valuenow="13"] .tooltip {
   left: 52%;
 }
 /* line 289, ../scss/custom-bars.scss */
-.bar[aria-valuenow='13'] .tooltip:before {
+.bar[aria-valuenow="13"] .tooltip:before {
   content: "13ml";
 }
 /* line 294, ../scss/custom-bars.scss */
-.bar[aria-valuenow='13'].heat-gradient .heat-gradient-tooltip {
+.bar[aria-valuenow="13"].heat-gradient .heat-gradient-tooltip {
   background-color: #f0aa1b;
   border-bottom: 1px solid #e39d0f;
 }
 /* line 16, ../scss/custom-bars.scss */
-.bar[aria-valuenow='13'].heat-gradient .heat-gradient-tooltip:after {
+.bar[aria-valuenow="13"].heat-gradient .heat-gradient-tooltip:after {
   border-bottom-color: #f0aa1b;
 }
 
 /* line 286, ../scss/custom-bars.scss */
-.bar[aria-valuenow='14'] .tooltip {
+.bar[aria-valuenow="14"] .tooltip {
   left: 56%;
 }
 /* line 289, ../scss/custom-bars.scss */
-.bar[aria-valuenow='14'] .tooltip:before {
+.bar[aria-valuenow="14"] .tooltip:before {
   content: "14ml";
 }
 /* line 294, ../scss/custom-bars.scss */
-.bar[aria-valuenow='14'].heat-gradient .heat-gradient-tooltip {
+.bar[aria-valuenow="14"].heat-gradient .heat-gradient-tooltip {
   background-color: #f0a81c;
   border-bottom: 1px solid #e39b0f;
 }
 /* line 16, ../scss/custom-bars.scss */
-.bar[aria-valuenow='14'].heat-gradient .heat-gradient-tooltip:after {
+.bar[aria-valuenow="14"].heat-gradient .heat-gradient-tooltip:after {
   border-bottom-color: #f0a81c;
 }
 
 /* line 286, ../scss/custom-bars.scss */
-.bar[aria-valuenow='15'] .tooltip {
+.bar[aria-valuenow="15"] .tooltip {
   left: 60%;
 }
 /* line 289, ../scss/custom-bars.scss */
-.bar[aria-valuenow='15'] .tooltip:before {
+.bar[aria-valuenow="15"] .tooltip:before {
   content: "15ml";
 }
 /* line 294, ../scss/custom-bars.scss */
-.bar[aria-valuenow='15'].heat-gradient .heat-gradient-tooltip {
+.bar[aria-valuenow="15"].heat-gradient .heat-gradient-tooltip {
   background-color: #f0a61d;
   border-bottom: 1px solid #e49a0f;
 }
 /* line 16, ../scss/custom-bars.scss */
-.bar[aria-valuenow='15'].heat-gradient .heat-gradient-tooltip:after {
+.bar[aria-valuenow="15"].heat-gradient .heat-gradient-tooltip:after {
   border-bottom-color: #f0a61d;
 }
 
 /* line 286, ../scss/custom-bars.scss */
-.bar[aria-valuenow='16'] .tooltip {
+.bar[aria-valuenow="16"] .tooltip {
   left: 64%;
 }
 /* line 289, ../scss/custom-bars.scss */
-.bar[aria-valuenow='16'] .tooltip:before {
+.bar[aria-valuenow="16"] .tooltip:before {
   content: "16ml";
 }
 /* line 294, ../scss/custom-bars.scss */
-.bar[aria-valuenow='16'].heat-gradient .heat-gradient-tooltip {
+.bar[aria-valuenow="16"].heat-gradient .heat-gradient-tooltip {
   background-color: #f0a41e;
   border-bottom: 1px solid #e5980f;
 }
 /* line 16, ../scss/custom-bars.scss */
-.bar[aria-valuenow='16'].heat-gradient .heat-gradient-tooltip:after {
+.bar[aria-valuenow="16"].heat-gradient .heat-gradient-tooltip:after {
   border-bottom-color: #f0a41e;
 }
 
 /* line 286, ../scss/custom-bars.scss */
-.bar[aria-valuenow='17'] .tooltip {
+.bar[aria-valuenow="17"] .tooltip {
   left: 68%;
 }
 /* line 289, ../scss/custom-bars.scss */
-.bar[aria-valuenow='17'] .tooltip:before {
+.bar[aria-valuenow="17"] .tooltip:before {
   content: "17ml";
 }
 /* line 294, ../scss/custom-bars.scss */
-.bar[aria-valuenow='17'].heat-gradient .heat-gradient-tooltip {
+.bar[aria-valuenow="17"].heat-gradient .heat-gradient-tooltip {
   background-color: #f0a21f;
   border-bottom: 1px solid #e6960f;
 }
 /* line 16, ../scss/custom-bars.scss */
-.bar[aria-valuenow='17'].heat-gradient .heat-gradient-tooltip:after {
+.bar[aria-valuenow="17"].heat-gradient .heat-gradient-tooltip:after {
   border-bottom-color: #f0a21f;
 }
 
 /* line 286, ../scss/custom-bars.scss */
-.bar[aria-valuenow='18'] .tooltip {
+.bar[aria-valuenow="18"] .tooltip {
   left: 72%;
 }
 /* line 289, ../scss/custom-bars.scss */
-.bar[aria-valuenow='18'] .tooltip:before {
+.bar[aria-valuenow="18"] .tooltip:before {
   content: "18ml";
 }
 /* line 294, ../scss/custom-bars.scss */
-.bar[aria-valuenow='18'].heat-gradient .heat-gradient-tooltip {
+.bar[aria-valuenow="18"].heat-gradient .heat-gradient-tooltip {
   background-color: #f0a020;
   border-bottom: 1px solid #e79410;
 }
 /* line 16, ../scss/custom-bars.scss */
-.bar[aria-valuenow='18'].heat-gradient .heat-gradient-tooltip:after {
+.bar[aria-valuenow="18"].heat-gradient .heat-gradient-tooltip:after {
   border-bottom-color: #f0a020;
 }
 
 /* line 286, ../scss/custom-bars.scss */
-.bar[aria-valuenow='19'] .tooltip {
+.bar[aria-valuenow="19"] .tooltip {
   left: 76%;
 }
 /* line 289, ../scss/custom-bars.scss */
-.bar[aria-valuenow='19'] .tooltip:before {
+.bar[aria-valuenow="19"] .tooltip:before {
   content: "19ml";
 }
 /* line 294, ../scss/custom-bars.scss */
-.bar[aria-valuenow='19'].heat-gradient .heat-gradient-tooltip {
+.bar[aria-valuenow="19"].heat-gradient .heat-gradient-tooltip {
   background-color: #f09e21;
   border-bottom: 1px solid #e89210;
 }
 /* line 16, ../scss/custom-bars.scss */
-.bar[aria-valuenow='19'].heat-gradient .heat-gradient-tooltip:after {
+.bar[aria-valuenow="19"].heat-gradient .heat-gradient-tooltip:after {
   border-bottom-color: #f09e21;
 }
 
 /* line 286, ../scss/custom-bars.scss */
-.bar[aria-valuenow='20'] .tooltip {
+.bar[aria-valuenow="20"] .tooltip {
   left: 80%;
 }
 /* line 289, ../scss/custom-bars.scss */
-.bar[aria-valuenow='20'] .tooltip:before {
+.bar[aria-valuenow="20"] .tooltip:before {
   content: "20ml";
 }
 /* line 294, ../scss/custom-bars.scss */
-.bar[aria-valuenow='20'].heat-gradient .heat-gradient-tooltip {
+.bar[aria-valuenow="20"].heat-gradient .heat-gradient-tooltip {
   background-color: #f09c22;
   border-bottom: 1px solid #e99010;
 }
 /* line 16, ../scss/custom-bars.scss */
-.bar[aria-valuenow='20'].heat-gradient .heat-gradient-tooltip:after {
+.bar[aria-valuenow="20"].heat-gradient .heat-gradient-tooltip:after {
   border-bottom-color: #f09c22;
 }
 
 /* line 286, ../scss/custom-bars.scss */
-.bar[aria-valuenow='21'] .tooltip {
+.bar[aria-valuenow="21"] .tooltip {
   left: 84%;
 }
 /* line 289, ../scss/custom-bars.scss */
-.bar[aria-valuenow='21'] .tooltip:before {
+.bar[aria-valuenow="21"] .tooltip:before {
   content: "21ml";
 }
 /* line 294, ../scss/custom-bars.scss */
-.bar[aria-valuenow='21'].heat-gradient .heat-gradient-tooltip {
+.bar[aria-valuenow="21"].heat-gradient .heat-gradient-tooltip {
   background-color: #ef9a23;
   border-bottom: 1px solid #e88e11;
 }
 /* line 16, ../scss/custom-bars.scss */
-.bar[aria-valuenow='21'].heat-gradient .heat-gradient-tooltip:after {
+.bar[aria-valuenow="21"].heat-gradient .heat-gradient-tooltip:after {
   border-bottom-color: #ef9a23;
 }
 
 /* line 286, ../scss/custom-bars.scss */
-.bar[aria-valuenow='22'] .tooltip {
+.bar[aria-valuenow="22"] .tooltip {
   left: 88%;
 }
 /* line 289, ../scss/custom-bars.scss */
-.bar[aria-valuenow='22'] .tooltip:before {
+.bar[aria-valuenow="22"] .tooltip:before {
   content: "22ml";
 }
 /* line 294, ../scss/custom-bars.scss */
-.bar[aria-valuenow='22'].heat-gradient .heat-gradient-tooltip {
+.bar[aria-valuenow="22"].heat-gradient .heat-gradient-tooltip {
   background-color: #ef9824;
   border-bottom: 1px solid #e98c11;
 }
 /* line 16, ../scss/custom-bars.scss */
-.bar[aria-valuenow='22'].heat-gradient .heat-gradient-tooltip:after {
+.bar[aria-valuenow="22"].heat-gradient .heat-gradient-tooltip:after {
   border-bottom-color: #ef9824;
 }
 
 /* line 286, ../scss/custom-bars.scss */
-.bar[aria-valuenow='23'] .tooltip {
+.bar[aria-valuenow="23"] .tooltip {
   left: 92%;
 }
 /* line 289, ../scss/custom-bars.scss */
-.bar[aria-valuenow='23'] .tooltip:before {
+.bar[aria-valuenow="23"] .tooltip:before {
   content: "23ml";
 }
 /* line 294, ../scss/custom-bars.scss */
-.bar[aria-valuenow='23'].heat-gradient .heat-gradient-tooltip {
+.bar[aria-valuenow="23"].heat-gradient .heat-gradient-tooltip {
   background-color: #ef9625;
   border-bottom: 1px solid #e98a11;
 }
 /* line 16, ../scss/custom-bars.scss */
-.bar[aria-valuenow='23'].heat-gradient .heat-gradient-tooltip:after {
+.bar[aria-valuenow="23"].heat-gradient .heat-gradient-tooltip:after {
   border-bottom-color: #ef9625;
 }
 
 /* line 286, ../scss/custom-bars.scss */
-.bar[aria-valuenow='24'] .tooltip {
+.bar[aria-valuenow="24"] .tooltip {
   left: 96%;
 }
 /* line 289, ../scss/custom-bars.scss */
-.bar[aria-valuenow='24'] .tooltip:before {
+.bar[aria-valuenow="24"] .tooltip:before {
   content: "24ml";
 }
 /* line 294, ../scss/custom-bars.scss */
-.bar[aria-valuenow='24'].heat-gradient .heat-gradient-tooltip {
+.bar[aria-valuenow="24"].heat-gradient .heat-gradient-tooltip {
   background-color: #ef9426;
   border-bottom: 1px solid #ea8811;
 }
 /* line 16, ../scss/custom-bars.scss */
-.bar[aria-valuenow='24'].heat-gradient .heat-gradient-tooltip:after {
+.bar[aria-valuenow="24"].heat-gradient .heat-gradient-tooltip:after {
   border-bottom-color: #ef9426;
 }
 
 /* line 286, ../scss/custom-bars.scss */
-.bar[aria-valuenow='25'] .tooltip {
+.bar[aria-valuenow="25"] .tooltip {
   left: 100%;
 }
 /* line 289, ../scss/custom-bars.scss */
-.bar[aria-valuenow='25'] .tooltip:before {
+.bar[aria-valuenow="25"] .tooltip:before {
   content: "25ml";
 }
 /* line 294, ../scss/custom-bars.scss */
-.bar[aria-valuenow='25'].heat-gradient .heat-gradient-tooltip {
+.bar[aria-valuenow="25"].heat-gradient .heat-gradient-tooltip {
   background-color: #ef9327;
   border-bottom: 1px solid #eb8711;
 }
 /* line 16, ../scss/custom-bars.scss */
-.bar[aria-valuenow='25'].heat-gradient .heat-gradient-tooltip:after {
+.bar[aria-valuenow="25"].heat-gradient .heat-gradient-tooltip:after {
   border-bottom-color: #ef9327;
+}
+
+.scale {
+  height: 1.5em;
+  border-left: 1px solid #d6d6d6;
+  top: 0;
+}
+
+.scale-para {
+  font-size: 0.3em;
+  position: absolute;
+  text-align: center
 }

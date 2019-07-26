@@ -51,7 +51,7 @@ h1 span.heading-3d {
 }
 /* line 116, ../scss/component.scss */
 .bar.has-rotation {
-  transform: rotateX(60deg);
+  transform: rotateX(30deg);
 }
 /* line 121, ../scss/component.scss */
 .bar .bar-face {
