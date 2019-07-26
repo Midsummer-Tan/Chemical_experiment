@@ -833,6 +833,16 @@ input[type="checkbox"]:checked
   top: 0;
 }
 
+.scale1 {
+  height: 1.3em;
+  border-left: 1px solid #d6d6d6;
+  top: 0;
+}
+.scale2{
+  height: 1.2em;
+  border-left: 1px solid #8a8282;
+  top: 0;
+}
 .scale-para {
   font-size: 0.3em;
   position: absolute;

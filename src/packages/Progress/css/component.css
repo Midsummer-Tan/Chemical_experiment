@@ -36,7 +36,7 @@ h1 span.heading-3d {
   font-size: 1em;
   position: relative;
   display: inline-block;
-  width: 4em;
+  width: 7em;
   height: 1em;
   transition: all 0.5s ease-in-out;
   transform-style: preserve-3d;
@@ -259,39 +259,39 @@ h1 span.heading-3d {
   box-shadow: 0 1.6em 3em rgba(10, 64, 105, 0);
 }
 /* line 24, ../scss/component.scss */
-.bar.cyan .bar-face, .bar.cyan[aria-valuenow='0'] .face-position.right {
+.bar.cyann .bar-face, .bar.cyann[aria-valuenow='0'] .face-position.right {
   background-color: rgba(255, 255, 255, 0.3);
 }
 /* line 29, ../scss/component.scss */
-.bar.cyan .face-position.left, .bar.cyan[aria-valuenow='100'] .face-position.right {
+.bar.cyann .face-position.left, .bar.cyann[aria-valuenow='100'] .face-position.right {
   background-color: rgba(87, 194, 244, 0.2);
 }
 /* line 34, ../scss/component.scss */
-.bar.cyan[aria-valuenow='100'] .face-position.right {
+.bar.cyann[aria-valuenow='100'] .face-position.right {
   transition-delay: 0.5s;
 }
 /* line 38, ../scss/component.scss */
-.bar.cyan .face-position.floor.volume-lights {
+.bar.cyann .face-position.floor.volume-lights {
   box-shadow: 0 -0.2em 1em rgba(0, 0, 0, 0.15), 0 0.2em 0.1em -5px rgba(0, 0, 0, 0.3), 0 -0.75em 1.75em rgba(254, 254, 254, 0.6);
 }
 /* line 45, ../scss/component.scss */
-.bar.cyan .percentage:before {
+.bar.cyann .percentage:before {
   background-color: rgba(87, 202, 244, 0.5);
 }
 /* line 49, ../scss/component.scss */
-.bar.cyan .volume-lights.shine:before {
+.bar.cyann .volume-lights.shine:before {
   box-shadow: 0 1.6em 3em rgba(87, 202, 244, 0.25);
 }
 /* line 56, ../scss/component.scss */
-.bar.cyan:not(.has-colors)[aria-valuenow] .face-position {
+.bar.cyann:not(.has-colors)[aria-valuenow] .face-position {
   background-color: rgba(68, 68, 68, 0.6);
 }
 /* line 60, ../scss/component.scss */
-.bar.cyan:not(.has-colors) .percentage:before {
+.bar.cyann:not(.has-colors) .percentage:before {
   background-color: transparent;
 }
 /* line 64, ../scss/component.scss */
-.bar.cyan:not(.has-colors) .volume-lights.shine:before {
+.bar.cyann:not(.has-colors) .volume-lights.shine:before {
   box-shadow: 0 1.6em 3em rgba(87, 202, 244, 0);
 }
 /* line 24, ../scss/component.scss */
