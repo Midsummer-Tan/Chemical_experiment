@@ -22,9 +22,8 @@ class Node{
 class Node0 extends Node{
     errortext = '你未调零';
     successtext = "调零";
-    //这步也有可能产生Bug !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     getScore(){
-        if (this.scene.getMeshByID('round_flask.Cone') == null && this.scene.getMeshByID('weight.paper') != null && this.electronicScaleQuality.toString() == [null, null, 0, 0, 0, 0].toString())
+        if (this.scene.getMeshByID('round_flask.Cone') == null && this.scene.getMeshByID("tri_flask.powder_brown")==null && this.scene.getMeshByID('weight.paper') != null && this.electronicScaleQuality.toString() == [null, null, 0, 0, 0, 0].toString())
         {
             this.setScore(1);
             return 1;
@@ -66,11 +65,51 @@ class Node3 extends Node{
     }
 }
 class Node4 extends Node{
-    errortext = '称量氯化铁之前未调零';
-    successtext = '称量前调零';
-    //这步有可能产生bug 因为有的人可能会先称氯化铁！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！以后再改
+    errortext = '你未调零';
+    successtext = '调零';
     getScore(){
-        if (this.scene.getMeshByID('round_flask.Cone') != null && this.scene.getMeshByID('weight.paper') != null && this.electronicScaleQuality.toString() == [null, null, 0, 0, 0, 0].toString()){
+        if (this.scene.getMeshByID('weight.paper') != null && this.electronicScaleQuality.toString() == [null, null, 0, 0, 0, 0].toString()) {
+            if (this.scene.getMeshByID('round_flask.Cone') != null && this.scene.getMeshByID('tri_flask.powder_brown') == null){
+                this.setScore(1);
+                return 1;
+            }
+            else if (this.scene.getMeshByID('round_flask.Cone') == null && this.scene.getMeshByID('tri_flask.powder_brown') != null) {
+               this.setScore(1);
+               return 1;
+            }
+            else return 0;
+            
+        }
+        return 0;
+    }
+}
+class Node5 extends Node{
+    errortext = '没有用药匙取出三氯化铁药品并放于称量纸上';
+    successtext = '量取三氯化铁药品并称量';
+    getScore(){
+        if (this.scene.getMeshByID('weight.paper_powder_brown')!=null){
+            this.setScore(1);
+            return 1;
+        }
+        return 0;
+    }
+}
+class Node6 extends Node{
+    errortext = '三氯化铁质量未达到0.100g';
+    successtext = '三氯化铁质量达到0.100g';
+    getScore(){
+        if (this.scene.getMeshByID('weight.paper_powder_brown') != null && this.electronicScaleQuality.toString() == [null, null, 0, 1, 0, 0]){
+            this.setScore(1);
+            return 1;
+        }
+        return 0;
+    }
+}
+class Node7 extends Node{
+    errortext = '未将三氯化铁药品放入25ml锥形瓶中';
+    successtext = '将三氯化铁药品放入25ml锥形瓶中';
+    getScore(){
+        if (this.scene.getMeshByID('tri_flask.powder_brown')!=null){
             this.setScore(1);
             return 1;
         }
@@ -133,7 +172,10 @@ var node1 = new Node1(1);
 var node2 = new Node2(2);
 var node3 = new Node3(3);
 var node4 = new Node4(4);
-var step1 = new Step1([node0,node1,node2,node3,node4]); 
+var node5 = new Node5(5);
+var node6 = new Node6(6);
+var node7 = new Node7(7);
+var step1 = new Step1([node0,node1,node2,node3,node4,node5,node6,node7]); 
 
 export {
     step1
