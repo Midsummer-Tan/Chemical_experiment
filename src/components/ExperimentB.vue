@@ -407,14 +407,14 @@ export default {
         weight_merged: "电子秤组合体",
         spoon: "药匙",
         trash_can: "垃圾桶",
-        "spoon.Cone": "有硫辛酸的药匙",
-        "weight.paper_Cone": "有硫辛酸的电子称",
-        paper_Cone: "带有硫辛酸的称量纸"
+        "spoon.cone": "有硫辛酸的药匙",
+        "weight.paper_cone": "有硫辛酸的电子称",
+        paper_cone: "带有硫辛酸的称量纸"
       },
       quality: {
         paper: [null, null, 0, 0, 0, 1],
         tri_flask: [null, 2, 0, 0, 0, 0],
-        Cone: [null, null, 1, 0, 0, 0],
+        cone: [null, null, 1, 0, 0, 0],
         powder_brown: [null, null, 0, 0, 5, 0]
       }, //20.000g
       step_finish: [0, 0, 0], //step1 step2 step3 是否执行完了？
@@ -457,7 +457,6 @@ export default {
       this.engine.runRenderLoop(() => {
         this.scene.render();
       });
-      // this.addModel("round_flask", null, null, null, null, this.scene);
 
       window.addEventListener("resize", () => {
         this.engine.resize();
@@ -479,7 +478,7 @@ export default {
             "stand.round_flask",
             "weight.pot",
             "weight.tri_flask",
-            "weight.paper_Cone",
+            "weight.paper_cone",
             "weight.paper_powder_brown"
           ];
           if (pickResult.pickedMesh.id != "ground") {
@@ -570,7 +569,7 @@ export default {
             case "tri_flask":
               this.addTriFlask();
               break;
-            case "paper_Cone":
+            case "paper_cone":
               this.addPaperCone();
             case "paper_powder_brown":
               this.addPaperPowderBrown();
@@ -589,7 +588,7 @@ export default {
       if (hoverid == "weight" || hoverid.indexOf("weight") != -1) str = "放置";
       else if (hoverid == "trash_can") str = "移除";
       else if (pickid == "spoon") str = "拾取";
-      else if (pickid == "paper_Cone" && hoverid == "round_flask") str = "倒入";
+      else if (pickid == "paper_cone" && hoverid == "round_flask") str = "倒入";
       else if(pickid == 'dropper' && hoverid == 'c3h6o') str = '吸入';
       var button1 = GUI.Button.CreateSimpleButton("btn1", str);
       this.advancedTexture.addControl(button1);
@@ -682,7 +681,7 @@ export default {
             true
           );
           mesh.id = "stand.round_flask";
-        } else if (pickid == "round_flask.Cone" && hoverid == "stand") {
+        } else if (pickid == "round_flask.cone" && hoverid == "stand") {
           //这步还没加分离
           this.scene.getMeshByID(pickid).position = new BABYLON.Vector3(
             -x + 0.175,
@@ -697,7 +696,7 @@ export default {
             false,
             true
           );
-          mesh.id = "stand.round_flask.Cone";
+          mesh.id = "stand.round_flask.cone";
         } else if (pickid == "tri_flask" && hoverid == "stand") {
           this.scene.getMeshByID(pickid).position = new BABYLON.Vector3(
             x - 0.175,
@@ -783,19 +782,18 @@ export default {
             new BABYLON.Vector3(0.02, 0.02, 0.02),
             new BABYLON.Vector3(x - 0.055, y + 0.02, z),
             null,
-            null,
-            this.scene
+            null
           );
           setTimeout(() => {
             var mesh = BABYLON.Mesh.MergeMeshes(
-              [this.scene.getMeshByID("Cone"), this.scene.getMeshByID("spoon")],
+              [this.scene.getMeshByID("cone"), this.scene.getMeshByID("spoon")],
               true,
               true,
               undefined,
               false,
               true
             );
-            mesh.id = "spoon.Cone";
+            mesh.id = "spoon.cone";
             mesh.addBehavior(
               new BABYLON.PointerDragBehavior({
                 dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
@@ -813,8 +811,7 @@ export default {
             new BABYLON.Vector3(2, 2, 2),
             new BABYLON.Vector3(x - 0.055, y, z),
             null,
-            null,
-            this.scene
+            null
           );
           setTimeout(() => {
             var mesh = BABYLON.Mesh.MergeMeshes(
@@ -845,8 +842,7 @@ export default {
             new BABYLON.Vector3(2.5, 2.5, 2.5),
             new BABYLON.Vector3(-x + 0.08, y, z + 0.18),
             null,
-            null,
-            this.scene
+            null
           ); //右手系变左手系
           mesh.disableFacetData();
           //移出带有粉末的勺子 加空勺子
@@ -863,12 +859,7 @@ export default {
             new BABYLON.Vector3(1.5, 1.5, 1.5),
             new BABYLON.Vector3(-x + 0.08, y, z),
             null,
-            [
-              new BABYLON.PointerDragBehavior({
-                dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
-              })
-            ],
-            this.scene
+            ['PointerDragBehavior']
           );
           setTimeout(() => {
             var mesh1 = BABYLON.Mesh.MergeMeshes(
@@ -904,12 +895,7 @@ export default {
               new BABYLON.Vector3(1.5, 1.5, 1.5),
               new BABYLON.Vector3(-x + 0.08, y, z),
               null,
-              [
-                new BABYLON.PointerDragBehavior({
-                  dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
-                })
-              ],
-              this.scene
+              ['PointerDragBehavior']
             );
         }
         else if(hoverid == 'tri_flask' && pickid =='paper_powder_brown'){
@@ -924,8 +910,7 @@ export default {
             new BABYLON.Vector3(2.5, 2.5, 2.5),
             new BABYLON.Vector3(x, y + 0.01, z),
             null,
-            null,
-            this.scene
+            null
           );
           setTimeout(() => {
             var mesh1 = BABYLON.Mesh.MergeMeshes(
@@ -948,7 +933,7 @@ export default {
           }, 500);
 
         }
-        else if (hoverid == "weight.paper" && pickid == "spoon.Cone") {
+        else if (hoverid == "weight.paper" && pickid == "spoon.cone") {
           var mesh = this.scene.getMeshByID("weight.paper");
           mesh.updateFacetData();
           var po = mesh.getFacetPosition(Math.floor(mesh.facetNb / 2));
@@ -960,12 +945,11 @@ export default {
             new BABYLON.Vector3(0.04, 0.04, 0.04),
             new BABYLON.Vector3(-x + 0.08, y, z + 0.18),
             null,
-            null,
-            this.scene
+            null
           ); //右手系变左手系
           mesh.disableFacetData();
           //移出带有粉末的勺子 加空勺子
-          var mesh = this.scene.getMeshByID("spoon.Cone");
+          var mesh = this.scene.getMeshByID("spoon.cone");
           mesh.updateFacetData();
           var po = mesh.getFacetPosition(Math.floor(mesh.facetNb / 2));
           var x = po.x;
@@ -978,18 +962,13 @@ export default {
             new BABYLON.Vector3(1.5, 1.5, 1.5),
             new BABYLON.Vector3(-x + 0.08, y, z),
             null,
-            [
-              new BABYLON.PointerDragBehavior({
-                dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
-              })
-            ],
-            this.scene
+            ['PointerDragBehavior']
           );
           setTimeout(() => {
             var mesh1 = BABYLON.Mesh.MergeMeshes(
               [
                 this.scene.getMeshByID("weight.paper"),
-                this.scene.getMeshByID("Cone")
+                this.scene.getMeshByID("cone")
               ],
               true,
               true,
@@ -997,15 +976,15 @@ export default {
               false,
               true
             );
-            mesh1.id = "weight.paper_Cone";
+            mesh1.id = "weight.paper_cone";
             mesh1.addBehavior(
               new BABYLON.PointerDragBehavior({
                 dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
               })
             );
           }, 500);
-        } else if (hoverid == "weight.paper_Cone" && pickid == "spoon.Cone") {
-          var mesh = this.scene.getMeshByID("spoon.Cone");
+        } else if (hoverid == "weight.paper_cone" && pickid == "spoon.cone") {
+          var mesh = this.scene.getMeshByID("spoon.cone");
           mesh.updateFacetData();
           var po = mesh.getFacetPosition(Math.floor(mesh.facetNb / 2));
           var x = po.x;
@@ -1019,32 +998,26 @@ export default {
             new BABYLON.Vector3(1.5, 1.5, 1.5),
             new BABYLON.Vector3(-x + 0.08, y, z),
             null,
-            [
-              new BABYLON.PointerDragBehavior({
-                dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
-              })
-            ],
-            this.scene
+            ['PointerDragBehavior']
           );
-        } else if (pickid == "paper_Cone" && hoverid == "round_flask") {
+        } else if (pickid == "paper_cone" && hoverid == "round_flask") {
           var mesh = this.scene.getMeshByID("round_flask");
           var po = mesh.position;
           var x = po.x;
           var y = po.y;
           var z = po.z;
-          this.scene.removeMesh(this.scene.getMeshByID("paper_Cone"));
+          this.scene.removeMesh(this.scene.getMeshByID("paper_cone"));
           this.addModel(
             "cone",
             new BABYLON.Vector3(0.03, 0.03, 0.03),
             new BABYLON.Vector3(x, y + 0.08, z),
             null,
-            null,
-            this.scene
+            null
           );
           setTimeout(() => {
             var mesh1 = BABYLON.Mesh.MergeMeshes(
               [
-                this.scene.getMeshByID("Cone"),
+                this.scene.getMeshByID("cone"),
                 this.scene.getMeshByID("round_flask")
               ],
               true,
@@ -1053,7 +1026,7 @@ export default {
               false,
               true
             );
-            mesh1.id = "round_flask.Cone";
+            mesh1.id = "round_flask.cone";
             mesh1.addBehavior(
               new BABYLON.PointerDragBehavior({
                 dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
@@ -1128,104 +1101,79 @@ export default {
       ground.material = groundMaterial;
       this.addTrash_can();
       this.addBB8();
-      BABYLON.SceneLoader.ImportMesh(
-        //铁架台
-        "",
-        "model/glb/",
-        "stand.glb",
-        scene,
-        obj => {
-          this.stand = obj;
-          this.scene.getMeshByID("stand").rotation = new BABYLON.Vector3(
-            0,
-            Math.PI,
-            0
-          );
-          this.scene.getMeshByID("stand").position = new BABYLON.Vector3(
-            1,
-            0,
-            0
-          );
-        }
-      );
+      this.addModel('stand',null,new BABYLON.Vector3(1,0,0),new BABYLON.Vector3(0,Math.PI,0),null);//加上固定的铁架台
     },
 
-    addModel(name, scaling, position, rotation, behavior, scene) {
+    addModel(name, scaling, position, rotation, behavior) {
       /*
         name String
         scaling BABYLON.Vector3
         position BABYLON.Vector3
         rotation BABYLON.Vector3
-        behavior []
-        scene scene
+        behavior ['PointerDragBehavior',...]
       */
       BABYLON.SceneLoader.ImportMesh(
         "",
         "model/glb/",
         `${name}.glb`,
-        scene,
+        this.scene,
         obj => {
-          var id = obj[1].id;
-          let model = scene.getMeshByID(id);
-
+          var array1 = [];
+          for(var i=0;i<obj.length;i++){
+            if(obj[i].id!='__root__'){array1.push(this.scene.getMeshByID(obj[i].id))}
+          }
+          if(array1.length>=2){
+            var mesh = BABYLON.Mesh.MergeMeshes(
+            array1,
+            true,
+            true,
+            undefined,
+            false,
+            true
+            );
+          }
+          else{
+            var mesh = this.scene.getMeshByID(array1[0].id);
+          }
+          mesh.id = name;
+          let model = this.scene.getMeshByID(name);
+          var code1 = new BABYLON.PointerDragBehavior({
+            dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+          })//add 拖拽事件
+          var dict = {'PointerDragBehavior':code1};
           if (behavior) {
             for (let i = 0; i < behavior.length; i++) {
-              model.addBehavior(behavior[i]);
+              model.addBehavior(dict[behavior[i]]);
             }
           }
           if (position) model.position = position;
           if (scaling) model.scaling = scaling;
           if (rotation) model.rotation = rotation;
-          return model;
         }
       );
     },
-    addPlate() {
-      BABYLON.SceneLoader.ImportMesh(
-        "",
-        "model/glb/",
-        "transparent.glb",
-        this.scene,
-        obj => {
-          console.log(obj);
-          //this.scene.getMeshByID("透明盘").id = 'plate';
-          this.scene.getMeshByID("Cylinder001").scaling = new BABYLON.Vector3(
-            100,
-            100,
-            100
-          );
-          // this.scene.getMeshByID("trash_can").rotation =  new BABYLON.Vector3(0,Math.PI,0);
-        }
-      );
-      // this.addModel("transparent",new BABYLON.Vector3(2,2,2), null, null, null, this.scene);
+    addPaper(){
+      this.addModel('paper',null,new BABYLON.Vector3(0,0.05,0),null,['PointerDragBehavior']);
     },
     addPaperCone() {
-      this.addModel(
-        "paper",
-        null,
-        new BABYLON.Vector3(0, 0.05, 0),
-        null,
-        null,
-        this.scene
-      );
+      this.addPaper();
       this.addModel(
         "cone",
         new BABYLON.Vector3(0.02, 0.02, 0.02),
         new BABYLON.Vector3(0, 0.07, 0),
         null,
         null,
-        this.scene
       );
       setTimeout(() => {
         var mesh = BABYLON.Mesh.MergeMeshes(
-          [this.scene.getMeshByID("paper"), this.scene.getMeshByID("Cone")],
+          [this.scene.getMeshByID("paper"), this.scene.getMeshByID("cone")],
           true,
           true,
           undefined,
           false,
           true
         );
-        mesh.id = "paper_Cone";
+        mesh.id = "paper_cone";
         mesh.addBehavior(
           new BABYLON.PointerDragBehavior({
             dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
@@ -1234,21 +1182,13 @@ export default {
       }, 500);
     },
     addPaperPowderBrown(){
-      this.addModel(
-        "paper",
-        null,
-        new BABYLON.Vector3(0, 0.05, 0),
-        null,
-        null,
-        this.scene
-      );
+      this.addPaper()
       this.addModel(
         "powder_brown",
         new BABYLON.Vector3(2.5, 2.5, 2.5),
         new BABYLON.Vector3(0, 0.05, 0),
         null,
-        null,
-        this.scene
+        null
       );
       setTimeout(() => {
         var mesh = BABYLON.Mesh.MergeMeshes(
@@ -1268,496 +1208,57 @@ export default {
       }, 500);
     },
     addTrash_can() {
-      BABYLON.SceneLoader.ImportMesh(
-        "",
-        "model/glb/",
-        "trash_can.glb",
-        this.scene,
-        obj => {
-          this.scene.getMeshByID("trashcan.1").id = "trash_can";
-          this.scene.getMeshByID("trash_can").scaling = new BABYLON.Vector3(
-            2,
-            2,
-            2
-          );
-          this.scene.getMeshByID("trash_can").rotation = new BABYLON.Vector3(
-            0,
-            Math.PI,
-            0
-          );
-          this.scene.getMeshByID("trash_can").position = new BABYLON.Vector3(
-            -200,
-            0,
-            200
-          );
-        }
-      );
+      this.addModel('trash_can',new BABYLON.Vector3(2,2,2),new BABYLON.Vector3(-200,0,200),new BABYLON.Vector3(0,Math.PI,0),null);
     },
-     addBB8() {
-      BABYLON.SceneLoader.ImportMesh(
-        "",
-        "model/glb/",
-        "BB8.glb",
-        this.scene,
-        obj => {
-          var array1=[];
-          for(var i=0;i<obj.length;i++){
-            if(obj[i].id!='__root__'){array1.push(this.scene.getMeshByID(obj[i].id))}
-          }
-          var mesh = BABYLON.Mesh.MergeMeshes(
-            array1,
-            true,
-            true,
-            undefined,
-            false,
-            true
-          );
-          mesh.id = "BB8";
-          mesh.scaling = new BABYLON.Vector3(
-            0.26,
-            0.26,
-            0.26
-          );
-          mesh.rotation = new BABYLON.Vector3(
-            0,
-            Math.PI,
-            0
-          );
-          mesh.position = new BABYLON.Vector3(
-            -0.85,
-            0.33,
-            0
-          );
-        }
-      );
+    addBB8() {
+      this.addModel('bb8',new BABYLON.Vector3(0.26,0.26,0.26),new BABYLON.Vector3(-0.85,0.33,0),new BABYLON.Vector3(0,Math.PI,0),null);
     },
     addRound_flask() {
-      //圆底烧瓶
-      BABYLON.SceneLoader.ImportMesh(
-        "",
-        "model/glb/",
-        "round_flask.glb",
-        this.scene,
-        obj => {
-          this.scene.getMeshByID("round_flask").addBehavior(
-            new BABYLON.PointerDragBehavior({
-              dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
-            })
-          );
-        }
-      );
+      this.addModel('round_flask',null,null,null,['PointerDragBehavior']);
     },
     addWeight() {
       this.hasWeight = 1; //有电子称
-      //电子称
-      BABYLON.SceneLoader.ImportMesh(
-        "",
-        "model/glb/",
-        "weight.glb",
-        this.scene,
-        obj => {
-          this.scene.getMeshByID("weight").rotation = new BABYLON.Vector3(
-            0,
-            Math.PI,
-            0
-          );
-          this.scene.getMeshByID("weight").addBehavior(
-            new BABYLON.PointerDragBehavior({
-              dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
-            })
-          );
-          this.toZero();
-        }
-      );
+      this.addModel('weight',null,null,new BABYLON.Vector3(0,Math.PI,0),['PointerDragBehavior']);
+      setTimeout(() => {
+        this.toZero();
+      }, 100);
     },
     addC8h14o2s2() {
-      BABYLON.SceneLoader.ImportMesh(
-        //试剂瓶
-        "",
-        "model/glb/",
-        "c8h14o2s2.glb",
-        this.scene,
-        obj => {
-          var mesh = BABYLON.Mesh.MergeMeshes(
-            [
-              this.scene.getMeshByID("C8H14O2S2_primitive0"),
-              this.scene.getMeshByID("C8H14O2S2_primitive1")
-            ],
-            true,
-            true,
-            undefined,
-            false,
-            true
-          );
-          mesh.id = "c8h14o2s2";
-          this.scene.getMeshByID(mesh.id).rotation = new BABYLON.Vector3(
-            0,
-            Math.PI,
-            0
-          );
-          this.scene.getMeshByID("c8h14o2s2").addBehavior(
-            new BABYLON.PointerDragBehavior({
-              dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
-            })
-          );
-        }
-      );
+      this.addModel('c8h14o2s2',null,null,new BABYLON.Vector3(0,Math.PI,0),['PointerDragBehavior']);
     },
     addFecl3() {
-      BABYLON.SceneLoader.ImportMesh(
-        //试剂瓶
-        "",
-        "model/glb/",
-        "fecl3.glb",
-        this.scene,
-        obj => {
-          var mesh = BABYLON.Mesh.MergeMeshes(
-            [
-              this.scene.getMeshByID("FeCl3_primitive0"),
-              this.scene.getMeshByID("FeCl3_primitive1")
-            ],
-            true,
-            true,
-            undefined,
-            false,
-            true
-          );
-          mesh.id = "fecl3";
-          this.scene.getMeshByID(mesh.id).rotation = new BABYLON.Vector3(
-            0,
-            Math.PI,
-            0
-          );
-          this.scene.getMeshByID("fecl3").addBehavior(
-            new BABYLON.PointerDragBehavior({
-              dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
-            })
-          );
-        }
-      );
+      this.addModel('fecl3',null,null,new BABYLON.Vector3(0,Math.PI,0),['PointerDragBehavior']);
     },
     addAsetone(){
-      BABYLON.SceneLoader.ImportMesh(
-        //试剂瓶
-        "",
-        "model/glb/",
-        "c3h6o.glb",
-        this.scene,
-        obj => {
-          var mesh = BABYLON.Mesh.MergeMeshes(
-            [
-              this.scene.getMeshByID("C3H6O_primitive0"),
-              this.scene.getMeshByID("C3H6O_primitive1")
-            ],
-            true,
-            true,
-            undefined,
-            false,
-            true
-          );
-          mesh.id = "c3h6o";
-          this.scene.getMeshByID(mesh.id).rotation = new BABYLON.Vector3(
-            0,
-            Math.PI,
-            0
-          );
-          this.scene.getMeshByID("c3h6o").addBehavior(
-            new BABYLON.PointerDragBehavior({
-              dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
-            })
-          );
-        }
-      );
+      this.addModel('c3h6o',null,null,new BABYLON.Vector3(0,Math.PI,0),['PointerDragBehavior']);
     },
     addStand() {
-      BABYLON.SceneLoader.ImportMesh(
-        //铁架台
-        "",
-        "model/glb/",
-        "stand.glb",
-        this.scene,
-        obj => {
-          this.scene.getMeshByID("stand").rotation = new BABYLON.Vector3(
-            0,
-            Math.PI,
-            0
-          );
-          this.scene.getMeshByID("stand").addBehavior(
-            new BABYLON.PointerDragBehavior({
-              dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
-            })
-          );
-        }
-      );
+      this.addModel('stand',null,null,new BABYLON.Vector3(0,Math.PI,0),['PointerDragBehavior']);
     },
-
     addPot() {
-      BABYLON.SceneLoader.ImportMesh(
-        //油浴锅
-        "",
-        "model/glb/",
-        "pot.glb",
-        this.scene,
-        obj => {
-          this.scene.getMeshByID("pot").addBehavior(
-            new BABYLON.PointerDragBehavior({
-              dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
-            })
-          );
-        }
-      );
+      this.addModel('pot',null,null,null,['PointerDragBehavior']);
     },
-
     addDropper() {
-      BABYLON.SceneLoader.ImportMesh(
-        //滴管
-        "",
-        "model/glb/",
-        "dropper.glb",
-        this.scene,
-        obj => {
-          this.scene.getMeshByID("dropper").scaling = new BABYLON.Vector3(
-            1.5,
-            1.5,
-            1.5
-          );
-          this.scene.getMeshByID("dropper").position = new BABYLON.Vector3(
-            0,
-            0.2,
-            0
-          ); //左右 上下 前后
-          this.scene.getMeshByID("dropper").rotation = new BABYLON.Vector3(
-            0,0,Math.PI,
-          );
-          this.scene.getMeshByID("dropper").addBehavior(
-            new BABYLON.PointerDragBehavior({
-              dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
-            })
-          );
-        }
-      );
+      this.addModel('dropper',new BABYLON.Vector3(1.5,1.5,1.5),new BABYLON.Vector3(0,0.2,0),new BABYLON.Vector3(0,Math.PI,0),['PointerDragBehavior']);
     },
-
     addHeater() {
-      BABYLON.SceneLoader.ImportMesh(
-        //磁力搅拌器
-        "",
-        "model/glb/",
-        "heater.glb",
-        this.scene,
-        obj => {
-          var mesh = BABYLON.Mesh.MergeMeshes(
-            [
-              this.scene.getMeshByID("heater_primitive1"),
-              this.scene.getMeshByID("heater_primitive0")
-            ],
-            true,
-            true,
-            undefined,
-            false,
-            true
-          );
-          mesh.id = "heater";
-          mesh.addBehavior(
-            new BABYLON.PointerDragBehavior({
-              dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
-            })
-          );
-        }
-      );
+      this.addModel('heater',null,null,new BABYLON.Vector3(0,Math.PI,0),['PointerDragBehavior']);
     },
-
     addLiquidTransferor() {
-      BABYLON.SceneLoader.ImportMesh(
-        //移液枪
-        "",
-        "model/glb/",
-        "liquid_transferor.glb",
-        this.scene,
-        obj => {
-          var mesh = BABYLON.Mesh.MergeMeshes(
-            [
-              this.scene.getMeshByID("liquid transferor_primitive0"),
-              this.scene.getMeshByID("liquid transferor_primitive1")
-            ],
-            true,
-            true,
-            undefined,
-            false,
-            true
-          );
-          mesh.id = "liquid_transferor";
-          mesh.addBehavior(
-            new BABYLON.PointerDragBehavior({
-              dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
-            })
-          );
-        }
-      );
+      this.addModel('liquid_transferor',null,new BABYLON.Vector3(0,0.2,0),new BABYLON.Vector3(0,0,Math.PI),['PointerDragBehavior']);
     },
-
     addMeasuringCylinder() {
       this.hasMeasuring_cylinder = 1;
-      BABYLON.SceneLoader.ImportMesh(
-        //量筒
-        "",
-        "model/glb/",
-        "measuring_cylinder.glb",
-        this.scene,
-        obj => {
-          this.scene.getMeshByID("measuring_cylinder").addBehavior(
-            new BABYLON.PointerDragBehavior({
-              dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
-            })
-          );
-        }
-      );
-    },
-    addPaper() {
-      BABYLON.SceneLoader.ImportMesh(
-        //称量纸
-        "",
-        "model/glb/",
-        "paper.glb",
-        this.scene,
-        obj => {
-          this.scene.getMeshByID("paper").position = new BABYLON.Vector3(
-            0,
-            0.05,
-            0
-          );
-          this.scene.getMeshByID("paper").addBehavior(
-            new BABYLON.PointerDragBehavior({
-              dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
-            })
-          );
-        }
-      );
+      this.addModel('measuring_cylinder',null,null,null,['PointerDragBehavior']);      
     },
     addNeedle() {
-      BABYLON.SceneLoader.ImportMesh(
-        //针管
-        "",
-        "model/glb/",
-        "needle.glb",
-        this.scene,
-        obj => {
-          var mesh = BABYLON.Mesh.MergeMeshes(
-            [this.scene.getMeshByID("node2"), this.scene.getMeshByID("node3")],
-            true,
-            true,
-            undefined,
-            false,
-            true
-          );
-          mesh.id = "needle";
-          this.scene.getMeshByID("needle").scaling = new BABYLON.Vector3(
-            0.3,
-            0.3,
-            0.3
-          );
-          mesh.addBehavior(
-            new BABYLON.PointerDragBehavior({
-              dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
-            })
-          );
-        }
-      );
+      this.addModel('needle',new BABYLON.Vector3(1.2,1.2,1.2),new BABYLON.Vector3(0,0.2,0),new BABYLON.Vector3(0,0,Math.PI),['PointerDragBehavior']);      
     },
     addSpoon() {
-      BABYLON.SceneLoader.ImportMesh(
-        //药匙
-        "",
-        "model/glb/",
-        "spoon.glb",
-        this.scene,
-        obj => {
-          this.scene.getMeshByID("spoon").scaling = new BABYLON.Vector3(
-            1.5,
-            1.5,
-            1.5
-          );
-          this.scene.getMeshByID("spoon").position = new BABYLON.Vector3(
-            0,
-            0.05,
-            0
-          );
-          this.scene.getMeshByID("spoon").addBehavior(
-            new BABYLON.PointerDragBehavior({
-              dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
-            })
-          );
-        }
-      );
-    },
-    addSpoonMerged(position) {
-      BABYLON.SceneLoader.ImportMesh(
-        //药匙
-        "",
-        "model/glb/",
-        "spoon.glb",
-        this.scene,
-        async obj => {
-          this.scene.getMeshByID("spoon").scaling = new BABYLON.Vector3(
-            1.5,
-            1.5,
-            1.5
-          );
-          BABYLON.SceneLoader.ImportMesh(
-            //粉末
-            "",
-            "model/glb/",
-            "cone.glb",
-            this.scene,
-            obj => {
-              this.scene.getMeshByID("Cone").scaling = new BABYLON.Vector3(
-                0.02,
-                0.02,
-                0.02
-              );
-              this.scene.getMeshByID("Cone").position = new BABYLON.Vector3(
-                -0.055,
-                0.02,
-                0
-              );
-              var mesh = BABYLON.Mesh.MergeMeshes(
-                [
-                  this.scene.getMeshByID("Cone"),
-                  this.scene.getMeshByID("spoon")
-                ],
-                true,
-                true,
-                undefined,
-                false,
-                true
-              );
-              mesh.addBehavior(
-                new BABYLON.PointerDragBehavior({
-                  dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
-                })
-              );
-              mesh.id = "spoon.Cone";
-              this.scene.getMeshByID(mesh.id).position = position;
-            }
-          );
-        }
-      );
+      this.addModel('spoon',new BABYLON.Vector3(1.5,1.5,1.5),new BABYLON.Vector3(0,0.05,0),null,['PointerDragBehavior']);      
     },
     addTriFlask() {
-      BABYLON.SceneLoader.ImportMesh(
-        //锥形瓶
-        "",
-        "model/glb/",
-        "tri_flask.glb",
-        this.scene,
-        obj => {
-          this.scene.getMeshByID("tri_flask").addBehavior(
-            new BABYLON.PointerDragBehavior({
-              dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
-            })
-          );
-        }
-      );
+      this.addModel('tri_flask',null,null,null,['PointerDragBehavior']);      
     },
     async createUx(scene) {
       // Create the 3D UI manager
