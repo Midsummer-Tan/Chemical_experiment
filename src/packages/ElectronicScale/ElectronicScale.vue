@@ -84,7 +84,7 @@
 import { setAllNumber } from "./js/digital-clock.js";
 //setNumber是由setAllNumber调用的 也需要引用
 export default {
-  name:'electronic-scale',
+  name:'electronicScale',
   data() {
     return {
 		

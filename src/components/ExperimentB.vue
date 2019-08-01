@@ -191,7 +191,7 @@
               </v-flex>
 
               <v-flex xs3>
-                <v-card @click="addNeedle()">
+                <v-card @click="addNeedleCap()">
                   <v-card-text>
                     <v-img
                       src="images/needle.png"
@@ -287,6 +287,18 @@
               </v-flex>
 
               <v-flex xs3>
+                <v-card @click="addDib()">
+                  <v-card-text>
+                    <v-img
+                      src="images/dib.png"
+                      aspect-ratio="1"
+                    ></v-img>
+                    <div class="body-2 text-xs-center">DIB交联剂</div>
+                  </v-card-text>
+                </v-card>
+              </v-flex>
+
+              <v-flex xs3>
                 <v-card @click="addSpoon()">
                   <v-card-text>
                     <v-img
@@ -351,7 +363,7 @@
           <div
             v-for="(item,index) in errortext"
             :key="index"
-          ><span style="color:orange">{{index}}</span>.{{item}}<br></div>
+          ><span style="color:orange">{{index+1}}</span>.{{item}}<br></div>
 
         </v-card-text>
         <v-card-actions>
@@ -376,7 +388,7 @@ import { step1 } from "../js/step1.js";
 import { Vector3 } from "@babylonjs/core/Legacy/legacy";
 import myProgress from "../packages/Progress/Progress.vue";
 import myNeedleProgress from "../packages/NeedleProgress/NeedleProgress.vue";
-
+import electronicScale from "../packages/ElectronicScale/ElectronicScale.vue";
 export default {
   data() {
     return {
@@ -416,7 +428,8 @@ export default {
         trash_can: "垃圾桶",
         "spoon_cone": "有硫辛酸的药匙",
         "weight.paper_cone": "有硫辛酸的电子称",
-        paper_cone: "带有硫辛酸的称量纸"
+        paper_cone: "带有硫辛酸的称量纸",
+        cap:'针管冒',
       },
       quality: {
         paper: [null, null, 0, 0, 0, 1],
@@ -448,7 +461,8 @@ export default {
   },
   components:{
     myProgress,
-    myNeedleProgress
+    myNeedleProgress,
+    electronicScale
   },
   methods: {
     async init() {
@@ -534,6 +548,7 @@ export default {
             "stand.round_flask_cone",
             "stand.tri_flask_powder_brown",
             "tri_flask_full_trans_powder_brown",
+            'needle.cap',
           ];
           if (pickResult.pickedMesh.id != "ground") {
             this.hl.addMesh(pickResult.pickedMesh, BABYLON.Color3.Purple());
@@ -650,7 +665,13 @@ export default {
             case "tri_flask_full_trans_powder_brown":
               this.needshake = 1;
               this.shaked = 1;
-              break
+              break;
+            case "needle":
+              this.addNeedle();
+              break;
+            case "cap":
+              this.addCap();
+              break;
             default:
               break;
           }
@@ -668,7 +689,7 @@ export default {
       else if (pickid == "spoon") str = "拾取";
       else if ( hoverid == "round_flask" ||hoverid == 'tri_flask'|| pickid == 'dropper_full' 
       || hoverid == 'tri_flask_powder_brown') str = "倒入";
-      else if(pickid == 'dropper' && hoverid == 'c3h6o') str = '吸取';
+      else if((pickid == 'dropper' && hoverid == 'c3h6o') || hoverid=='dib') str = '吸取';
       else if( pickid =='film') str = '封口';
       var button1 = GUI.Button.CreateSimpleButton("btn1", str);
       this.advancedTexture.addControl(button1);
@@ -1220,6 +1241,55 @@ export default {
             );
 
         }
+        else if( pickid =='cap' && hoverid == 'needle'){
+          var mesh = this.scene.getMeshByID('cap');
+          var po = this.getMergedPosition('needle');
+          mesh.position = new BABYLON.Vector3(po[0],po[1]+0.01,po[2]);
+          var mesh1 = BABYLON.Mesh.MergeMeshes(
+            [this.scene.getMeshByID(hoverid), this.scene.getMeshByID(pickid)],
+            true,
+            true,
+            undefined,
+            false,
+            true
+          );
+          mesh1.id = "needle.cap";
+          mesh1.addBehavior(
+            new BABYLON.PointerDragBehavior({
+              dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+            })
+          );
+        }
+        else if(pickid == 'needle' && hoverid =='dib'){
+          this.valueneedle+=0.05;
+          this.valueneedle=Math.floor(this.valueneedle*100)/100;
+          var po = this.getMergedPosition('needle');
+          this.addModel('needle_full',null,new BABYLON.Vector3(po[0],po[1]+0.15,po[2]),new BABYLON.Vector3(0,0,Math.PI),['PointerDragBehavior']);
+          this.scene.removeMesh(this.scene.getMeshByID('needle'));
+        }
+        else if(pickid == 'needle_full' && hoverid=='dib'){
+          this.valueneedle+=0.05;
+          this.valueneedle=Math.floor(this.valueneedle*100)/100;
+        }
+        else if(pickid =='cap' && hoverid == 'needle_full'){
+          var mesh1 = this.scene.getMeshByID('cap');
+          var po = this.getMergedPosition('needle_full');
+          mesh1.position = new BABYLON.Vector3(po[0],po[1]+0.01,po[2]);
+          var mesh = BABYLON.Mesh.MergeMeshes(
+            [this.scene.getMeshByID(hoverid), this.scene.getMeshByID(pickid)],
+            true,
+            true,
+            undefined,
+            false,
+            true
+          );
+          mesh.id = "needle_full.cap";
+          mesh.addBehavior(
+            new BABYLON.PointerDragBehavior({
+              dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+            })
+          );
+        }
         else if (hoverid == "trash_can") {
           this.scene.removeMesh(this.scene.getMeshByID(pickid));
           var flag1 = 0,
@@ -1438,7 +1508,8 @@ export default {
           new BABYLON.PointerDragBehavior({
             dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
           })
-        );},500)
+        );
+        },500)
     },
     addRoundFlaskCone(){
       this.addModel('round_flask',null,null,null,null);
@@ -1521,6 +1592,9 @@ export default {
     addAsetone(){
       this.addModel('c3h6o',null,null,new BABYLON.Vector3(0,Math.PI,0),['PointerDragBehavior']);
     },
+    addDib(){
+      this.addModel('dib',null,null,new BABYLON.Vector3(0,Math.PI,0),['PointerDragBehavior']);
+    },
     addStand() {
       this.addModel('stand',null,null,new BABYLON.Vector3(0,Math.PI,0),['PointerDragBehavior']);
     },
@@ -1541,10 +1615,52 @@ export default {
       this.activeIndex='measuring_cylinder';
       this.addModel('measuring_cylinder',null,null,null,['PointerDragBehavior']);      
     }, 
-    addNeedle() {
+    addNeedleCap() {
+      this.hasNeedle = 1;
+      this.activeIndex='needle';
+      this.addModel('needle',new BABYLON.Vector3(1.2,1.2,1.2),new BABYLON.Vector3(0,0.2,0),new BABYLON.Vector3(0,0,Math.PI),null);    
+      BABYLON.Mesh.CreateCylinder("cap", 0.01, 0.01, 0.01, 10, 1, this.scene, false, BABYLON.Mesh.DEFAULTSIDE);
+      this.scene.getMeshByID('cap').position = new BABYLON.Vector3(0.002,0.05,0);
+      var mater = new BABYLON.StandardMaterial("texture1", this.scene);
+      mater.diffuseColor = new BABYLON.Color3( 0.134, 0.331, 0.535);
+      this.scene.getMeshByID('cap').material = mater;
+      setTimeout(() => {
+        var mesh = BABYLON.Mesh.MergeMeshes(
+          [
+            this.scene.getMeshByID("needle"),
+            this.scene.getMeshByID("cap")
+          ],
+          true,
+          true,
+          undefined,
+          false,
+          true
+        );
+        mesh.addBehavior(
+          new BABYLON.PointerDragBehavior({
+            dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+          })
+        );
+        mesh.id = 'needle.cap';
+      }, 500);
+
+    },
+    addNeedle(){
       this.hasNeedle = 1;
       this.activeIndex='needle'
-      this.addModel('needle',new BABYLON.Vector3(1.2,1.2,1.2),new BABYLON.Vector3(0,0.2,0),new BABYLON.Vector3(0,0,Math.PI),['PointerDragBehavior']);      
+      this.addModel('needle',new BABYLON.Vector3(1.2,1.2,1.2),new BABYLON.Vector3(0,0.2,0),new BABYLON.Vector3(0,0,Math.PI),['PointerDragBehavior']);    
+    },
+    addCap(){
+      BABYLON.Mesh.CreateCylinder("cap", 0.01, 0.01, 0.01, 10, 1, this.scene, false, BABYLON.Mesh.DEFAULTSIDE);
+      this.scene.getMeshByID('cap').position = new BABYLON.Vector3(0,0.01,0);
+      var mater = new BABYLON.StandardMaterial("texture1", this.scene);
+      mater.diffuseColor = new BABYLON.Color3(0.134, 0.331, 0.535);
+      this.scene.getMeshByID('cap').material = mater;
+      this.scene.getMeshByID('cap').addBehavior(
+        new BABYLON.PointerDragBehavior({
+            dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+          })
+      );
     },
     addSpoon() {
       this.addModel('spoon',new BABYLON.Vector3(1.5,1.5,1.5),new BABYLON.Vector3(0,0.05,0),null,['PointerDragBehavior']);      

@@ -177,6 +177,39 @@ class Node12 extends Node{
         return 0;
     }
 }
+class Node13 extends Node{
+    errortext = '未用针管吸取DIB交联剂';
+    successtext = '用针管吸取DIB交联剂';
+    getScore(){
+        if(this.scene.getMeshByID('needle_full')!=null){
+            this.setScore(1);
+            return 1;
+        }
+        return 0;
+    }
+}
+class Node14 extends Node{
+    errortext = 'DIB试剂并未达到针管的0.35ml刻度处';
+    successtext = '量取0.35mlDIB试剂';
+    getScore(){
+        if(this.valueneedle == 0.35){
+            this.setScore(1);
+            return 1;
+        }
+        return 0;
+    }
+}
+class Node15 extends Node{
+    errortext = '未给量取DIB试剂的针管盖上针管盖';
+    successtext = '盖上针管盖';
+    getScore(){
+        if(this.scene.getMeshByID('needle_full.cap')){
+            this.setScore(1);
+            return 1;
+        }
+        return 0;
+    }
+}
 class Step1{
     // textarray = ['你未调零', '你未称量硫辛酸药品'
     //     , '硫辛酸药品未到5.000g', '没有将硫辛酸药品倒入10ml烧瓶中',
@@ -184,7 +217,7 @@ class Step1{
     //     '三氯化铁质量未达到0.100g', '三氯化铁药品未放入25ml锥形瓶中', '未用滴管量取丙酮并放入25ml量筒中',
     //     '丙酮液面未达到量筒的14ml刻度处', '未将丙酮与三氯化铁混合', '没有左右震荡丙酮与三氯化铁混合溶液',
     //     '未用塑料薄膜将锥形瓶口封口', '未用针管吸取DIB交联剂', 'DIB试剂并未达到针管的0.35ml刻度处'];
-    all_score = 15;//总分
+    all_score = 16;//总分
     current_score=0;//目前得分
     node_array = [];
     constructor(allnode){
@@ -237,7 +270,11 @@ var node9 = new Node9(9);
 var node10 = new Node10(10);
 var node11 = new Node11(11);
 var node12 = new Node12(12);
-var step1 = new Step1([node0, node1, node2, node3, node4, node5, node6, node7, node8, node9, node10, node11,node12]); 
+var node13 = new Node13(13);
+var node14 = new Node14(14);
+var node15 = new Node15(15);
+
+var step1 = new Step1([node0, node1, node2, node3, node4, node5, node6, node7, node8, node9, node10, node11, node12,node13, node14, node15]);
 
 export {
     step1

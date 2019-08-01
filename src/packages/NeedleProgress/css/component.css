@@ -217,7 +217,7 @@ h1 span.heading-3d {
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.10'] .percentage:before {
+.bar[aria-valuenow='0.1'] .percentage:before {
   width: 10%;
 }
 
@@ -267,7 +267,7 @@ h1 span.heading-3d {
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.20'] .percentage:before {
+.bar[aria-valuenow='0.2'] .percentage:before {
   width: 20%;
 }
 
@@ -317,7 +317,7 @@ h1 span.heading-3d {
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.30'] .percentage:before {
+.bar[aria-valuenow='0.3'] .percentage:before {
   width: 30%;
 }
 
@@ -367,7 +367,7 @@ h1 span.heading-3d {
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.40'] .percentage:before {
+.bar[aria-valuenow='0.4'] .percentage:before {
   width: 40%;
 }
 
@@ -417,7 +417,7 @@ h1 span.heading-3d {
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.50'] .percentage:before {
+.bar[aria-valuenow='0.5'] .percentage:before {
   width: 50%;
 }
 
@@ -467,7 +467,7 @@ h1 span.heading-3d {
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.60'] .percentage:before {
+.bar[aria-valuenow='0.6'] .percentage:before {
   width: 60%;
 }
 
@@ -517,7 +517,7 @@ h1 span.heading-3d {
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.70'] .percentage:before {
+.bar[aria-valuenow='0.7'] .percentage:before {
   width: 70%;
 }
 
@@ -567,7 +567,7 @@ h1 span.heading-3d {
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.80'] .percentage:before {
+.bar[aria-valuenow='0.8'] .percentage:before {
   width: 80%;
 }
 
@@ -617,7 +617,7 @@ h1 span.heading-3d {
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.90'] .percentage:before {
+.bar[aria-valuenow='0.9'] .percentage:before {
   width: 90%;
 }
 
