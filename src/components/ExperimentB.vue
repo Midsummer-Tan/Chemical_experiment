@@ -24,19 +24,16 @@
           <v-stepper v-model="e1">
             <v-stepper-header>
               <v-stepper-step
-                :complete="e1 > 1"
-                color="cyan"
+                :complete="e1 > 1"              
                 step="1"
               >{{step[0]}}</v-stepper-step>
               <v-divider></v-divider>
               <v-stepper-step
                 :complete="e1 > 2"
-                color="cyan"
                 step="2"
               >{{step[1]}}</v-stepper-step>
               <v-divider></v-divider>
               <v-stepper-step
-                color="cyan"
                 step="3"
               >{{step[2]}}</v-stepper-step>
             </v-stepper-header>
@@ -44,7 +41,7 @@
               style="float:right"
               :disabled="btn_post"
               dark
-              color="cyan"
+              color="pink"
               @click="post()"
             >提交</v-btn>
             <v-btn
@@ -53,7 +50,7 @@
               fab
               dark
               small
-              color="cyan"
+              color="pink"
               @click="openDialog1()"
             >
               <v-icon>fa fa-chevron-right</v-icon>
@@ -65,57 +62,51 @@
 
           </v-stepper>
         </v-card>
-
+        
         <!--步骤条-->
-
-        <!--电子称示数-->
-
-        <v-card
-          v-if="hasWeight"
-        >
-          <electronic-scale ref="es"></electronic-scale>
-          <v-btn
-            color="pink"
-            dark
-            small
-            absolute
-            bottom
-            right
-            fab
-            @click="toZero()"
-          >
-            <v-icon>fa fa-refresh</v-icon>
-          </v-btn>
-        </v-card>
-
-        <!--没称-->
-
-        <v-card
-          v-else
-          class="mb-3"
-        >
-          <v-alert
-            :value="true"
-            type="warning"
-            outline
-          >
-            <v-avatar size="60px">
-              <img
-                src="images/bb8.png"
-                alt="avatar"
+        <el-tabs 
+        v-model="activeIndex"
+        class="el-tabs-color" type="border-card">
+        <el-tab-pane label="电子称"  name = 'weight'>
+          <div style="height:120px;">
+            <v-card>
+              <electronic-scale ref="es" v-if="hasWeight==1"></electronic-scale>
+              <v-btn v-if="hasWeight==1"
+              color="pink"
+              dark
+              small
+              absolute
+              bottom
+              right
+              fab
+              @click="toZero()"
               >
+              <v-icon>fa fa-refresh</v-icon>
+              </v-btn>
+            </v-card>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane label="量筒"  name = 'measuring_cylinder'>
+          <div style="height:150px;">
+            <my-progress :valueNow="valuemeasuring_cylinder" v-if="hasMeasuring_cylinder==1"></my-progress>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane label="针管"  name = 'needle'>
+          <div style="height:150px;">
+            <my-needle-progress :valueNow="valueneedle" v-if="hasNeedle==1" ></my-needle-progress >
+          </div>
+        </el-tab-pane>
+         <el-tab-pane label="BB8's warning"  name = 'default'>
+          <div style="height:100px;">
+            <v-alert :value="true" type="warning" outline>
+            <v-avatar size="60px">
+              <img src="images/bb8.png" alt="avatar" >
             </v-avatar>
             &emsp;实验中请穿好实验服，戴好护目镜
           </v-alert>
-        </v-card>
-
-        <v-card
-          v-show="hasMeasuring_cylinder"
-          height="20%"
-        >
-          <my-progress :ariaValuenow='valuenow'></my-progress>
-
-        </v-card>
+          </div>
+        </el-tab-pane>
+        </el-tabs>   
 
         <!--工具栏-->
         <v-card class="mb-4">
@@ -128,7 +119,7 @@
               wrap
             >
               <v-flex xs3>
-                <v-card @click="addRound_flask()">
+                <v-card @click="addRoundFlask()">
                   <v-card-text>
                     <v-img
                       src="images/round_flask.png"
@@ -307,6 +298,18 @@
                 </v-card>
               </v-flex>
 
+              <v-flex xs3>
+                <v-card @click="addFilm()">
+                  <v-card-text>
+                    <v-img
+                      src="images/film.png"
+                      aspect-ratio="1"
+                    ></v-img>
+                    <div class="body-2 text-xs-center">塑料薄膜</div>
+                  </v-card-text>
+                </v-card>
+              </v-flex>
+
             </v-layout>
           </v-container>
         </v-card>
@@ -339,15 +342,16 @@
     <!--对话框-->
     <v-dialog
       v-model="dialog_result"
-      max-width="290"
+      max-width="500"
     >
       <v-card>
         <v-card-title class="headline">本环节总结</v-card-title>
         <v-card-text>你本环节得分是<span style="color:orange">{{now_score}}</span>分,总分为<span style="color:orange">{{all_score}}</span>分<br>
+        <span style="color:red">失分原因如下：</span><br>
           <div
             v-for="(item,index) in errortext"
             :key="index"
-          >{{i}}<br></div>
+          ><span style="color:orange">{{index}}</span>.{{item}}<br></div>
 
         </v-card-text>
         <v-card-actions>
@@ -370,8 +374,9 @@ import "@babylonjs/loaders/OBJ";
 import * as GUI from "@babylonjs/gui";
 import { step1 } from "../js/step1.js";
 import { Vector3 } from "@babylonjs/core/Legacy/legacy";
-import { Message } from "element-ui";
-import "element-ui/lib/theme-chalk/index.css";
+import myProgress from "../packages/Progress/Progress.vue";
+import myNeedleProgress from "../packages/NeedleProgress/NeedleProgress.vue";
+
 export default {
   data() {
     return {
@@ -389,7 +394,9 @@ export default {
       step: ["反应前期准备", "", ""],
       hasWeight: 0,
       hasMeasuring_cylinder: 0,
-      valuenow: 0,
+      hasNeedle:0,
+      valuemeasuring_cylinder:0,
+      valueneedle:0,
       map: {
         pot: "油浴锅",
         round_flask: "圆底烧瓶",
@@ -407,15 +414,15 @@ export default {
         weight_merged: "电子秤组合体",
         spoon: "药匙",
         trash_can: "垃圾桶",
-        "spoon.cone": "有硫辛酸的药匙",
+        "spoon_cone": "有硫辛酸的药匙",
         "weight.paper_cone": "有硫辛酸的电子称",
         paper_cone: "带有硫辛酸的称量纸"
       },
       quality: {
         paper: [null, null, 0, 0, 0, 1],
         tri_flask: [null, 2, 0, 0, 0, 0],
-        cone: [null, null, 1, 0, 0, 0],
-        powder_brown: [null, null, 0, 0, 5, 0]
+        spoon_cone: [null, null, 1, 0, 0, 0],
+        spoon_powder_brown: [null, null, 0, 0, 5, 0]
       }, //20.000g
       step_finish: [0, 0, 0], //step1 step2 step3 是否执行完了？
       all_score: null,
@@ -431,8 +438,17 @@ export default {
       mesh_front: null,
       spliced_meshes: [],
       electronicScaleQuality: [null, null, 0, 0, 0, 0],
-      stable: 0 //产生分离按钮的时候鼠标滑动不太稳定 这个等于一个flag
+      stable: 0, //产生分离按钮的时候鼠标滑动不太稳定 这个等于一个flag
+      shake_count:0,
+      rotateflag:1,
+      needshake:0,
+      shaked :0,//用于判断是否给分
+      activeIndex:"default",
     };
+  },
+  components:{
+    myProgress,
+    myNeedleProgress
   },
   methods: {
     async init() {
@@ -455,6 +471,41 @@ export default {
       );
       // await this.createUx(this.scene);
       this.engine.runRenderLoop(() => {
+        
+        if(this.needshake == 1){
+          if(this.shake_count <=35){
+            var mesh = this.scene.getMeshByID('tri_flask_full_trans_powder_brown')
+            console.log(mesh)
+            var n = 1/2;
+            if(mesh.rotation.z<Math.PI/10 && this.rotateflag == 1){
+              mesh.rotation.z+=n*Math.PI/10;
+              if(mesh.rotation.z==Math.PI/10)this.rotateflag = 2;
+            }
+            else if(mesh.rotation.z<=Math.PI/10 && this.rotateflag == 2){
+              mesh.rotation.z-=n*Math.PI/10;
+              if(mesh.rotation.z==0)this.rotateflag = 3;
+            }
+            else if(mesh.rotation.z>-Math.PI/10 && this.rotateflag == 3){
+              mesh.rotation.z-=n*Math.PI/10;
+              if(mesh.rotation.z==-Math.PI/10)this.rotateflag = 4;
+            }
+            else if(mesh.rotation.z>=-Math.PI/10 && this.rotateflag == 4){
+              mesh.rotation.z+=n*Math.PI/10;
+              if(mesh.rotation.z==0)this.rotateflag = 1;
+            }
+            this.shake_count++;
+          }
+          else{
+            //摇完了
+            this.shake_count = 0;
+            this.needshake = 0;
+            var po = this.getMergedPosition('tri_flask_full_trans_powder_brown');
+            this.scene.removeMesh(this.scene.getMeshByID('tri_flask_full_trans_powder_brown'));
+            this.addModel('tri_flask_full_fecl3',null,new BABYLON.Vector3(po[0],0,po[2]),null,['PointerDragBehavior']);
+          }
+        }
+        
+
         this.scene.render();
       });
 
@@ -479,7 +530,10 @@ export default {
             "weight.pot",
             "weight.tri_flask",
             "weight.paper_cone",
-            "weight.paper_powder_brown"
+            "weight.paper_powder_brown",
+            "stand.round_flask_cone",
+            "stand.tri_flask_powder_brown",
+            "tri_flask_full_trans_powder_brown",
           ];
           if (pickResult.pickedMesh.id != "ground") {
             this.hl.addMesh(pickResult.pickedMesh, BABYLON.Color3.Purple());
@@ -497,6 +551,7 @@ export default {
               //this.controller==null is neccesary!
               this.addGui2(pickResult.pickedMesh.id);
               this.stable = 1;
+              //由于merge需要时间 所以可能会导致merge之前就出现分离按钮 导致未能移除网格 （bug）
             }
             this.hoveredObj = pickResult.pickedMesh;
           } else {
@@ -539,19 +594,30 @@ export default {
         this.advancedTexture.removeControl(this.controller);
         this.controller = null;
       }
-      var button1 = GUI.Button.CreateSimpleButton("btn2", "分离");
-      this.advancedTexture.addControl(button1);
+      if(hoverid == 'tri_flask_full_trans_powder_brown'){
+        var button1 = GUI.Button.CreateSimpleButton("btn2", "震荡");
+        button1.background = "orange";
+        button1.fontSize = 14;
+      }
+      else{
+        var button1 = GUI.Button.CreateSimpleButton("btn2", "分离");
+        button1.background = "gray";
+        button1.fontSize = 16;
+      }
       button1.width = "40px";
       button1.height = "20px";
-      button1.fontSize = 16;
+      
       button1.cornerRadius = 20;
-      button1.background = "gray";
+      this.advancedTexture.addControl(button1);
       button1.linkWithMesh(this.scene.getMeshByID(hoverid));
       button1.color = "black";
       this.controller = button1;
+      
       button1.onPointerClickObservable.add(() => {
-        this.scene.removeMesh(this.scene.getMeshByID(hoverid));
         var array1 = hoverid.split(".");
+        if(hoverid!="tri_flask_full_trans_powder_brown"){
+          this.scene.removeMesh(this.scene.getMeshByID(hoverid));
+        }
         for (var i = 0; i < array1.length; i++) {
           switch (array1[i]) {
             case "weight":
@@ -561,7 +627,7 @@ export default {
               this.addPaper();
               break;
             case "round_flask":
-              this.addRound_flask();
+              this.addRoundFlask();
               break;
             case "stand":
               this.addStand();
@@ -571,8 +637,20 @@ export default {
               break;
             case "paper_cone":
               this.addPaperCone();
+              break;
             case "paper_powder_brown":
               this.addPaperPowderBrown();
+              break;
+            case "round_flask_cone":
+              this.addRoundFlaskCone();
+              break;
+            case "tri_flask_powder_brown":
+              this.addTriFlaskPowderBrown();
+              break;
+            case "tri_flask_full_trans_powder_brown":
+              this.needshake = 1;
+              this.shaked = 1;
+              break
             default:
               break;
           }
@@ -588,8 +666,10 @@ export default {
       if (hoverid == "weight" || hoverid.indexOf("weight") != -1) str = "放置";
       else if (hoverid == "trash_can") str = "移除";
       else if (pickid == "spoon") str = "拾取";
-      else if (pickid == "paper_cone" && hoverid == "round_flask") str = "倒入";
-      else if(pickid == 'dropper' && hoverid == 'c3h6o') str = '吸入';
+      else if ( hoverid == "round_flask" ||hoverid == 'tri_flask'|| pickid == 'dropper_full' 
+      || hoverid == 'tri_flask_powder_brown') str = "倒入";
+      else if(pickid == 'dropper' && hoverid == 'c3h6o') str = '吸取';
+      else if( pickid =='film') str = '封口';
       var button1 = GUI.Button.CreateSimpleButton("btn1", str);
       this.advancedTexture.addControl(button1);
       button1.width = "60px";
@@ -606,6 +686,7 @@ export default {
         var x = this.scene.getMeshByID(hoverid).position.x;
         var y = this.scene.getMeshByID(hoverid).position.y;
         var z = this.scene.getMeshByID(hoverid).position.z;
+        //有称的话 加示数
         if (hoverid == "weight" || hoverid.indexOf("weight") != -1) {
           var array1 = new Array(6);
           array1.fill(0);
@@ -646,6 +727,7 @@ export default {
             }
           }
         }
+
         if (pickid == "paper" && hoverid == "weight") {
           this.scene.getMeshByID(pickid).position = new BABYLON.Vector3(
             x,
@@ -666,7 +748,45 @@ export default {
               dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
             })
           );
-        } else if (pickid == "round_flask" && hoverid == "stand") {
+        } 
+        else if (pickid == "round_flask_cone" && hoverid == "stand") {
+          this.scene.getMeshByID(pickid).position = this.changeMergedPosition(pickid,x-0.21,y+0.23,z+0.08);
+          //不可用.position = Vector3
+          var mesh = BABYLON.Mesh.MergeMeshes(
+            [this.scene.getMeshByID(hoverid), this.scene.getMeshByID(pickid)],
+            true,
+            true,
+            undefined,
+            false,
+            true
+          );
+          mesh.id = "stand.round_flask_cone";
+          mesh.addBehavior(
+              new BABYLON.PointerDragBehavior({
+                dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+              })
+          );
+        }
+        else if(pickid == 'tri_flask_powder_brown' && hoverid == "stand"){
+         
+          this.scene.getMeshByID(pickid).position = this.changeMergedPosition(pickid,x-0.16,y+0.4,z-0.05);
+          //不可用.position = Vector3
+          var mesh = BABYLON.Mesh.MergeMeshes(
+            [this.scene.getMeshByID(hoverid), this.scene.getMeshByID(pickid)],
+            true,
+            true,
+            undefined,
+            false,
+            true
+          );
+          mesh.id = "stand.tri_flask_powder_brown";
+          mesh.addBehavior(
+              new BABYLON.PointerDragBehavior({
+                dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+              })
+          );
+        }
+        else if (pickid == "round_flask" && hoverid == "stand") {
           this.scene.getMeshByID(pickid).position = new BABYLON.Vector3(
             x - 0.175,
             y + 0.18,
@@ -681,23 +801,8 @@ export default {
             true
           );
           mesh.id = "stand.round_flask";
-        } else if (pickid == "round_flask.cone" && hoverid == "stand") {
-          //这步还没加分离
-          this.scene.getMeshByID(pickid).position = new BABYLON.Vector3(
-            -x + 0.175,
-            y + 0.18,
-            z
-          ); //(左右,上下,前后)
-          var mesh = BABYLON.Mesh.MergeMeshes(
-            [this.scene.getMeshByID(hoverid), this.scene.getMeshByID(pickid)],
-            true,
-            true,
-            undefined,
-            false,
-            true
-          );
-          mesh.id = "stand.round_flask.cone";
-        } else if (pickid == "tri_flask" && hoverid == "stand") {
+        }
+        else if (pickid == "tri_flask" && hoverid == "stand") {
           this.scene.getMeshByID(pickid).position = new BABYLON.Vector3(
             x - 0.175,
             y + 0.18,
@@ -712,7 +817,8 @@ export default {
             true
           );
           mesh.id = "stand.tri_flask";
-        } else if (pickid == "round_flask" && hoverid == "weight") {
+        } 
+        else if (pickid == "round_flask" && hoverid == "weight") {
           this.scene.getMeshByID(pickid).position = new BABYLON.Vector3(
             x,
             y + 0.06,
@@ -732,7 +838,8 @@ export default {
               dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
             })
           );
-        } else if (pickid == "pot" && hoverid == "weight") {
+        } 
+        else if (pickid == "pot" && hoverid == "weight") {
           this.scene.getMeshByID(pickid).position = new BABYLON.Vector3(
             x,
             y + 0.07,
@@ -752,7 +859,8 @@ export default {
               dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
             })
           );
-        } else if (pickid == "tri_flask" && hoverid == "weight") {
+        } 
+        else if (pickid == "tri_flask" && hoverid == "weight") {
           this.scene.getMeshByID(pickid).position = new BABYLON.Vector3(
             x,
             y + 0.06,
@@ -772,7 +880,8 @@ export default {
               dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
             })
           );
-        } else if (pickid == "spoon" && hoverid == "c8h14o2s2") {
+        } 
+        else if (pickid == "spoon" && hoverid == "c8h14o2s2") {
           var x = this.scene.getMeshByID("spoon").position.x;
           var y = this.scene.getMeshByID("spoon").position.y;
           var z = this.scene.getMeshByID("spoon").position.z;
@@ -793,7 +902,7 @@ export default {
               false,
               true
             );
-            mesh.id = "spoon.cone";
+            mesh.id = "spoon_cone";
             mesh.addBehavior(
               new BABYLON.PointerDragBehavior({
                 dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
@@ -801,7 +910,8 @@ export default {
             );
           }, 500);
           //this.addSpoonMerged(new BABYLON.Vector3(-x,y,z));//右手系变左手系 谁知道这怎么回事
-        } else if (pickid == "spoon" && hoverid == "fecl3") {
+        } 
+        else if (pickid == "spoon" && hoverid == "fecl3") {
           var x = this.scene.getMeshByID("spoon").position.x;
           var y = this.scene.getMeshByID("spoon").position.y;
           var z = this.scene.getMeshByID("spoon").position.z;
@@ -822,7 +932,7 @@ export default {
               false,
               true
             );
-            mesh.id = "spoon.powder_brown";
+            mesh.id = "spoon_powder_brown";
             mesh.addBehavior(
               new BABYLON.PointerDragBehavior({
                 dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
@@ -830,7 +940,8 @@ export default {
             );
           }, 500);
           //this.addSpoonMerged(new BABYLON.Vector3(-x,y,z));//右手系变左手系 谁知道这怎么回事
-        } else if(hoverid == 'weight.paper'&&pickid =='spoon.powder_brown'){
+        } 
+        else if(pickid =='spoon_powder_brown'&& hoverid == 'weight.paper'){
           var mesh = this.scene.getMeshByID("weight.paper");
           mesh.updateFacetData();
           var po = mesh.getFacetPosition(Math.floor(mesh.facetNb / 2));
@@ -846,7 +957,7 @@ export default {
           ); //右手系变左手系
           mesh.disableFacetData();
           //移出带有粉末的勺子 加空勺子
-          var mesh = this.scene.getMeshByID("spoon.powder_brown");
+          var mesh = this.scene.getMeshByID("spoon_powder_brown");
           mesh.updateFacetData();
           var po = mesh.getFacetPosition(Math.floor(mesh.facetNb / 2));
           var x = po.x;
@@ -880,8 +991,9 @@ export default {
               })
             );
           }, 500);
-        }else if( pickid == 'spoon.powder_brown' && hoverid == 'weight.paper_powder_brown'){
-            var mesh = this.scene.getMeshByID("spoon.powder_brown");
+        }
+        else if(pickid == 'spoon_powder_brown' && hoverid == 'weight.paper_powder_brown'){
+            var mesh = this.scene.getMeshByID("spoon_powder_brown");
             mesh.updateFacetData();
             var po = mesh.getFacetPosition(Math.floor(mesh.facetNb / 2));
             var x = po.x;
@@ -898,42 +1010,7 @@ export default {
               ['PointerDragBehavior']
             );
         }
-        else if(hoverid == 'tri_flask' && pickid =='paper_powder_brown'){
-          var mesh = this.scene.getMeshByID("tri_flask");
-          var po = mesh.position;
-          var x = po.x;
-          var y = po.y;
-          var z = po.z;
-          this.scene.removeMesh(this.scene.getMeshByID("paper_powder_brown"));
-          this.addModel(
-            "powder_brown",
-            new BABYLON.Vector3(2.5, 2.5, 2.5),
-            new BABYLON.Vector3(x, y + 0.01, z),
-            null,
-            null
-          );
-          setTimeout(() => {
-            var mesh1 = BABYLON.Mesh.MergeMeshes(
-              [
-                this.scene.getMeshByID("powder_brown"),
-                this.scene.getMeshByID("tri_flask")
-              ],
-              true,
-              true,
-              undefined,
-              false,
-              true
-            );
-            mesh1.id = "tri_flask.powder_brown";
-            mesh1.addBehavior(
-              new BABYLON.PointerDragBehavior({
-                dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
-              })
-            );
-          }, 500);
-
-        }
-        else if (hoverid == "weight.paper" && pickid == "spoon.cone") {
+        else if (pickid == "spoon_cone" && hoverid == "weight.paper") {
           var mesh = this.scene.getMeshByID("weight.paper");
           mesh.updateFacetData();
           var po = mesh.getFacetPosition(Math.floor(mesh.facetNb / 2));
@@ -949,7 +1026,7 @@ export default {
           ); //右手系变左手系
           mesh.disableFacetData();
           //移出带有粉末的勺子 加空勺子
-          var mesh = this.scene.getMeshByID("spoon.cone");
+          var mesh = this.scene.getMeshByID("spoon_cone");
           mesh.updateFacetData();
           var po = mesh.getFacetPosition(Math.floor(mesh.facetNb / 2));
           var x = po.x;
@@ -983,8 +1060,9 @@ export default {
               })
             );
           }, 500);
-        } else if (hoverid == "weight.paper_cone" && pickid == "spoon.cone") {
-          var mesh = this.scene.getMeshByID("spoon.cone");
+        } 
+        else if (pickid == "spoon_cone" && hoverid == "weight.paper_cone") {
+          var mesh = this.scene.getMeshByID("spoon_cone");
           mesh.updateFacetData();
           var po = mesh.getFacetPosition(Math.floor(mesh.facetNb / 2));
           var x = po.x;
@@ -1000,13 +1078,11 @@ export default {
             null,
             ['PointerDragBehavior']
           );
-        } else if (pickid == "paper_cone" && hoverid == "round_flask") {
-          var mesh = this.scene.getMeshByID("round_flask");
-          var po = mesh.position;
-          var x = po.x;
-          var y = po.y;
-          var z = po.z;
-          this.scene.removeMesh(this.scene.getMeshByID("paper_cone"));
+        }
+        else if (pickid == "paper_cone" && hoverid == "round_flask") {
+          this.scene.removeMesh(this.scene.getMeshByID(pickid));
+          var mesh = this.scene.getMeshByID(hoverid)
+          mesh.removeBehavior(mesh.behaviors[0]);
           this.addModel(
             "cone",
             new BABYLON.Vector3(0.03, 0.03, 0.03),
@@ -1026,17 +1102,129 @@ export default {
               false,
               true
             );
-            mesh1.id = "round_flask.cone";
+            mesh1.id = "round_flask_cone";
             mesh1.addBehavior(
               new BABYLON.PointerDragBehavior({
                 dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
               })
             );
           }, 500);
-        } else if (hoverid == "trash_can") {
+        } 
+        else if (pickid =='paper_powder_brown' && hoverid == 'tri_flask'){
+          var mesh = this.scene.getMeshByID("tri_flask");
+          mesh.removeBehavior(mesh.behaviors[0]);
+          var po = mesh.position;
+          var x = po.x;
+          var y = po.y;
+          var z = po.z;
+          this.scene.removeMesh(this.scene.getMeshByID("paper_powder_brown"));
+          this.addModel(
+            "powder_brown",
+            new BABYLON.Vector3(2.5, 2.5, 2.5),
+            new BABYLON.Vector3(x, y + 0.01, z),
+            null,
+            null
+          );
+          setTimeout(() => {
+            var mesh1 = BABYLON.Mesh.MergeMeshes(
+              [
+                this.scene.getMeshByID("powder_brown"),
+                this.scene.getMeshByID("tri_flask")
+              ],
+              true,
+              true,
+              undefined,
+              false,
+              true
+            );
+            mesh1.id = "tri_flask_powder_brown";
+            mesh1.addBehavior(
+              new BABYLON.PointerDragBehavior({
+                dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+              })
+            );
+          }, 500);
+
+        }
+        else if(pickid =='dropper' && hoverid =='c3h6o'){
+          var po = this.scene.getMeshByID(pickid).position;
+          this.scene.removeMesh(this.scene.getMeshByID(pickid))
+          this.addModel('dropper_full',new BABYLON.Vector3(1.5,1.5,1.5),new BABYLON.Vector3(-po.x,po.y,po.z),new BABYLON.Vector3(0,0,Math.PI),['PointerDragBehavior']);
+        }
+        else if(pickid == 'dropper_full' && hoverid == 'measuring_cylinder'){
+          this.valuemeasuring_cylinder+=2;
+          var po = this.scene.getMeshByID(hoverid).position;
+          this.scene.removeMesh(this.scene.getMeshByID(hoverid));
+          var po1 = this.scene.getMeshByID(pickid).position;
+          this.scene.removeMesh(this.scene.getMeshByID(pickid));
+          this.addModel('dropper',new BABYLON.Vector3(1.5,1.5,1.5),new BABYLON.Vector3(-po1.x,po1.y,po1.z),new BABYLON.Vector3(0,0,Math.PI),['PointerDragBehavior']);
+          this.addModel('measuring_cylinder_full',null,new BABYLON.Vector3(-po.x+0.4,po.y,po.z),null,['PointerDragBehavior']);     
+        }
+        else if(pickid == 'dropper_full' && hoverid == 'measuring_cylinder_full'){
+          this.valuemeasuring_cylinder+=2;
+          var po1 = this.scene.getMeshByID(pickid).position;
+          this.scene.removeMesh(this.scene.getMeshByID(pickid));
+          this.addModel('dropper',new BABYLON.Vector3(1.5,1.5,1.5),new BABYLON.Vector3(-po1.x,po1.y,po1.z),new BABYLON.Vector3(0,0,Math.PI),['PointerDragBehavior']);
+        }
+        else if( pickid == 'measuring_cylinder_full' && hoverid == 'tri_flask_powder_brown'){
+          //this.scene.getMeshByID().position;
+          var poarray = this.getMergedPosition('tri_flask_powder_brown');
+          var x = poarray[0];
+          var y = poarray[1];
+          var z = poarray[2];
+          this.scene.removeMesh(this.scene.getMeshByID('tri_flask_powder_brown'));
+          this.addModel('tri_flask_full_trans',null,new BABYLON.Vector3(x,0,z),null,null);
+          this.addModel(
+            "powder_brown",
+            new BABYLON.Vector3(2.5, 2.5, 2.5),
+            new BABYLON.Vector3(-x, 0.05, z),
+            null,
+            null
+          );
+          var po1 = this.getMergedPosition('measuring_cylinder_full');
+          this.scene.removeMesh(this.scene.getMeshByID('measuring_cylinder_full'));
+          this.addModel('measuring_cylinder',null,new BABYLON.Vector3(-po1[0],0,po1[2]),null,['PointerDragBehavior']);
+          setTimeout(() => {
+            var mesh = BABYLON.Mesh.MergeMeshes(
+            [this.scene.getMeshByID('powder_brown'),this.scene.getMeshByID('tri_flask_full_trans')],
+            true,
+            true,
+            undefined,
+            false,
+            true
+            );
+            mesh.id = 'tri_flask_full_trans_powder_brown';
+            mesh.addBehavior(
+              new BABYLON.PointerDragBehavior({
+                dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+              })
+            );
+          }, 500);
+        }
+        else if( pickid =='film' && hoverid == 'tri_flask_full_fecl3'){
+          var po = this.getMergedPosition(hoverid);
+          this.scene.getMeshByID(pickid).position = new BABYLON.Vector3(-po[0],po[1],po[2]-0.002);
+          var mesh = BABYLON.Mesh.MergeMeshes(
+            [this.scene.getMeshByID('tri_flask_full_fecl3'),this.scene.getMeshByID('film')],
+            true,
+            true,
+            undefined,
+            false,
+            true
+          );
+          mesh.id = 'tri_flask_full_fecl3_film'
+          mesh.addBehavior(
+              new BABYLON.PointerDragBehavior({
+                dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+              })
+            );
+
+        }
+        else if (hoverid == "trash_can") {
           this.scene.removeMesh(this.scene.getMeshByID(pickid));
           var flag1 = 0,
-            flag2 = 0;
+            flag2 = 0,
+            flag3 = 0;
           for (var i = 0; i < this.scene.meshes.length; i++) {
             if (this.scene.meshes[i].id.split(".").includes("weight"))
               flag1 = 1;
@@ -1044,18 +1232,61 @@ export default {
               this.scene.meshes[i].id.split(".").includes("measuring_cylinder")
             )
               flag2 = 1;
+            if (
+              this.scene.meshes[i].id.split(".").includes("needle")
+            )
+              flag3 = 1;
           }
           if (flag1 == 0) {
             this.hasWeight = 0;
           }
           if (flag2 == 0) {
             this.hasMeasuring_cylinder = 0;
+            this.valuemeasuring_cylinder = 0;
+          }
+          if(flag3 == 0){
+            this.hasNeedle = 0;
+            this.valueneedle = 0;
+          }
+          var array1 = [flag1,flag2,flag3,1];
+          var array2 = ['weight','measuring_cylinder','needle','default']
+          if(array1[array2.indexOf(this.activeIndex)]==0){
+            for(var i=0;i<array1.length;i++){
+              if(array1[i]!=0){
+                this.activeIndex = array2[i];
+                break;
+              }
+            }
           }
         }
-
         this.advancedTexture.removeControl(this.controller);
         this.controller = null;
       });
+    },
+    changeMergedPosition(id,x,y,z){
+      //这个方法用于merge后的物体位置的更改 我发现经过merge后 坐标由世界坐标系变成了本地坐标系 
+      var mesh = this.scene.getMeshByID(id)
+      mesh.updateFacetData();
+      var po = mesh.getFacetPosition(Math.floor(mesh.facetNb / 2));
+      var x0 = po.x;
+      var y0 = po.y;
+      var z0 = po.z;
+      var x1 = -x-x0+mesh.position.x;
+      var y1 = y-y0+mesh.position.y;
+      var z1 = z-z0+mesh.position.z;
+      mesh.disableFacetData();
+      var position = new BABYLON.Vector3(x1,y1,z1);
+      return position;
+    },
+    getMergedPosition(id){
+      var mesh = this.scene.getMeshByID(id)
+      mesh.updateFacetData();
+      var po = mesh.getFacetPosition(Math.floor(mesh.facetNb / 2));
+      var x0 = po.x;
+      var y0 = po.y;
+      var z0 = po.z;
+      mesh.disableFacetData();
+      return [x0,y0,z0];
     },
     async createScene() {
       var scene = new BABYLON.Scene(this.engine);
@@ -1100,8 +1331,9 @@ export default {
       groundMaterial.specularColor = BABYLON.Color3.Black();
       ground.material = groundMaterial;
       this.addTrash_can();
-      this.addBB8();
-      this.addModel('stand',null,new BABYLON.Vector3(1,0,0),new BABYLON.Vector3(0,Math.PI,0),null);//加上固定的铁架台
+      //this.addBB8();
+      this.addModel('stand',null,new BABYLON.Vector3(1,0,0),new BABYLON.Vector3(0,Math.PI,0),null);
+      //this.addStand();
     },
 
     addModel(name, scaling, position, rotation, behavior) {
@@ -1133,22 +1365,21 @@ export default {
             );
           }
           else{
-            var mesh = this.scene.getMeshByID(array1[0].id);
+            var mesh = array1[0];
           }
           mesh.id = name;
-          let model = this.scene.getMeshByID(name);
           var code1 = new BABYLON.PointerDragBehavior({
             dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
           })//add 拖拽事件
           var dict = {'PointerDragBehavior':code1};
           if (behavior) {
             for (let i = 0; i < behavior.length; i++) {
-              model.addBehavior(dict[behavior[i]]);
+              mesh.addBehavior(dict[behavior[i]]);
             }
           }
-          if (position) model.position = position;
-          if (scaling) model.scaling = scaling;
-          if (rotation) model.rotation = rotation;
+          if (position) mesh.position = position;
+          if (scaling) mesh.scaling = scaling;
+          if (rotation) mesh.rotation = rotation;
         }
       );
     },
@@ -1162,7 +1393,7 @@ export default {
         new BABYLON.Vector3(0.02, 0.02, 0.02),
         new BABYLON.Vector3(0, 0.07, 0),
         null,
-        null,
+        null
       );
       setTimeout(() => {
         var mesh = BABYLON.Mesh.MergeMeshes(
@@ -1174,6 +1405,63 @@ export default {
           true
         );
         mesh.id = "paper_cone";
+        mesh.addBehavior(
+          new BABYLON.PointerDragBehavior({
+            dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+          })
+        );
+      }, 500);
+    },
+    addTriFlaskPowderBrown(){
+      this.addModel('tri_flask',null,null,null,null);     
+      this.addModel(
+        "powder_brown",
+        new BABYLON.Vector3(2.5, 2.5, 2.5),
+        new BABYLON.Vector3(0, 0.05, 0),
+        null,
+        null
+      );
+      setTimeout(() => {
+        var mesh = BABYLON.Mesh.MergeMeshes(
+          [
+            this.scene.getMeshByID("powder_brown"),
+            this.scene.getMeshByID("tri_flask")
+          ],
+          true,
+          true,
+          undefined,
+          false,
+          true
+        );
+        mesh.id = "tri_flask_powder_brown";
+        mesh.addBehavior(
+          new BABYLON.PointerDragBehavior({
+            dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+          })
+        );},500)
+    },
+    addRoundFlaskCone(){
+      this.addModel('round_flask',null,null,null,null);
+      this.addModel(
+        "cone",
+        new BABYLON.Vector3(0.03, 0.03, 0.03),
+        new BABYLON.Vector3(0, 0.08, 0),
+        null,
+        null
+      );
+      setTimeout(() => {
+        var mesh = BABYLON.Mesh.MergeMeshes(
+          [
+            this.scene.getMeshByID("cone"),
+            this.scene.getMeshByID("round_flask")
+          ],
+          true,
+          true,
+          undefined,
+          false,
+          true
+        );
+        mesh.id = "round_flask_cone";
         mesh.addBehavior(
           new BABYLON.PointerDragBehavior({
             dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
@@ -1213,11 +1501,12 @@ export default {
     addBB8() {
       this.addModel('bb8',new BABYLON.Vector3(0.26,0.26,0.26),new BABYLON.Vector3(-0.85,0.33,0),new BABYLON.Vector3(0,Math.PI,0),null);
     },
-    addRound_flask() {
+    addRoundFlask() {
       this.addModel('round_flask',null,null,null,['PointerDragBehavior']);
     },
     addWeight() {
       this.hasWeight = 1; //有电子称
+      this.activeIndex='weight';
       this.addModel('weight',null,null,new BABYLON.Vector3(0,Math.PI,0),['PointerDragBehavior']);
       setTimeout(() => {
         this.toZero();
@@ -1239,7 +1528,7 @@ export default {
       this.addModel('pot',null,null,null,['PointerDragBehavior']);
     },
     addDropper() {
-      this.addModel('dropper',new BABYLON.Vector3(1.5,1.5,1.5),new BABYLON.Vector3(0,0.2,0),new BABYLON.Vector3(0,Math.PI,0),['PointerDragBehavior']);
+      this.addModel('dropper',new BABYLON.Vector3(1.5,1.5,1.5),new BABYLON.Vector3(0,0.2,0),new BABYLON.Vector3(0,0,Math.PI),['PointerDragBehavior']);
     },
     addHeater() {
       this.addModel('heater',null,null,new BABYLON.Vector3(0,Math.PI,0),['PointerDragBehavior']);
@@ -1247,11 +1536,14 @@ export default {
     addLiquidTransferor() {
       this.addModel('liquid_transferor',null,new BABYLON.Vector3(0,0.2,0),new BABYLON.Vector3(0,0,Math.PI),['PointerDragBehavior']);
     },
-    addMeasuringCylinder() {
+    addMeasuringCylinder() { 
       this.hasMeasuring_cylinder = 1;
+      this.activeIndex='measuring_cylinder';
       this.addModel('measuring_cylinder',null,null,null,['PointerDragBehavior']);      
-    },
+    }, 
     addNeedle() {
+      this.hasNeedle = 1;
+      this.activeIndex='needle'
       this.addModel('needle',new BABYLON.Vector3(1.2,1.2,1.2),new BABYLON.Vector3(0,0.2,0),new BABYLON.Vector3(0,0,Math.PI),['PointerDragBehavior']);      
     },
     addSpoon() {
@@ -1259,6 +1551,9 @@ export default {
     },
     addTriFlask() {
       this.addModel('tri_flask',null,null,null,['PointerDragBehavior']);      
+    },
+    addFilm(){
+      this.addModel('film',null,null,null,['PointerDragBehavior']);      
     },
     async createUx(scene) {
       // Create the 3D UI manager
@@ -1337,6 +1632,9 @@ export default {
         this.btn_nextstep = true;
         this.btn_post = false;
       }
+    },
+    checkActivePane(){
+      return 'needle'
     }
   },
 
@@ -1354,10 +1652,10 @@ export default {
         if (this.scene != null) {
           if (this.step_finish.toString() == [0, 0, 0].toString()) {
             this.all_score = step1.all_score;
-            step1.setStepNeed(this.scene, this.electronicScaleQuality);
+            step1.setStepNeed(this.scene, this.electronicScaleQuality,this.valuemeasuring_cylinder,this.valueneedle,this.shaked);
             var node = step1.checkAllNodeScore();
             if (node != null) {
-              Message({
+              this.$message({
                 dangerouslyUseHTMLString: true,
                 message:
                   '<strong><span style="color:black;">' +
@@ -1404,5 +1702,20 @@ canvas {
 }
 .img {
   width: 50%;
+}
+.el-tabs--border-card{
+  background: #424242;
+  border: 1px solid #424242;
+}
+.el-tabs-color>>>.el-tabs__header{
+  background-color:#424242;
+}
+
+.el-tabs-color>>>.el-tabs__item.is-active{
+  background-color:#424242;
+  color:#ffd700;
+}
+.el-tabs-color>>>.el-tabs__item:not(.is-disabled):hover{
+  color:#ffd700;
 }
 </style>

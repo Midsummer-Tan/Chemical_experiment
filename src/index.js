@@ -1,10 +1,9 @@
 import ElectronicScale from './packages/ElectronicScale/index.js';
-import Progress from "./packages/Progress/index.js";
+
 // ...如果还有的话继续添加
 
 const components = [
   ElectronicScale,
-  Progress
   // ...如果还有的话继续添加
 ]
 
@@ -22,6 +21,5 @@ if (typeof window !== 'undefined' && window.Vue) {
 export default {
   install,
   ElectronicScale,
-  Progress,
   // ...如果还有的话继续添加
 }

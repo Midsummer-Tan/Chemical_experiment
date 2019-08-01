@@ -4,7 +4,7 @@
       <div
         class="bar has-rotation has-colors cyann ruler-3"
         role="progressbar"
-        :aria-valuenow="ariaValuenow"
+        :aria-valuenow="valueNow"
         aria-valuemin="0"
         aria-valuemax="25"
       >
@@ -252,24 +252,24 @@
           class="scale-para"
           style="margin-left:100%"
         >25ml</div>
-        <div class="bar-face face-position roof percentage"></div>
-        <div class="bar-face face-position back percentage"></div>
-        <div class="bar-face face-position floor percentage volume-lights"></div>
-        <div class="bar-face face-position left"></div>
-        <div class="bar-face face-position right"></div>
-        <div class="bar-face face-position front percentage volume-lights shine"></div>
+        <div class="bar-face1 face-position roof percentage"></div>
+        <div class="bar-face1 face-position back percentage"></div>
+        <div class="bar-face1 face-position floor percentage volume-lights"></div>
+        <div class="bar-face1 face-position left"></div>
+        <div class="bar-face1 face-position right"></div>
+        <div class="bar-face1 face-position front percentage volume-lights shine"></div>
       </div>
     </div>
   </div>
 </template>
-<style scoped>
-@import "./css/component.css";
-@import "./css/custom-bars.css";
+<style scoped="scoped">
+@import "./css/component1.css";
+@import "./css/custom-bars1.css";
 </style>
 <script>
 export default {
-  name: "my-progress",
-  props: ["ariaValuenow"],
+  name: "myProgress",
+  props:['valueNow'],
   methods: {}
-};
+}
 </script>
