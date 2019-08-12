@@ -1,6 +1,7 @@
 <template>
   <div class="progress-factor">
     <div class="progress-bar">
+
       <div
         class="bar has-rotation has-colors yelloww ruler-3"
         role="progressbar"

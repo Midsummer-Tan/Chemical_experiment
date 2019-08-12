@@ -91,8 +91,9 @@ export default {
 	}
   },
   methods:{
-	  setAllNumber(num1,num2,num3,num4,num5,num6){
-		  setAllNumber(num1,num2,num3,num4,num5,num6)
+	  setAllNumber(num1,num2,num3,num4,num5,num6,id){
+		  setAllNumber(num1,num2,num3,num4,num5,num6,id)
+		  
 		  //用法 000.000g
 		  //对应 num1 num2 num3.num4 num5,num6g
 	  }

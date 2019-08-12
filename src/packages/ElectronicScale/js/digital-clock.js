@@ -13,17 +13,16 @@ var digitSegments = [
   [],
 ]
 
-var setAllNumber = function (num1,num2,num3, num4, num5, num6) {
-  var segments = document.getElementsByClassName('segment');
-  
-  if (document.getElementsByClassName('on').length!=0){
+var setAllNumber = function (num1,num2,num3, num4, num5, num6,name) {
+  var segments = document.getElementById("pane-" + name).getElementsByClassName('segment');
+  if (document.getElementById("pane-"+name).getElementsByClassName('on').length != 0) {
     for (var i = 0; i < segments.length; i++) {
       segments[i].classList.remove('on')
     }
   }
-  var _small = document.querySelectorAll('.small');
-  var _big = document.querySelectorAll('.big');
-  var _g = document.querySelectorAll('.g');
+  var _small = document.getElementById("pane-" + name).querySelectorAll('.small');
+  var _big = document.getElementById("pane-" + name).querySelectorAll('.big');
+  var _g = document.getElementById("pane-" + name).querySelectorAll('.g');
   setNumber(_big[0], num1, 1);
   setNumber(_big[1], num2, 1);
   setNumber(_big[2], num3, 1);
@@ -35,7 +34,7 @@ var setAllNumber = function (num1,num2,num3, num4, num5, num6) {
   setNumber(_g[0], 10, 1);
 }
 
-var setNumber = function (digit, number, on) {
+var setNumber = function (digit, number) {
   if(number ==null) number =11;
   var segments = digit.querySelectorAll('.segment');
   setTimeout(function () {
