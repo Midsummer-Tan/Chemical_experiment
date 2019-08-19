@@ -69,13 +69,13 @@ class Node1 extends Node {
     }
 }
 class Node2 extends Node {
-    errortext = '硫辛酸药品未到5.000g';
-    successtext = '量取5.000g硫辛酸药品';
+    errortext = '硫辛酸药品未到2.000g';
+    successtext = '量取2.000g硫辛酸药品';
     getScore() {
         var number = 0;
         var result = 0;
         for (var i = 0; i < this.scene.meshes.length; i++) {
-            if (this.scene.meshes[i].id.split('-').includes('weight.paper_cone') && this.weightprops[this.scene.meshes[i].id][0].toString() == [null, null, 5, 0, 0, 0].toString()) {
+            if (this.scene.meshes[i].id.split('-').includes('weight.paper_cone') && this.weightprops[this.scene.meshes[i].id][0].toString() == [null, null, 2, 0, 0, 0].toString()) {
                 this.setScore(1);
                 return 1;
             }
@@ -138,8 +138,8 @@ class Node4 extends Node {
     }
 }
 class Node5 extends Node {
-    errortext = '没有用药匙取出三氯化铁药品并放于称量纸上';
-    successtext = '量取三氯化铁药品并称量';
+    errortext = '没有用药匙取出六水合三氯化铁药品并放于称量纸上';
+    successtext = '量取六水合三氯化铁药品并称量';
     getScore() {
         var number = 0;
         for (var i = 0; i < this.scene.meshes.length; i++) {
@@ -155,8 +155,8 @@ class Node5 extends Node {
     }
 }
 class Node6 extends Node {
-    errortext = '三氯化铁质量未达到0.100g';
-    successtext = '三氯化铁质量达到0.100g';
+    errortext = '六水合三氯化铁质量未达到0.100g';
+    successtext = '六水合三氯化铁质量达到0.100g';
     getScore() {
         var number = 0;
         for (var i = 0; i < this.scene.meshes.length; i++) {
@@ -169,8 +169,8 @@ class Node6 extends Node {
     }
 }
 class Node7 extends Node {
-    errortext = '未将三氯化铁药品放入25ml锥形瓶中';
-    successtext = '将三氯化铁药品放入25ml锥形瓶中';
+    errortext = '未将六水合三氯化铁药品放入25ml锥形瓶中';
+    successtext = '将六水合三氯化铁药品放入25ml锥形瓶中';
     getScore() {
         var number = 0;
         for (var i = 0; i < this.scene.meshes.length; i++) {
@@ -216,8 +216,8 @@ class Node9 extends Node {
     }
 }
 class Node10 extends Node {
-    errortext = '未将丙酮与三氯化铁混合';
-    successtext = '将丙酮与三氯化铁混合';
+    errortext = '未将丙酮与六水合三氯化铁混合';
+    successtext = '将丙酮与六水合三氯化铁混合';
     getScore() {
         var number = 0;
         for (var i = 0; i < this.scene.meshes.length; i++) {
@@ -233,7 +233,7 @@ class Node10 extends Node {
     }
 }
 class Node11 extends Node {
-    errortext = '没有左右震荡丙酮与三氯化铁混合溶液,使三氯化铁溶解';
+    errortext = '没有左右震荡丙酮与六水合三氯化铁混合溶液,使六水合三氯化铁溶解';
     successtext = '震荡';
     getScore() {
         if (this.shaked == 1) {
@@ -278,11 +278,11 @@ class Node13 extends Node {
     }
 }
 class Node14 extends Node {
-    errortext = 'DIB试剂并未达到针管的0.35ml刻度处';
-    successtext = '量取0.35mlDIB试剂';
+    errortext = 'DIB试剂并未达到针管的0.43ml刻度处';
+    successtext = '量取0.43mlDIB试剂';
     getScore() {
         for (var i = 0; i < this.scene.meshes.length; i++) {
-            if (this.scene.meshes[i].id.split('-').includes('needle_full') && this.needleprops[this.scene.meshes[i].id]!=undefined && this.needleprops[this.scene.meshes[i].id][0] == 0.35) {
+            if (this.scene.meshes[i].id.split('-').includes('needle_full') && this.needleprops[this.scene.meshes[i].id]!=undefined && this.needleprops[this.scene.meshes[i].id][0] == 0.43) {
                 this.setScore(1);
                 return 1;
             }
@@ -1096,6 +1096,8 @@ const step1Function = {
                         this.needlelist.splice(index, 1)
                         delete(this.needlelist[pickid])
                     }
+                } else if (pickid.split('-')[0] == 'clock') {
+                    this.hasClock = false;
                 }
                 setTimeout(() => {
                     for (var i = 0; i < this.weightlist.length; i++) {
@@ -1125,7 +1127,7 @@ const step1Function = {
                 this.now_score = this.step1.getNowScore();
             }
             var num = this.step1.unlockTools();
-            var tool = ['', '装有硫辛酸的圆底烧瓶', '三氯化铁溶液', '装有dib试剂的针管']
+            var tool = ['', '装有硫辛酸的圆底烧瓶', '三氯化铁丙酮溶液', '装有dib试剂的针管']
             var message = '<strong><span style="color:black;">' +
                 '恭喜你！得到了新工具' +
                 "</span>&emsp;" +

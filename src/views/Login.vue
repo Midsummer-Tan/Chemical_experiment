@@ -68,9 +68,30 @@ export default {
   },
   methods: {
     async login() {
-      this.$router.push({ path: "/collection" });
+      this.axios.request(
+        {
+          url:'/login/',
+          method:'POST',
+          data:{
+            username:this.username,
+            password:this.password
+          }
+        }
+      ).then(response=>{
+        var response=response.data
+        if(response['check']==1){
+          this.$message({message:'登陆成功',type:'success'});
+          this.$router.push({ path: "/collection" });
+        }
+        else 
+          this.$message({message:'用户名或密码有误',type:'error'});
+      })
     }
-  }
+  },
+  mounted() {
+    this.$router.push({ path: "/collection" });
+  },
+
 };
 </script>
 

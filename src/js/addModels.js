@@ -46,7 +46,20 @@ const addModels = {
             this.addModel('dib', null, null, new BABYLON.Vector3(0, Math.PI, 0), ['PointerDragBehavior'], null);
         },
         addStand() {
-            this.addModel('stand', null, null, new BABYLON.Vector3(0, Math.PI, 0), ['PointerDragBehavior'], null);
+            if(this.step_finish.toString() == [1,0,0].toString()){
+                this.addModel('stand1_movable', null, new BABYLON.Vector3(0.9, 0.6, 0), new BABYLON.Vector3(0, Math.PI, 0), null, 'stand1_movable');
+                this.addModel('stand1_pole', null, new BABYLON.Vector3(1, 0, 0), new BABYLON.Vector3(0, Math.PI, 0), null, 'stand1_pole');
+                setTimeout(() => {
+                    var mesh = this.scene.getMeshByID('stand1_movable');
+                    mesh.id = this.addName(mesh.id);
+                    var mesh1 = this.scene.getMeshByID('stand1_pole');
+                    mesh1.id = this.addName(mesh1.id);
+                    this.standlist.push([mesh.id,mesh1.id]);
+                    this.activeIndex = mesh1.id;
+                }, 500);
+            }
+            else
+                this.addModel('stand', null, null, new BABYLON.Vector3(0, Math.PI, 0), ['PointerDragBehavior'], null);
         },
         addPot() {
             this.addModel('pot', null, null, null, ['PointerDragBehavior'], null);
@@ -55,10 +68,40 @@ const addModels = {
             this.addModel('dropper', new BABYLON.Vector3(1.5, 1.5, 1.5), new BABYLON.Vector3(0, 0.2, 0), new BABYLON.Vector3(0, 0, Math.PI), ['PointerDragBehavior'], null);
         },
         addHeater() {
-            this.addModel('heater', null, null, new BABYLON.Vector3(0, Math.PI, 0), ['PointerDragBehavior'], null);
+            this.addModel('heater', null, null, new BABYLON.Vector3(0, Math.PI, 0),null, 'heater');
+            this.addModel('heater_switch', null, new BABYLON.Vector3(0.08, 0.05, -0.25), new BABYLON.Vector3(0, Math.PI, 0), null, 'heater_switch1');
+            this.addModel('heater_knob', null,new BABYLON.Vector3(0.14,0.05,-0.27), null, null, 'heater_knob1');
+            this.addModel('heater_switch', null, new BABYLON.Vector3(0.197, 0.05, -0.25), new BABYLON.Vector3(0, Math.PI, 0), null, 'heater_switch2');
+            this.addModel('heater_knob', null, new BABYLON.Vector3(0.03, 0.05, -0.27), null, null, 'heater_knob2');            
+            setTimeout(() => {
+                var mesh = BABYLON.Mesh.MergeMeshes(
+                    [this.scene.getMeshByID('heater'), this.scene.getMeshByID('heater_switch1'), this.scene.getMeshByID('heater_switch2'),
+                    this.scene.getMeshByID('heater_knob1'), this.scene.getMeshByID('heater_knob2')],
+                    true,
+                    true,
+                    undefined,
+                    false,
+                    true
+                );
+                mesh.id = 'heater';
+                mesh.id = this.addName(mesh.id);
+                mesh.addBehavior(
+                    new BABYLON.PointerDragBehavior({
+                        dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+                    })
+                );
+            }, 500);
+           
         },
         addLiquidTransferor() {
-            this.addModel('liquid_transferor', null, new BABYLON.Vector3(0, 0.2, 0), new BABYLON.Vector3(0, 0, Math.PI), ['PointerDragBehavior']);
+            this.addModel('liquid_transferor', null, new BABYLON.Vector3(0, 0.2, 0), new BABYLON.Vector3(0, 0, Math.PI), ['PointerDragBehavior'], 'liquid_transferor');
+            setTimeout(() => {
+                var mesh = this.scene.getMeshByID('liquid_transferor');
+                mesh.id = this.addName(mesh.id);
+                this.liquid_transferorlist.push(mesh.id);
+                this.liquid_transferorprops[mesh.id]=[0,100,true,''];//液体多少,量程,按钮禁用状态,吸入三氯化铁丙酮溶液锥形瓶的id
+                this.activeIndex = mesh.id;
+            }, 500);
         },
         addMeasuringCylinder() {
             this.addModel('measuring_cylinder', null, null, null, ['PointerDragBehavior'], 'measuring_cylinder');
@@ -222,7 +265,7 @@ const addModels = {
                         dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
                     })
                 );
-            }, 500);
+            }, 800);
         },
         addTriFlaskFullFecl3Film() {
             this.addModel('tri_flask_full_fecl3', null, null, null, null, 'tri_flask_full_fecl3');
@@ -245,8 +288,8 @@ const addModels = {
                     })
                 );
                 mesh.id = 'tri_flask_full_fecl3.film';
-                mesh.id = mesh.id = this.addName(mesh.id);
-            }, 500);
+                mesh.id = this.addName(mesh.id);
+            }, 800);
         },
         addNeedleFullCap() {
             this.addModel('needle_full', null, new BABYLON.Vector3(0, 0 + 0.15, 0), new BABYLON.Vector3(0, 0, Math.PI), null, 'needle_full');
@@ -269,7 +312,7 @@ const addModels = {
                         dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
                     })
                 );
-            }, 500);
+            }, 800);
 
         },
         addPaperPowderBrown() {
@@ -299,6 +342,46 @@ const addModels = {
                     })
                 );
             }, 500);
+        },
+        addThermometer(){
+            this.addModel('thermometer', new BABYLON.Vector3(0.03, 0.03, 0.03), new BABYLON.Vector3(0,0.1,0), null, ['PointerDragBehavior'], null);
+        },
+        addMagneton(){
+            var magneton = BABYLON.MeshBuilder.CreateSphere("mySphere", { diameter: 0.02, diameterX: 0.03 }, this.scene);
+            magneton.position = new BABYLON.Vector3(0,0.2,0)
+            magneton.addBehavior(
+                new BABYLON.PointerDragBehavior({
+                    dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+                })
+            );
+            magneton.id = 'magneton';
+            magneton.id = this.addName(magneton.id);
+        },
+        //添加铁架台 温度计 油浴装置 烧瓶合装置
+        addRound_flask_conePotHeaterStand1(){
+            this.activeIndex = 'heater'
+            var x = 0.5;
+            var z = -0.3;
+            this.addModel('heater', null, new BABYLON.Vector3(0+x, 0 , 0+z), new BABYLON.Vector3(0, Math.PI, 0), null, null);
+            this.addModel('heater_switch', null, new BABYLON.Vector3(0.08+x, 0.05, -0.25+z), new BABYLON.Vector3(0, Math.PI, 0), null, 'heater_switch1');
+            this.addModel('heater_knob', null, new BABYLON.Vector3(0.14+x, 0.05, -0.27+z), null, null, null);
+            this.addModel('heater_switch', null, new BABYLON.Vector3(0.197+x, 0.05, -0.25+z), new BABYLON.Vector3(0, Math.PI, 0), null, 'heater_switch2');
+            this.addModel('heater_knob', null, new BABYLON.Vector3(0.03+x, 0.05, -0.27+z), null, null, null);
+            this.addModel('pot', null, new BABYLON.Vector3(0+x, 0.1, 0+z), null, null, null);
+            this.addModel('round_flask', null, new BABYLON.Vector3(0+x, 0.1, 0+z), null, null, 'round_flaskdel');
+            this.addModel("cone",new BABYLON.Vector3(0.03, 0.03, 0.03),new BABYLON.Vector3(0+x, 0.18, 0+z),null,null,'conedel');
+            this.addModel('stand1_movable', null, new BABYLON.Vector3(0.07+x, 0.3, 0+z), new BABYLON.Vector3(0, Math.PI, 0), null, null);
+            this.addModel('stand1_pole', null, new BABYLON.Vector3(0.17+x, 0, 0+z), new BABYLON.Vector3(0, Math.PI, 0), null,null);
+            //this.addModel('thermometer', new BABYLON.Vector3(0.03, 0.03, 0.03), new BABYLON.Vector3(-(0.12+x), 0.12, 0+z), null, null, null);
+        },
+        addClock(){
+            if(!this.hasClock){
+                this.hasClock = true;
+                this.activeIndex = 'clock'
+                this.addModel('clock', new BABYLON.Vector3(3, 3, 3), null, new BABYLON.Vector3(0, Math.PI, 0), ['PointerDragBehavior'],null);
+            }
+            
+
         }
     }
 }
