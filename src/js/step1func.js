@@ -278,11 +278,11 @@ class Node13 extends Node {
     }
 }
 class Node14 extends Node {
-    errortext = 'DIB试剂并未达到针管的0.43ml刻度处';
-    successtext = '量取0.43mlDIB试剂';
+    errortext = 'DIB试剂并未达到针管的0.45ml刻度处';
+    successtext = '量取0.45mlDIB试剂';
     getScore() {
         for (var i = 0; i < this.scene.meshes.length; i++) {
-            if (this.scene.meshes[i].id.split('-').includes('needle_full') && this.needleprops[this.scene.meshes[i].id]!=undefined && this.needleprops[this.scene.meshes[i].id][0] == 0.43) {
+            if (this.scene.meshes[i].id.split('-').includes('needle_full') && this.needleprops[this.scene.meshes[i].id]!=undefined && this.needleprops[this.scene.meshes[i].id][0] == 0.45) {
                 this.setScore(1);
                 return 1;
             }

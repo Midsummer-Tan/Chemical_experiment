@@ -13,17 +13,17 @@
         role="progressbar"
         :aria-valuenow="valueNow"
         aria-valuemin="0"
-        aria-valuemax="1"
+        aria-valuemax="100"
       >
         <div class="scale"></div>
         <div class="scale-para">0</div>
         <div class="tooltip white"></div>
-        <div class="bar-face face-position roof percentage"></div>
-        <div class="bar-face face-position back percentage"></div>
-        <div class="bar-face face-position floor percentage volume-lights"></div>
+        <div class="bar-face face-position roof percentage3"></div>
+        <div class="bar-face face-position back percentage3"></div>
+        <div class="bar-face face-position floor percentage3 volume-lights"></div>
         <div class="bar-face face-position left"></div>
         <div class="bar-face face-position right"></div>
-        <div class="bar-face face-position front percentage volume-lights shine"></div>
+        <div class="bar-face face-position front percentage3 volume-lights shine"></div>
       </div>
     </div>
   </div>
@@ -31,7 +31,7 @@
 </div>
   
 </template>
-<style scoped="scoped">
+<style scoped>
 @import "./css/component.css";
 @import "./css/custom-bars.css";
 </style>

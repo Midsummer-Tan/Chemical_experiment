@@ -201,8 +201,6 @@
               </v-slider> 
                 </v-flex>
               </v-layout>
-              
-              
               <my-pipette-progress :valueNow="liquid_transferorprops[i][0]"></my-pipette-progress>
             </div>
           </el-tab-pane>
@@ -491,6 +489,18 @@
               </v-flex>
 
               <v-flex xs3>
+                <v-card @click="addTweezer()">
+                  <v-card-text>
+                    <v-img
+                      src="/images/clock.png"
+                      aspect-ratio="1"
+                    ></v-img>
+                    <div class="body-2 text-xs-center">镊子</div>
+                  </v-card-text>
+                </v-card>
+              </v-flex>
+
+              <v-flex xs3>
                 <v-card @click="addRoundFlaskCone()" v-show="show1">
                   <v-card-text>
                     <v-img
@@ -618,6 +628,7 @@ import myClock from "../packages/clock/clock.vue";
 import addModels from '../js/addModels.js';
 import step1Function from '../js/step1func.js';
 import step2Function from '../js/step2func.js';
+import step3Function from '../js/step3func.js';
 import { clearTimeout } from 'timers';
 export default {
   data() {
@@ -661,7 +672,6 @@ export default {
         spoon_cone: [null, null, 1, 0, 0, 0],
         spoon_powder_brown: [null, null, 0, 0, 5, 0]
       }, //20.000g
-      step_finish: [0, 0, 0], //step1 step2 step3 是否执行完了？
       all_score: null,
       now_score: 0,
       dialog_nextstep: false,
@@ -694,6 +704,7 @@ export default {
       liquid_transferorlist:[],
       liquid_transferorprops:{},
       liquid_transferor_btn_color:'green',
+      correct_use_transferor:[0,0],
       timeout1:null,
       timeout2:null,
       particleSystem:null,
@@ -716,7 +727,7 @@ export default {
     myClock,
     myPipetteProgress
   },
-  mixins:[addModels,step1Function,step2Function],
+  mixins:[addModels,step1Function,step2Function,step3Function],
   methods: {
     async init() {
       this.canvas = document.getElementById("renderCanvas");
@@ -790,9 +801,10 @@ export default {
             this.hl.addMesh(this.scene.getMeshByID('heater_switch2'), BABYLON.Color3.Yellow());
           }
           if(this.heater_temp_value >= 120 && this.heater_temp_value<=160 && this.temp_stable==0){
-            this.temp_stable =1;
+            this.temp_stable =2;//如果这里不将它赋值为2 那么下一次渲染还是会进来 
             setTimeout(() => {
               if(this.heater_temp_value >= 120 && this.heater_temp_value<=160){
+                this.temp_stable =1;//温度稳定为1
                 this.addFog();
                 setTimeout(() => {
                   this.scene.removeMesh(this.scene.getMeshByID('conedel'));
@@ -815,20 +827,17 @@ export default {
             this.temp_stable=0;
           }
         }
-
-
-        if(this.step_finish.toString() == [0, 0, 0].toString()){
+        if(this.e1==1){
           this.getScore_step1()  
         }
-        else if (this.step_finish.toString() == [1, 0, 0].toString()) {
+        else if (this.e1==2) {
           this.getScore_step2()  
         } 
-        else if (this.step_finish.toString() == [1, 1, 0].toString()) {
-          
+        else if (this.e1==3) {
+          this.getScore_step3()
         } 
         else {
         }
-
         this.scene.render();
       });
 
@@ -903,7 +912,7 @@ export default {
         );
         if (pickResult.hit) {
           if (pickResult.pickedMesh.id != "ground") {
-            if(this.weightlist.indexOf(pickResult.pickedMesh.id)!= -1 || this.measuring_cylinderlist.indexOf(pickResult.pickedMesh.id)!=-1 || this.needlelist.indexOf(pickResult.pickedMesh.id)!= -1 ||pickResult.pickedMesh.id.split('-')[0]=='stand1_pole'){
+            if(this.weightlist.indexOf(pickResult.pickedMesh.id)!= -1 || this.measuring_cylinderlist.indexOf(pickResult.pickedMesh.id)!=-1 || this.needlelist.indexOf(pickResult.pickedMesh.id)!= -1 ||pickResult.pickedMesh.id.split('-')[0]=='stand1_pole' || this.liquid_transferorlist.indexOf(pickResult.pickedMesh.id)!= -1){
               this.activeIndex = pickResult.pickedMesh.id
             }
             else if(pickResult.pickedMesh.id.split('-')[0]==''){
@@ -1074,11 +1083,14 @@ export default {
         case 3:
           var str = '拼接';
           if (hoverid.split('-')[0] == "trash_can") str = "移除";
-          else if(pickid.split('-')[0]=='magneton' && hoverid.split('-')[0]=='round_flask_c8h14o2s2')str='放入';
+          else if(pickid.split('-')[0]=='magneton.tweezer' && hoverid.split('-')[0]=='round_flask_c8h14o2s2')str='放入';
           else if(pickid.split('-')[0]=='needle_full' && hoverid.split('-')[0]=='round_flask_c8h14o2s2')str = '倒入';
+          else if(pickid.split('-')[0]=='needle' && hoverid.split('-')[0]=='round_flask_c8h14o2s2')str = '吸入';
           else if( pickid.split('-')[0] =='film') str = '封口';
           else if(pickid.split('-')[0]=='liquid_transferor' && hoverid.split('-')[0] == 'tri_flask_full_fecl3')str = '准备吸入';
-          else if(pickid.split('-')[0]=='liquid_transferor' && hoverid.split('-')[0] == 'round_flask')str = '准备倒入';
+          else if(pickid.split('-')[0]=='liquid_transferor' && hoverid.split('-')[0] == 'round_flask_c8h14o2s2')str = '准备倒入';
+          else if(pickid.split('-')[0]=='needle_full' && hoverid.split('-')[0]=='tri_flask')str = '放入';      
+          else if(pickid.split('-')[0]=='tweezer' && hoverid.split('-')[0]=='magneton')str = '夹起';                
           break;
         default:
           break;
@@ -1131,135 +1143,15 @@ export default {
           }
         }
 
-        if(this.step_finish.toString() == [0, 0, 0].toString()){
+        if(this.e1 == 1){
           this.checkPickHover1(pickid,hoverid);
         }
-        else if(this.step_finish.toString()==[1,0,0].toString()){
+        else if(this.e1 == 2){
           this.checkPickHover2(pickid,hoverid);
         }
         else if(this.e1==3){
-          if(pickid.split('-')[0]=='magneton' && hoverid.split('-')[0]=='round_flask_c8h14o2s2'){
-            this.scene.getMeshByID(pickid).position = new BABYLON.Vector3(-0.5,0.12,-0.33);
-            this.scene.getMeshByID(pickid).removeBehavior(this.scene.getMeshByID(pickid).behaviors[0]);
-            var CoR_At = new BABYLON.Vector3(-0.5,0.12,-0.3);
-            var start_po = new BABYLON.Vector3(-0.5,0.12,-0.33);
-            var translate =start_po.subtract(CoR_At);
-            this.scene.getMeshByID(pickid).setPivotMatrix(BABYLON.Matrix.Translation(translate.x, translate.y, translate.z));
-            this.scene.getMeshByID(pickid).id = 'magneton_stiring'
-            this.scene.getMeshByID('magneton_stiring').id = this.addName('magneton_stiring')
-          }
-          else if (pickid.split('-')[0] == 'cap' && hoverid.split('-')[0] == 'needle_full') {
-                var mesh1 = this.scene.getMeshByID(pickid);
-                var po = this.getMergedPosition(hoverid);
-                mesh1.position = new BABYLON.Vector3(po[0], po[1] + 0.01, po[2]);
-                var mesh = BABYLON.Mesh.MergeMeshes(
-                    [this.scene.getMeshByID(hoverid), this.scene.getMeshByID(pickid)],
-                    true,
-                    true,
-                    undefined,
-                    false,
-                    true
-                );
-                mesh.id = "needle_full.cap";
-                mesh.id = this.addName(mesh.id)
-                mesh.addBehavior(
-                    new BABYLON.PointerDragBehavior({
-                        dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
-                    })
-                );
-                this.activeIndex = mesh.id
-                this.needlelist[this.needlelist.indexOf(hoverid)] = mesh.id
-                this.needleprops[mesh.id] = this.needleprops[hoverid]
-                delete(this.needleprops[hoverid])
-                this.refreshComponents();
-          }
-          else if(pickid.split('-')[0]=='needle_full' && hoverid.split('-')[0] == 'round_flask_c8h14o2s2'){
-            var po = this.getMergedPosition(pickid);
-            this.scene.removeMesh(this.scene.getMeshByID(pickid))
-            this.addModel('needle', new BABYLON.Vector3(1.2, 1.2, 1.2), new BABYLON.Vector3(po[0], po[1]+0.3, po[2]), new BABYLON.Vector3(0, 0, Math.PI), ['PointerDragBehavior'], null);
-          }
-          else if (pickid.split('-')[0] == 'film' && hoverid.split('-')[0] == 'tri_flask_full_fecl3') {
-                var po = this.getMergedPosition(hoverid);
-                this.scene.getMeshByID(pickid).position = new BABYLON.Vector3(-po[0], po[1], po[2] - 0.002);
-                var mesh = BABYLON.Mesh.MergeMeshes(
-                    [this.scene.getMeshByID(hoverid), this.scene.getMeshByID(pickid)],
-                    true,
-                    true,
-                    undefined,
-                    false,
-                    true
-                );
-                mesh.id = 'tri_flask_full_fecl3.film'
-                mesh.id = this.addName(mesh.id)
-                mesh.addBehavior(
-                    new BABYLON.PointerDragBehavior({
-                        dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
-                    })
-                );
-
-          }
-          else if(this.liquid_transferorprops[pickid][0]==0 && pickid.split('-')[0]=='liquid_transferor' && hoverid.split('-')[0] == 'tri_flask_full_fecl3'){
-            this.liquid_transferorprops[pickid][2]=false;//按钮取消禁用
-            this.liquid_transferorprops[pickid][3]=hoverid;
-            this.refreshComponents()
-            this.scene.getMeshByID(pickid).removeBehavior(this.scene.getMeshByID(pickid).behaviors[0]);
-            this.scene.getMeshByID(hoverid).removeBehavior(this.scene.getMeshByID(hoverid).behaviors[0]);
-            //不挤出液体就不让这两个物体移动
-          } 
-          else if(this.liquid_transferorprops[pickid][0]!=0 && pickid.split('-')[0]=='liquid_transferor' && hoverid.split('-')[0] == 'round_flask'){
-            this.liquid_transferorprops[pickid][2]=false;
-            this.liquid_transferorprops[pickid][3]=hoverid;
-            this.refreshComponents()
-            this.scene.getMeshByID(pickid).removeBehavior(this.scene.getMeshByID(pickid).behaviors[0]);
-            this.scene.getMeshByID(hoverid).removeBehavior(this.scene.getMeshByID(hoverid).behaviors[0]);
-          }
-          else if (hoverid.split('-')[0] == "trash_can") {
-                this.scene.removeMesh(this.scene.getMeshByID(pickid));
-                if (this.weightlist.indexOf(pickid) != -1) {
-                    var index = this.weightlist.indexOf(pickid);
-                    //删除
-                    {
-                        this.weightlist.splice(index, 1)
-                        delete(this.weightprops[pickid])
-                    }
-                } else if (this.measuring_cylinderlist.indexOf(pickid) != -1) {
-                    var index = this.measuring_cylinderlist.indexOf(pickid);
-                    //删除
-                    {
-                        this.measuring_cylinderlist.splice(index, 1)
-                        delete(this.measuring_cylinderprops[pickid])
-                    }
-                } else if (this.needlelist.indexOf(pickid) != -1) {
-                    var index = this.needlelist.indexOf(pickid);
-                    //删除
-                    {
-                        this.needlelist.splice(index, 1)
-                        delete(this.needleprops[pickid])
-                    }
-                } else if(pickid.split('-')[0]=='clock'){
-                  this.hasClock = false;
-                } else if (this.liquid_transferorlist.indexOf(pickid) != -1) {
-                    var index = this.liquid_transferorlist.indexOf(pickid);
-                    //删除
-                    {
-                        this.liquid_transferorlist.splice(index, 1)
-                        delete(this.liquid_transferorprops[pickid])
-                    }
-                } 
-                setTimeout(() => {
-                    for (var i = 0; i < this.weightlist.length; i++) {
-                        var re = this.weightprops[this.weightlist[i]][0]
-                        this.$refs.weight[i].setAllNumber(re[0], re[1], re[2], re[3], re[4], re[5], this.weightlist[i]);
-                    }
-                    if (this.weightlist.length != 0) this.activeIndex = this.weightlist[this.weightlist.length - 1];
-                    else if (this.measuring_cylinderlist.length != 0) this.activeIndex = this.measuring_cylinderlist[this.measuring_cylinderlist.length - 1]
-                    else if (this.needlelist.length != 0) this.activeIndex = this.needlelist[this.needlelist.length - 1]
-                    else if (this.liquid_transferorlist.length != 0) this.activeIndex = this.liquid_transferorlist[this.liquid_transferorlist.length - 1]                    
-                    else if (this.e1==3)this.activeIndex = 'heater';
-                    else this.activeIndex = 'default'
-                }, 200);
-            }
-          }
+          this.checkPickHover3(pickid,hoverid);
+        }
         this.advancedTexture.removeControl(this.controller);
         this.controller = null;
       });
@@ -1429,7 +1321,6 @@ export default {
     toStep2(){
         this.e1 = 2;
         this.step = ["", "搭建反应装置", ""];
-        this.step_finish[0] = 1;
         this.show1 = true;
         this.show2 = true;
         this.show3 = true;
@@ -1443,19 +1334,18 @@ export default {
     toStep3(){
       this.e1 = 3;
       this.step = ["", "", "聚合物合成"];
-        this.step_finish[1] = 1;
-        this.btn_nextstep = true;
-        this.btn_post = false;
-        this.show1 = true;
-        this.show2 = true;
-        this.show3 = true;
-        this.show4 = true;
-        for(var i=0;i<this.scene.meshes.length;i++){
-          if(this.scene.meshes[i].id!='ground' && this.scene.meshes[i].id!='__root__' && this.scene.meshes[i].id.split('-')[0]!='trash_can'){
-            this.scene.removeMesh(this.scene.meshes[i]);
-          }
+      this.btn_nextstep = true;
+      this.btn_post = false;
+      this.show1 = true;
+      this.show2 = true;
+      this.show3 = true;
+      this.show4 = true;
+      for(var i=0;i<this.scene.meshes.length;i++){
+        if(this.scene.meshes[i].id!='ground' && this.scene.meshes[i].id!='__root__' && this.scene.meshes[i].id.split('-')[0]!='trash_can'){
+          this.scene.removeMesh(this.scene.meshes[i]);
         }
-        this.addRound_flask_conePotHeaterStand1();
+      }
+      this.addRound_flask_conePotHeaterStand1();
     },
     showErrorText(){
       switch (this.e1) {
@@ -1482,7 +1372,6 @@ export default {
       switch (this.e1) {
         case 1:
           this.step = ["", "搭建反应装置", ""];
-          this.step_finish[0] = 1;
           this.show1 = true;
           this.show2 = true;
           this.show3 = true;
@@ -1490,7 +1379,6 @@ export default {
           break;
         case 2:
           this.step = ["", "", "聚合物合成"];
-          this.step_finish[1] = 1;
           this.btn_nextstep = true;
           this.btn_post = false;
           this.show1 = true;
@@ -1586,16 +1474,18 @@ export default {
               dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
           })
       );
-      this.scene.getMeshByID(this.liquid_transferorprops[id][3]).addBehavior(
-          new BABYLON.PointerDragBehavior({
-              dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
-          })
-      );
       if(this.liquid_transferorprops[id][0]==0){
+          this.scene.getMeshByID(this.liquid_transferorprops[id][3]).addBehavior(
+            new BABYLON.PointerDragBehavior({
+                dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+            })
+        );
         if(this.liquid_transferor_btn_color == 'orange'){
+          this.correct_use_transferor[0]=1;
           this.liquid_transferorprops[id][0]=this.liquid_transferorprops[id][1]
         }
         else if(this.liquid_transferor_btn_color == 'red'){
+          this.correct_use_transferor[0]=0;
           if(this.liquid_transferorprops[id][1]==100){
             this.liquid_transferorprops[id][0]=this.liquid_transferorprops[id][1];
           }
@@ -1603,16 +1493,16 @@ export default {
         }
       }
       else{
-        var po = this.scene.getMeshByID(this.liquid_transferorprops[id][3]).position;
-        this.scene.removeMesh(this.scene.getMeshByID(this.liquid_transferorprops[id][3]))
-        this.addModel('round_flask_c8h14o2s2',null,new BABYLON.Vector3(-po.x,po.y,po.z),null,['PointerDragBehavior'],null);
         if(this.liquid_transferor_btn_color == 'orange'){
           this.liquid_transferorprops[id][0]=1;
+          this.correct_use_transferor[1]=0;
         }
         else if(this.liquid_transferor_btn_color == 'red'){
+          this.correct_use_transferor[1]=1;
           this.liquid_transferorprops[id][0]=0;           
         }
         this.liquid_transferorprops[id][1]=100;
+        if(this.dib_in_flask_5min == 1)this.step3node4 = 1;
       }
       this.liquid_transferorprops[id][2] = true;
       this.liquid_transferor_btn_color = 'green';

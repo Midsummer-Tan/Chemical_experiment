@@ -48,7 +48,7 @@ h1 span.heading-3d {
 }
 
 /* line 108, ../scss/component.scss */
-.bar.regular-width[aria-valuenow] .percentage:before {
+.bar.regular-width[aria-valuenow] .percentage3:before {
   width: 100%;
 }
 
@@ -111,7 +111,7 @@ h1 span.heading-3d {
 }
 
 /* line 173, ../scss/component.scss */
-.bar .bar-face.percentage:before {
+.bar .bar-face.percentage3:before {
   content: '';
   font-size: .25em;
   line-height: 4em;
@@ -149,7 +149,7 @@ h1 span.heading-3d {
 }
 
 /* line 45, ../scss/component.scss */
-.bar.red .percentage:before {
+.bar.red .percentage3:before {
   background-color: rgba(236, 0, 113, 0.5);
 }
 
@@ -164,7 +164,7 @@ h1 span.heading-3d {
 }
 
 /* line 60, ../scss/component.scss */
-.bar.red:not(.has-colors) .percentage:before {
+.bar.red:not(.has-colors) .percentage3:before {
   background-color: transparent;
 }
 
@@ -196,7 +196,7 @@ h1 span.heading-3d {
 }
 
 /* line 45, ../scss/component.scss */
-.bar.yellow .percentage:before {
+.bar.yellow .percentage3:before {
   background-color: rgba(241, 196, 15, 0.5);
 }
 
@@ -211,7 +211,7 @@ h1 span.heading-3d {
 }
 
 /* line 60, ../scss/component.scss */
-.bar.yellow:not(.has-colors) .percentage:before {
+.bar.yellow:not(.has-colors) .percentage3:before {
   background-color: transparent;
 }
 
@@ -243,7 +243,7 @@ h1 span.heading-3d {
 }
 
 /* line 45, ../scss/component.scss */
-.bar.lime .percentage:before {
+.bar.lime .percentage3:before {
   background-color: rgba(215, 255, 0, 0.5);
 }
 
@@ -258,7 +258,7 @@ h1 span.heading-3d {
 }
 
 /* line 60, ../scss/component.scss */
-.bar.lime:not(.has-colors) .percentage:before {
+.bar.lime:not(.has-colors) .percentage3:before {
   background-color: transparent;
 }
 
@@ -290,7 +290,7 @@ h1 span.heading-3d {
 }
 
 /* line 45, ../scss/component.scss */
-.bar.navy .percentage:before {
+.bar.navy .percentage3:before {
   background-color: rgba(10, 64, 105, 0.5);
 }
 
@@ -305,7 +305,7 @@ h1 span.heading-3d {
 }
 
 /* line 60, ../scss/component.scss */
-.bar.navy:not(.has-colors) .percentage:before {
+.bar.navy:not(.has-colors) .percentage3:before {
   background-color: transparent;
 }
 
@@ -337,7 +337,7 @@ h1 span.heading-3d {
 }
 
 /* line 45, ../scss/component.scss */
-.bar.cyan .percentage:before {
+.bar.cyan .percentage3:before {
   background-color: rgba(87, 202, 244, 0.5);
 }
 
@@ -352,7 +352,7 @@ h1 span.heading-3d {
 }
 
 /* line 60, ../scss/component.scss */
-.bar.cyan:not(.has-colors) .percentage:before {
+.bar.cyan:not(.has-colors) .percentage3:before {
   background-color: transparent;
 }
 
@@ -384,7 +384,7 @@ h1 span.heading-3d {
 }
 
 /* line 45, ../scss/component.scss */
-.bar.dark .percentage:before {
+.bar.dark .percentage3:before {
   background-color: rgba(68, 68, 68, 0.5);
 }
 
@@ -399,7 +399,7 @@ h1 span.heading-3d {
 }
 
 /* line 60, ../scss/component.scss */
-.bar.dark:not(.has-colors) .percentage:before {
+.bar.dark:not(.has-colors) .percentage3:before {
   background-color: transparent;
 }
 
@@ -431,7 +431,7 @@ h1 span.heading-3d {
 }
 
 /* line 45, ../scss/component.scss */
-.bar.orange .percentage:before {
+.bar.orange .percentage3:before {
   background-color: rgba(255, 105, 0, 0.5);
 }
 
@@ -446,7 +446,7 @@ h1 span.heading-3d {
 }
 
 /* line 60, ../scss/component.scss */
-.bar.orange:not(.has-colors) .percentage:before {
+.bar.orange:not(.has-colors) .percentage3:before {
   background-color: transparent;
 }
 
@@ -456,501 +456,501 @@ h1 span.heading-3d {
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='1'] .percentage:before {
+.bar[aria-valuenow='1'] .percentage3:before {
   width: 1%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='2'] .percentage:before {
+.bar[aria-valuenow='2'] .percentage3:before {
   width: 2%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='3'] .percentage:before {
+.bar[aria-valuenow='3'] .percentage3:before {
   width: 3%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='4'] .percentage:before {
+.bar[aria-valuenow='4'] .percentage3:before {
   width: 4%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='5'] .percentage:before {
+.bar[aria-valuenow='5'] .percentage3:before {
   width: 5%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='6'] .percentage:before {
+.bar[aria-valuenow='6'] .percentage3:before {
   width: 6%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='7'] .percentage:before {
+.bar[aria-valuenow='7'] .percentage3:before {
   width: 7%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='8'] .percentage:before {
+.bar[aria-valuenow='8'] .percentage3:before {
   width: 8%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='9'] .percentage:before {
+.bar[aria-valuenow='9'] .percentage3:before {
   width: 9%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='10'] .percentage:before {
+.bar[aria-valuenow='10'] .percentage3:before {
   width: 10%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='11'] .percentage:before {
+.bar[aria-valuenow='11'] .percentage3:before {
   width: 11%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='12'] .percentage:before {
+.bar[aria-valuenow='12'] .percentage3:before {
   width: 12%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='13'] .percentage:before {
+.bar[aria-valuenow='13'] .percentage3:before {
   width: 13%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='14'] .percentage:before {
+.bar[aria-valuenow='14'] .percentage3:before {
   width: 14%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='15'] .percentage:before {
+.bar[aria-valuenow='15'] .percentage3:before {
   width: 15%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='16'] .percentage:before {
+.bar[aria-valuenow='16'] .percentage3:before {
   width: 16%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='17'] .percentage:before {
+.bar[aria-valuenow='17'] .percentage3:before {
   width: 17%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='18'] .percentage:before {
+.bar[aria-valuenow='18'] .percentage3:before {
   width: 18%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='19'] .percentage:before {
+.bar[aria-valuenow='19'] .percentage3:before {
   width: 19%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='20'] .percentage:before {
+.bar[aria-valuenow='20'] .percentage3:before {
   width: 20%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='21'] .percentage:before {
+.bar[aria-valuenow='21'] .percentage3:before {
   width: 21%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='22'] .percentage:before {
+.bar[aria-valuenow='22'] .percentage3:before {
   width: 22%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='23'] .percentage:before {
+.bar[aria-valuenow='23'] .percentage3:before {
   width: 23%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='24'] .percentage:before {
+.bar[aria-valuenow='24'] .percentage3:before {
   width: 24%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='25'] .percentage:before {
+.bar[aria-valuenow='25'] .percentage3:before {
   width: 25%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='26'] .percentage:before {
+.bar[aria-valuenow='26'] .percentage3:before {
   width: 26%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='27'] .percentage:before {
+.bar[aria-valuenow='27'] .percentage3:before {
   width: 27%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='28'] .percentage:before {
+.bar[aria-valuenow='28'] .percentage3:before {
   width: 28%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='29'] .percentage:before {
+.bar[aria-valuenow='29'] .percentage3:before {
   width: 29%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='30'] .percentage:before {
+.bar[aria-valuenow='30'] .percentage3:before {
   width: 30%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='31'] .percentage:before {
+.bar[aria-valuenow='31'] .percentage3:before {
   width: 31%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='32'] .percentage:before {
+.bar[aria-valuenow='32'] .percentage3:before {
   width: 32%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='33'] .percentage:before {
+.bar[aria-valuenow='33'] .percentage3:before {
   width: 33%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='34'] .percentage:before {
+.bar[aria-valuenow='34'] .percentage3:before {
   width: 34%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='35'] .percentage:before {
+.bar[aria-valuenow='35'] .percentage3:before {
   width: 35%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='36'] .percentage:before {
+.bar[aria-valuenow='36'] .percentage3:before {
   width: 36%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='37'] .percentage:before {
+.bar[aria-valuenow='37'] .percentage3:before {
   width: 37%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='38'] .percentage:before {
+.bar[aria-valuenow='38'] .percentage3:before {
   width: 38%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='39'] .percentage:before {
+.bar[aria-valuenow='39'] .percentage3:before {
   width: 39%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='40'] .percentage:before {
+.bar[aria-valuenow='40'] .percentage3:before {
   width: 40%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='41'] .percentage:before {
+.bar[aria-valuenow='41'] .percentage3:before {
   width: 41%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='42'] .percentage:before {
+.bar[aria-valuenow='42'] .percentage3:before {
   width: 42%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='43'] .percentage:before {
+.bar[aria-valuenow='43'] .percentage3:before {
   width: 43%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='44'] .percentage:before {
+.bar[aria-valuenow='44'] .percentage3:before {
   width: 44%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='45'] .percentage:before {
+.bar[aria-valuenow='45'] .percentage3:before {
   width: 45%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='46'] .percentage:before {
+.bar[aria-valuenow='46'] .percentage3:before {
   width: 46%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='47'] .percentage:before {
+.bar[aria-valuenow='47'] .percentage3:before {
   width: 47%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='48'] .percentage:before {
+.bar[aria-valuenow='48'] .percentage3:before {
   width: 48%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='49'] .percentage:before {
+.bar[aria-valuenow='49'] .percentage3:before {
   width: 49%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='50'] .percentage:before {
+.bar[aria-valuenow='50'] .percentage3:before {
   width: 50%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='51'] .percentage:before {
+.bar[aria-valuenow='51'] .percentage3:before {
   width: 51%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='52'] .percentage:before {
+.bar[aria-valuenow='52'] .percentage3:before {
   width: 52%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='53'] .percentage:before {
+.bar[aria-valuenow='53'] .percentage3:before {
   width: 53%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='54'] .percentage:before {
+.bar[aria-valuenow='54'] .percentage3:before {
   width: 54%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='55'] .percentage:before {
+.bar[aria-valuenow='55'] .percentage3:before {
   width: 55%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='56'] .percentage:before {
+.bar[aria-valuenow='56'] .percentage3:before {
   width: 56%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='57'] .percentage:before {
+.bar[aria-valuenow='57'] .percentage3:before {
   width: 57%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='58'] .percentage:before {
+.bar[aria-valuenow='58'] .percentage3:before {
   width: 58%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='59'] .percentage:before {
+.bar[aria-valuenow='59'] .percentage3:before {
   width: 59%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='60'] .percentage:before {
+.bar[aria-valuenow='60'] .percentage3:before {
   width: 60%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='61'] .percentage:before {
+.bar[aria-valuenow='61'] .percentage3:before {
   width: 61%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='62'] .percentage:before {
+.bar[aria-valuenow='62'] .percentage3:before {
   width: 62%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='63'] .percentage:before {
+.bar[aria-valuenow='63'] .percentage3:before {
   width: 63%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='64'] .percentage:before {
+.bar[aria-valuenow='64'] .percentage3:before {
   width: 64%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='65'] .percentage:before {
+.bar[aria-valuenow='65'] .percentage3:before {
   width: 65%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='66'] .percentage:before {
+.bar[aria-valuenow='66'] .percentage3:before {
   width: 66%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='67'] .percentage:before {
+.bar[aria-valuenow='67'] .percentage3:before {
   width: 67%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='68'] .percentage:before {
+.bar[aria-valuenow='68'] .percentage3:before {
   width: 68%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='69'] .percentage:before {
+.bar[aria-valuenow='69'] .percentage3:before {
   width: 69%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='70'] .percentage:before {
+.bar[aria-valuenow='70'] .percentage3:before {
   width: 70%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='71'] .percentage:before {
+.bar[aria-valuenow='71'] .percentage3:before {
   width: 71%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='72'] .percentage:before {
+.bar[aria-valuenow='72'] .percentage3:before {
   width: 72%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='73'] .percentage:before {
+.bar[aria-valuenow='73'] .percentage3:before {
   width: 73%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='74'] .percentage:before {
+.bar[aria-valuenow='74'] .percentage3:before {
   width: 74%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='75'] .percentage:before {
+.bar[aria-valuenow='75'] .percentage3:before {
   width: 75%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='76'] .percentage:before {
+.bar[aria-valuenow='76'] .percentage3:before {
   width: 76%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='77'] .percentage:before {
+.bar[aria-valuenow='77'] .percentage3:before {
   width: 77%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='78'] .percentage:before {
+.bar[aria-valuenow='78'] .percentage3:before {
   width: 78%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='79'] .percentage:before {
+.bar[aria-valuenow='79'] .percentage3:before {
   width: 79%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='80'] .percentage:before {
+.bar[aria-valuenow='80'] .percentage3:before {
   width: 80%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='81'] .percentage:before {
+.bar[aria-valuenow='81'] .percentage3:before {
   width: 81%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='82'] .percentage:before {
+.bar[aria-valuenow='82'] .percentage3:before {
   width: 82%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='83'] .percentage:before {
+.bar[aria-valuenow='83'] .percentage3:before {
   width: 83%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='84'] .percentage:before {
+.bar[aria-valuenow='84'] .percentage3:before {
   width: 84%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='85'] .percentage:before {
+.bar[aria-valuenow='85'] .percentage3:before {
   width: 85%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='86'] .percentage:before {
+.bar[aria-valuenow='86'] .percentage3:before {
   width: 86%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='87'] .percentage:before {
+.bar[aria-valuenow='87'] .percentage3:before {
   width: 87%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='88'] .percentage:before {
+.bar[aria-valuenow='88'] .percentage3:before {
   width: 88%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='89'] .percentage:before {
+.bar[aria-valuenow='89'] .percentage3:before {
   width: 89%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='90'] .percentage:before {
+.bar[aria-valuenow='90'] .percentage3:before {
   width: 90%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='91'] .percentage:before {
+.bar[aria-valuenow='91'] .percentage3:before {
   width: 91%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='92'] .percentage:before {
+.bar[aria-valuenow='92'] .percentage3:before {
   width: 92%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='93'] .percentage:before {
+.bar[aria-valuenow='93'] .percentage3:before {
   width: 93%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='94'] .percentage:before {
+.bar[aria-valuenow='94'] .percentage3:before {
   width: 94%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='95'] .percentage:before {
+.bar[aria-valuenow='95'] .percentage3:before {
   width: 95%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='96'] .percentage:before {
+.bar[aria-valuenow='96'] .percentage3:before {
   width: 96%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='97'] .percentage:before {
+.bar[aria-valuenow='97'] .percentage3:before {
   width: 97%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='98'] .percentage:before {
+.bar[aria-valuenow='98'] .percentage3:before {
   width: 98%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='99'] .percentage:before {
+.bar[aria-valuenow='99'] .percentage3:before {
   width: 99%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='100'] .percentage:before {
+.bar[aria-valuenow='100'] .percentage3:before {
   width: 100%;
 }

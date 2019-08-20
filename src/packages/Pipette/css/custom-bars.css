@@ -74,7 +74,7 @@ input[type='checkbox']:checked~.value-label {
 }
 
 /* line 86, ../scss/custom-bars.scss */
-input[type='checkbox']:checked~.flexy-column .bar[aria-valuenow] .percentage:before {
+input[type='checkbox']:checked~.flexy-column .bar[aria-valuenow] .percentage3:before {
   width: 90%;
 }
 
@@ -100,7 +100,7 @@ input[type='checkbox']:checked~.flexy-column .bar[aria-valuenow] .tooltip:before
 }
 
 /* line 110, ../scss/custom-bars.scss */
-.dots-pattern .percentage:before {
+.dots-pattern .percentage3:before {
   background: radial-gradient(rgba(254, 254, 254, 0.5) 10%, rgba(0, 0, 0, 0) 5%) 0 0, radial-gradient(rgba(254, 254, 254, 0.5) 10%, rgba(0, 0, 0, 0) 5%) 0.5em 0.5em;
   background-size: 1em 1em;
 }
@@ -111,7 +111,7 @@ input[type='checkbox']:checked~.flexy-column .bar[aria-valuenow] .tooltip:before
 }
 
 /* line 124, ../scss/custom-bars.scss */
-.bar.heat-gradient .percentage:before {
+.bar.heat-gradient .percentage3:before {
   /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ec545b+0,ec5799+100 */
   background-color: rgba(241, 196, 15, 0.8);
   /* Old browsers */
@@ -143,20 +143,20 @@ input[type='checkbox']:checked~.flexy-column .bar[aria-valuenow] .tooltip:before
 }
 
 /* line 146, ../scss/custom-bars.scss */
-.bar.ruler .percentage:before {
+.bar.ruler .percentage3:before {
   background-image: linear-gradient(rgba(255, 255, 255, 0.1) 1px, rgba(0, 0, 0, 0) 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, rgba(0, 0, 0, 0) 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, rgba(0, 0, 0, 0) 1px);
   background-size: 1em 1em, 1.6em 2em, .8em 2em;
 }
 
 /* line 153, ../scss/custom-bars.scss */
-.bar.ruler-2 .percentage:before {
+.bar.ruler-2 .percentage3:before {
   background-image: linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0.8em, rgba(0, 0, 0, 0) 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.14) 0.8em, rgba(0, 0, 0, 0) 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.18) 0.8em, rgba(0, 0, 0, 0) 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.22) 0.8em, rgba(0, 0, 0, 0) 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.26) 0.8em, rgba(0, 0, 0, 0) 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.3) 0.8em, rgba(0, 0, 0, 0) 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.34) 0.8em, rgba(0, 0, 0, 0) 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.38) 0.8em, rgba(0, 0, 0, 0) 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.42) 0.8em, rgba(0, 0, 0, 0) 1px);
   background-size: 16em 1em;
   background-position: 1.6em 0, 3.2em 0, 4.8em 0, 6.4em 0, 8em 0, 9.6em 0, 11.2em 0, 12.8em 0, 14.4em 0;
 }
 
 /* line 167, ../scss/custom-bars.scss */
-.bar.ruler-3 .percentage:before {
+.bar.ruler-3 .percentage3:before {
   background-image: linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0.8em, rgba(0, 0, 0, 0) 1px);
   background-size: 1.6em 2em;
 }

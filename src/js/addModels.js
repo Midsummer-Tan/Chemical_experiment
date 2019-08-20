@@ -46,7 +46,7 @@ const addModels = {
             this.addModel('dib', null, null, new BABYLON.Vector3(0, Math.PI, 0), ['PointerDragBehavior'], null);
         },
         addStand() {
-            if(this.step_finish.toString() == [1,0,0].toString()){
+            if(this.e1==2){
                 this.addModel('stand1_movable', null, new BABYLON.Vector3(0.9, 0.6, 0), new BABYLON.Vector3(0, Math.PI, 0), null, 'stand1_movable');
                 this.addModel('stand1_pole', null, new BABYLON.Vector3(1, 0, 0), new BABYLON.Vector3(0, Math.PI, 0), null, 'stand1_pole');
                 setTimeout(() => {
@@ -307,6 +307,9 @@ const addModels = {
                 );
                 mesh.id = "needle_full.cap";
                 mesh.id = this.addName(mesh.id)
+                this.needlelist.push(mesh.id);
+                this.needleprops[mesh.id] = [0.43, '']
+                this.activeIndex = mesh.id
                 mesh.addBehavior(
                     new BABYLON.PointerDragBehavior({
                         dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
@@ -349,13 +352,9 @@ const addModels = {
         addMagneton(){
             var magneton = BABYLON.MeshBuilder.CreateSphere("mySphere", { diameter: 0.02, diameterX: 0.03 }, this.scene);
             magneton.position = new BABYLON.Vector3(0,0.2,0)
-            magneton.addBehavior(
-                new BABYLON.PointerDragBehavior({
-                    dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
-                })
-            );
             magneton.id = 'magneton';
             magneton.id = this.addName(magneton.id);
+            return magneton.id;
         },
         //添加铁架台 温度计 油浴装置 烧瓶合装置
         addRound_flask_conePotHeaterStand1(){
@@ -374,14 +373,15 @@ const addModels = {
             this.addModel('stand1_pole', null, new BABYLON.Vector3(0.17+x, 0, 0+z), new BABYLON.Vector3(0, Math.PI, 0), null,null);
             //this.addModel('thermometer', new BABYLON.Vector3(0.03, 0.03, 0.03), new BABYLON.Vector3(-(0.12+x), 0.12, 0+z), null, null, null);
         },
+        addTweezer(){
+            this.addModel('tweezer', null, new BABYLON.Vector3(0,0.2,0), null, ['PointerDragBehavior'], null);
+        },
         addClock(){
             if(!this.hasClock){
                 this.hasClock = true;
                 this.activeIndex = 'clock'
                 this.addModel('clock', new BABYLON.Vector3(3, 3, 3), null, new BABYLON.Vector3(0, Math.PI, 0), ['PointerDragBehavior'],null);
             }
-            
-
         }
     }
 }

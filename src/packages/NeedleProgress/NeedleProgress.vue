@@ -415,26 +415,24 @@
 		<div class="scale" style="margin-left:100%;position: absolute"></div>
         <div class="scale-para" style="margin-left:97%">1.0ml</div>
 
-        <div class="bar-face2 face-position roof percentage"></div>
-        <div class="bar-face2 face-position back percentage"></div>
-        <div class="bar-face2 face-position floor percentage volume-lights"></div>
-        <div class="bar-face2 face-position left"></div>
-        <div class="bar-face2 face-position right"></div>
-        <div class="bar-face2 face-position front percentage volume-lights shine"></div>
+        <div class="bar-face face-position roof percentage2"></div>
+        <div class="bar-face face-position back percentage2"></div>
+        <div class="bar-face face-position floor percentage2 volume-lights"></div>
+        <div class="bar-face face-position left"></div>
+        <div class="bar-face face-position right"></div>
+        <div class="bar-face face-position front percentage2 volume-lights shine"></div>
       </div>
     </div>
   </div>
 </template>
-<style scoped="scoped">
+<style scoped>
 @import "./css/component.css";
 @import "./css/custom-bars.css";
 </style>
 <script>
 export default {
   name: "myNeedleProgress",
-  props:{ 
-    valueNow:{required: true}
-    },
+  props:['valueNow'],
   methods: {}
 };
 </script>

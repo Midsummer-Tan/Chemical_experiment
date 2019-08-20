@@ -252,19 +252,19 @@
           class="scale-para"
           style="margin-left:100%"
         >25ml</div>
-        <div class="bar-face1 face-position roof percentage"></div>
-        <div class="bar-face1 face-position back percentage"></div>
-        <div class="bar-face1 face-position floor percentage volume-lights"></div>
-        <div class="bar-face1 face-position left"></div>
-        <div class="bar-face1 face-position right"></div>
-        <div class="bar-face1 face-position front percentage volume-lights shine"></div>
+        <div class="bar-face face-position roof percentage1"></div>
+        <div class="bar-face face-position back percentage1"></div>
+        <div class="bar-face face-position floor percentage1 volume-lights"></div>
+        <div class="bar-face face-position left"></div>
+        <div class="bar-face face-position right"></div>
+        <div class="bar-face face-position front percentage1 volume-lights shine"></div>
       </div>
     </div>
   </div>
 </template>
-<style scoped="scoped">
-@import "./css/component1.css";
-@import "./css/custom-bars1.css";
+<style  scoped>
+@import "./css/component.css";
+@import "./css/custom-bars.css";
 </style>
 <script>
 export default {

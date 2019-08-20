@@ -46,7 +46,7 @@ h1 span.heading-3d {
 }
 
 /* line 108, ../scss/component.scss */
-.bar.regular-width[aria-valuenow] .percentage:before {
+.bar.regular-width[aria-valuenow] .percentage2:before {
   width: 100%;
 }
 
@@ -56,7 +56,7 @@ h1 span.heading-3d {
 }
 
 /* line 121, ../scss/component.scss */
-.bar .bar-face2 {
+.bar .bar-face {
   position: absolute;
   bottom: 0;
   left: 0;
@@ -70,24 +70,24 @@ h1 span.heading-3d {
 }
 
 /* line 138, ../scss/component.scss */
-.bar .bar-face2.face-position {
+.bar .bar-face.face-position {
   transform-origin: 50% 100%;
 }
 
 /* line 142, ../scss/component.scss */
-.bar .bar-face2.face-position.roof {
+.bar .bar-face.face-position.roof {
   transform: translateZ(1em);
   transition-delay: 2s;
 }
 
 /* line 147, ../scss/component.scss */
-.bar .bar-face2.face-position.front {
+.bar .bar-face.face-position.front {
   transform: rotateX(-90deg);
   transition-delay: 0s;
 }
 
 /* line 152, ../scss/component.scss */
-.bar .bar-face2.face-position.right {
+.bar .bar-face.face-position.right {
   left: auto;
   right: -.5em;
   width: 1em;
@@ -96,20 +96,20 @@ h1 span.heading-3d {
 }
 
 /* line 160, ../scss/component.scss */
-.bar .bar-face2.face-position.back {
+.bar .bar-face.face-position.back {
   transform: rotateX(-90deg) rotateY(0deg) translateZ(-1em);
   transition-delay: 1s;
 }
 
 /* line 165, ../scss/component.scss */
-.bar .bar-face2.face-position.left {
+.bar .bar-face.face-position.left {
   width: 1em;
   transform: rotateX(-90deg) rotateY(-90deg) translateX(-0.5em) translateZ(0.5em);
   transition-delay: 1.5s;
 }
 
 /* line 173, ../scss/component.scss */
-.bar .bar-face2.percentage:before {
+.bar .bar-face.percentage2:before {
   content: '';
   font-size: .25em;
   line-height: 4em;
@@ -125,7 +125,7 @@ h1 span.heading-3d {
 }
 
 /* line 24, ../scss/component.scss */
-.bar.yelloww .bar-face2,
+.bar.yelloww .bar-face,
 .bar.yelloww[aria-valuenow='0'] .face-position.right {
   background-color: rgba(255, 255, 255, 0.3);
 }
@@ -147,7 +147,7 @@ h1 span.heading-3d {
 }
 
 /* line 45, ../scss/component.scss */
-.bar.yelloww .percentage:before {
+.bar.yelloww .percentage2:before {
   background-color: rgba(241, 196, 15, 0.5);
 }
 
@@ -162,7 +162,7 @@ h1 span.heading-3d {
 }
 
 /* line 60, ../scss/component.scss */
-.bar.yelloww:not(.has-colors) .percentage:before {
+.bar.yelloww:not(.has-colors) .percentage2:before {
   background-color: transparent;
 }
 
@@ -172,501 +172,501 @@ h1 span.heading-3d {
 }
 
 
-.bar[aria-valuenow='0.01'] .percentage:before {
+.bar[aria-valuenow='0.01'] .percentage2:before {
   width: 1%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.02'] .percentage:before {
+.bar[aria-valuenow='0.02'] .percentage2:before {
   width: 2%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.03'] .percentage:before {
+.bar[aria-valuenow='0.03'] .percentage2:before {
   width: 3%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.04'] .percentage:before {
+.bar[aria-valuenow='0.04'] .percentage2:before {
   width: 4%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.05'] .percentage:before {
+.bar[aria-valuenow='0.05'] .percentage2:before {
   width: 5%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.06'] .percentage:before {
+.bar[aria-valuenow='0.06'] .percentage2:before {
   width: 6%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.07'] .percentage:before {
+.bar[aria-valuenow='0.07'] .percentage2:before {
   width: 7%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.08'] .percentage:before {
+.bar[aria-valuenow='0.08'] .percentage2:before {
   width: 8%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.09'] .percentage:before {
+.bar[aria-valuenow='0.09'] .percentage2:before {
   width: 9%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.1'] .percentage:before {
+.bar[aria-valuenow='0.1'] .percentage2:before {
   width: 10%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.11'] .percentage:before {
+.bar[aria-valuenow='0.11'] .percentage2:before {
   width: 11%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.12'] .percentage:before {
+.bar[aria-valuenow='0.12'] .percentage2:before {
   width: 12%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.13'] .percentage:before {
+.bar[aria-valuenow='0.13'] .percentage2:before {
   width: 13%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.14'] .percentage:before {
+.bar[aria-valuenow='0.14'] .percentage2:before {
   width: 14%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.15'] .percentage:before {
+.bar[aria-valuenow='0.15'] .percentage2:before {
   width: 15%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.16'] .percentage:before {
+.bar[aria-valuenow='0.16'] .percentage2:before {
   width: 16%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.17'] .percentage:before {
+.bar[aria-valuenow='0.17'] .percentage2:before {
   width: 17%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.18'] .percentage:before {
+.bar[aria-valuenow='0.18'] .percentage2:before {
   width: 18%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.19'] .percentage:before {
+.bar[aria-valuenow='0.19'] .percentage2:before {
   width: 19%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.2'] .percentage:before {
+.bar[aria-valuenow='0.2'] .percentage2:before {
   width: 20%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.21'] .percentage:before {
+.bar[aria-valuenow='0.21'] .percentage2:before {
   width: 21%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.22'] .percentage:before {
+.bar[aria-valuenow='0.22'] .percentage2:before {
   width: 22%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.23'] .percentage:before {
+.bar[aria-valuenow='0.23'] .percentage2:before {
   width: 23%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.24'] .percentage:before {
+.bar[aria-valuenow='0.24'] .percentage2:before {
   width: 24%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.25'] .percentage:before {
+.bar[aria-valuenow='0.25'] .percentage2:before {
   width: 25%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.26'] .percentage:before {
+.bar[aria-valuenow='0.26'] .percentage2:before {
   width: 26%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.27'] .percentage:before {
+.bar[aria-valuenow='0.27'] .percentage2:before {
   width: 27%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.28'] .percentage:before {
+.bar[aria-valuenow='0.28'] .percentage2:before {
   width: 28%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.29'] .percentage:before {
+.bar[aria-valuenow='0.29'] .percentage2:before {
   width: 29%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.3'] .percentage:before {
+.bar[aria-valuenow='0.3'] .percentage2:before {
   width: 30%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.31'] .percentage:before {
+.bar[aria-valuenow='0.31'] .percentage2:before {
   width: 31%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.32'] .percentage:before {
+.bar[aria-valuenow='0.32'] .percentage2:before {
   width: 32%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.33'] .percentage:before {
+.bar[aria-valuenow='0.33'] .percentage2:before {
   width: 33%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.34'] .percentage:before {
+.bar[aria-valuenow='0.34'] .percentage2:before {
   width: 34%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.35'] .percentage:before {
+.bar[aria-valuenow='0.35'] .percentage2:before {
   width: 35%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.36'] .percentage:before {
+.bar[aria-valuenow='0.36'] .percentage2:before {
   width: 36%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.37'] .percentage:before {
+.bar[aria-valuenow='0.37'] .percentage2:before {
   width: 37%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.38'] .percentage:before {
+.bar[aria-valuenow='0.38'] .percentage2:before {
   width: 38%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.39'] .percentage:before {
+.bar[aria-valuenow='0.39'] .percentage2:before {
   width: 39%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.4'] .percentage:before {
+.bar[aria-valuenow='0.4'] .percentage2:before {
   width: 40%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.41'] .percentage:before {
+.bar[aria-valuenow='0.41'] .percentage2:before {
   width: 41%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.42'] .percentage:before {
+.bar[aria-valuenow='0.42'] .percentage2:before {
   width: 42%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.43'] .percentage:before {
+.bar[aria-valuenow='0.43'] .percentage2:before {
   width: 43%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.44'] .percentage:before {
+.bar[aria-valuenow='0.44'] .percentage2:before {
   width: 44%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.45'] .percentage:before {
+.bar[aria-valuenow='0.45'] .percentage2:before {
   width: 45%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.46'] .percentage:before {
+.bar[aria-valuenow='0.46'] .percentage2:before {
   width: 46%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.47'] .percentage:before {
+.bar[aria-valuenow='0.47'] .percentage2:before {
   width: 47%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.48'] .percentage:before {
+.bar[aria-valuenow='0.48'] .percentage2:before {
   width: 48%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.49'] .percentage:before {
+.bar[aria-valuenow='0.49'] .percentage2:before {
   width: 49%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.5'] .percentage:before {
+.bar[aria-valuenow='0.5'] .percentage2:before {
   width: 50%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.51'] .percentage:before {
+.bar[aria-valuenow='0.51'] .percentage2:before {
   width: 51%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.52'] .percentage:before {
+.bar[aria-valuenow='0.52'] .percentage2:before {
   width: 52%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.53'] .percentage:before {
+.bar[aria-valuenow='0.53'] .percentage2:before {
   width: 53%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.54'] .percentage:before {
+.bar[aria-valuenow='0.54'] .percentage2:before {
   width: 54%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.55'] .percentage:before {
+.bar[aria-valuenow='0.55'] .percentage2:before {
   width: 55%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.56'] .percentage:before {
+.bar[aria-valuenow='0.56'] .percentage2:before {
   width: 56%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.57'] .percentage:before {
+.bar[aria-valuenow='0.57'] .percentage2:before {
   width: 57%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.58'] .percentage:before {
+.bar[aria-valuenow='0.58'] .percentage2:before {
   width: 58%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.59'] .percentage:before {
+.bar[aria-valuenow='0.59'] .percentage2:before {
   width: 59%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.6'] .percentage:before {
+.bar[aria-valuenow='0.6'] .percentage2:before {
   width: 60%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.61'] .percentage:before {
+.bar[aria-valuenow='0.61'] .percentage2:before {
   width: 61%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.62'] .percentage:before {
+.bar[aria-valuenow='0.62'] .percentage2:before {
   width: 62%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.63'] .percentage:before {
+.bar[aria-valuenow='0.63'] .percentage2:before {
   width: 63%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.64'] .percentage:before {
+.bar[aria-valuenow='0.64'] .percentage2:before {
   width: 64%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.65'] .percentage:before {
+.bar[aria-valuenow='0.65'] .percentage2:before {
   width: 65%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.66'] .percentage:before {
+.bar[aria-valuenow='0.66'] .percentage2:before {
   width: 66%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.67'] .percentage:before {
+.bar[aria-valuenow='0.67'] .percentage2:before {
   width: 67%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.68'] .percentage:before {
+.bar[aria-valuenow='0.68'] .percentage2:before {
   width: 68%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.69'] .percentage:before {
+.bar[aria-valuenow='0.69'] .percentage2:before {
   width: 69%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.7'] .percentage:before {
+.bar[aria-valuenow='0.7'] .percentage2:before {
   width: 70%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.71'] .percentage:before {
+.bar[aria-valuenow='0.71'] .percentage2:before {
   width: 71%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.72'] .percentage:before {
+.bar[aria-valuenow='0.72'] .percentage2:before {
   width: 72%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.73'] .percentage:before {
+.bar[aria-valuenow='0.73'] .percentage2:before {
   width: 73%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.74'] .percentage:before {
+.bar[aria-valuenow='0.74'] .percentage2:before {
   width: 74%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.75'] .percentage:before {
+.bar[aria-valuenow='0.75'] .percentage2:before {
   width: 75%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.76'] .percentage:before {
+.bar[aria-valuenow='0.76'] .percentage2:before {
   width: 76%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.77'] .percentage:before {
+.bar[aria-valuenow='0.77'] .percentage2:before {
   width: 77%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.78'] .percentage:before {
+.bar[aria-valuenow='0.78'] .percentage2:before {
   width: 78%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.79'] .percentage:before {
+.bar[aria-valuenow='0.79'] .percentage2:before {
   width: 79%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.8'] .percentage:before {
+.bar[aria-valuenow='0.8'] .percentage2:before {
   width: 80%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.81'] .percentage:before {
+.bar[aria-valuenow='0.81'] .percentage2:before {
   width: 81%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.82'] .percentage:before {
+.bar[aria-valuenow='0.82'] .percentage2:before {
   width: 82%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.83'] .percentage:before {
+.bar[aria-valuenow='0.83'] .percentage2:before {
   width: 83%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.84'] .percentage:before {
+.bar[aria-valuenow='0.84'] .percentage2:before {
   width: 84%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.85'] .percentage:before {
+.bar[aria-valuenow='0.85'] .percentage2:before {
   width: 85%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.86'] .percentage:before {
+.bar[aria-valuenow='0.86'] .percentage2:before {
   width: 86%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.87'] .percentage:before {
+.bar[aria-valuenow='0.87'] .percentage2:before {
   width: 87%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.88'] .percentage:before {
+.bar[aria-valuenow='0.88'] .percentage2:before {
   width: 88%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.89'] .percentage:before {
+.bar[aria-valuenow='0.89'] .percentage2:before {
   width: 89%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.9'] .percentage:before {
+.bar[aria-valuenow='0.9'] .percentage2:before {
   width: 90%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.91'] .percentage:before {
+.bar[aria-valuenow='0.91'] .percentage2:before {
   width: 91%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.92'] .percentage:before {
+.bar[aria-valuenow='0.92'] .percentage2:before {
   width: 92%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.93'] .percentage:before {
+.bar[aria-valuenow='0.93'] .percentage2:before {
   width: 93%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.94'] .percentage:before {
+.bar[aria-valuenow='0.94'] .percentage2:before {
   width: 94%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.95'] .percentage:before {
+.bar[aria-valuenow='0.95'] .percentage2:before {
   width: 95%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.96'] .percentage:before {
+.bar[aria-valuenow='0.96'] .percentage2:before {
   width: 96%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.97'] .percentage:before {
+.bar[aria-valuenow='0.97'] .percentage2:before {
   width: 97%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.98'] .percentage:before {
+.bar[aria-valuenow='0.98'] .percentage2:before {
   width: 98%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='0.99'] .percentage:before {
+.bar[aria-valuenow='0.99'] .percentage2:before {
   width: 99%;
 }
 
 /* line 209, ../scss/component.scss */
-.bar[aria-valuenow='1'] .percentage:before {
+.bar[aria-valuenow='1'] .percentage2:before {
   width: 100%;
 }

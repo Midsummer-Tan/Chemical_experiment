@@ -73,7 +73,7 @@ input[type="checkbox"]:checked ~ .value-label {
 input[type="checkbox"]:checked
   ~ .flexy-column
   .bar[aria-valuenow]
-  .percentage:before {
+  .percentage2:before {
   width: 90%;
 }
 
@@ -105,7 +105,7 @@ input[type="checkbox"]:checked
 }
 
 /* line 110, ../scss/custom-bars.scss */
-.dots-pattern .percentage:before {
+.dots-pattern .percentage2:before {
   background: radial-gradient(rgba(254, 254, 254, 0.5) 10%, rgba(0, 0, 0, 0) 5%)
       0 0,
     radial-gradient(rgba(254, 254, 254, 0.5) 10%, rgba(0, 0, 0, 0) 5%) 0.5em
@@ -118,7 +118,7 @@ input[type="checkbox"]:checked
   background-color: rgba(241, 196, 15, 0.8);
 }
 /* line 124, ../scss/custom-bars.scss */
-.bar.heat-gradient .percentage:before {
+.bar.heat-gradient .percentage2:before {
   /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ec545b+0,ec5799+100 */
   background-color: rgba(241, 196, 15, 0.8);
   /* Old browsers */
@@ -175,7 +175,7 @@ input[type="checkbox"]:checked
 }
 
 /* line 146, ../scss/custom-bars.scss */
-.bar.ruler .percentage:before {
+.bar.ruler .percentage2:before {
   background-image: linear-gradient(
       rgba(255, 255, 255, 0.1) 1px,
       rgba(0, 0, 0, 0) 1px
@@ -186,7 +186,7 @@ input[type="checkbox"]:checked
 }
 
 /* line 153, ../scss/custom-bars.scss */
-.bar.ruler-2 .percentage:before {
+.bar.ruler-2 .percentage2:before {
   background-image: linear-gradient(
       90deg,
       rgba(255, 255, 255, 0.1) 0.8em,
@@ -234,7 +234,7 @@ input[type="checkbox"]:checked
 }
 
 /* line 167, ../scss/custom-bars.scss */
-.bar.ruler-3 .percentage:before {
+.bar.ruler-3 .percentage2:before {
   background-image: linear-gradient(
     90deg,
     rgba(255, 255, 255, 0.1) 0.8em,
