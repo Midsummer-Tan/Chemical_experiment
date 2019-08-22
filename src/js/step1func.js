@@ -72,8 +72,6 @@ class Node2 extends Node {
     errortext = '硫辛酸药品未到2.000g';
     successtext = '量取2.000g硫辛酸药品';
     getScore() {
-        var number = 0;
-        var result = 0;
         for (var i = 0; i < this.scene.meshes.length; i++) {
             if (this.scene.meshes[i].id.split('-').includes('weight.paper_cone') && this.weightprops[this.scene.meshes[i].id][0].toString() == [null, null, 2, 0, 0, 0].toString()) {
                 this.setScore(1);
@@ -387,7 +385,9 @@ var node15 = new Node15(15);
 const step1Function = {
     data(){
         return {
-            step1:new Step1([node0, node1, node2, node3, node4, node5, node6, node7, node8, node9, node10, node11, node12, node13, node14, node15])
+            step1:new Step1([node0, node1, node2, node3, node4, node5, node6, 
+                node7, node8, node9, node10, node11, node12, node13, node14, node15]),
+            step1node15:0
         }
     },
     methods:{
@@ -620,7 +620,7 @@ const step1Function = {
                             dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
                         })
                     );
-                }, 500);
+                }, 800);
                 //this.addSpoonMerged(new BABYLON.Vector3(-x,y,z));//右手系变左手系 谁知道这怎么回事
             } 
             else if (pickid.split('-')[0] == "spoon" && hoverid.split('-')[0] == "fecl3") {
@@ -652,7 +652,7 @@ const step1Function = {
                             dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
                         })
                     );
-                }, 500);
+                }, 800);
                 //this.addSpoonMerged(new BABYLON.Vector3(-x,y,z));//右手系变左手系 谁知道这怎么回事
             } 
             else if (pickid.split('-')[0] == 'spoon_powder_brown' && hoverid.split('-')[0] == 'weight.paper') {
@@ -716,7 +716,7 @@ const step1Function = {
                             dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
                         })
                     );
-                }, 500);
+                }, 800);
             } 
             else if (pickid.split('-')[0] == 'spoon_powder_brown' && hoverid.split('-')[0] == 'weight.paper_powder_brown') {
                 var mesh = this.scene.getMeshByID(pickid);
@@ -801,7 +801,7 @@ const step1Function = {
                             dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
                         })
                     );
-                }, 500);
+                }, 800);
             } 
             else if (pickid.split('-')[0] == "spoon_cone" && hoverid.split('-')[0] == "weight.paper_cone") {
                 var mesh = this.scene.getMeshByID(pickid);
@@ -857,7 +857,7 @@ const step1Function = {
                             dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
                         })
                     );
-                }, 500);
+                }, 800);
             } 
             else if (pickid.split('-')[0] == 'paper_powder_brown' && hoverid.split('-')[0] == 'tri_flask') {
                 var mesh = this.scene.getMeshByID(hoverid);
@@ -894,7 +894,7 @@ const step1Function = {
                             dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
                         })
                     );
-                }, 500);
+                }, 800);
 
             } 
             else if (pickid.split('-')[0] == 'dropper' && hoverid.split('-')[0] == 'c3h6o') {
@@ -919,7 +919,7 @@ const step1Function = {
                     this.measuring_cylinderprops[mesh.id] = this.measuring_cylinderprops[hoverid]
                     delete(this.measuring_cylinderprops[hoverid]);
                     this.refreshComponents()
-                }, 500);
+                }, 800);
             } 
             else if (pickid.split('-')[0] == 'dropper_full' && hoverid.split('-')[0] == 'measuring_cylinder_full') {
                 this.measuring_cylinderprops[hoverid][0] += 2;
@@ -976,7 +976,7 @@ const step1Function = {
                         })
                     );
                     this.refreshComponents();
-                }, 500);
+                }, 800);
             } 
             else if (pickid.split('-')[0] == 'film' && hoverid.split('-')[0] == 'tri_flask_full_fecl3') {
                 var po = this.getMergedPosition(hoverid);
@@ -1040,7 +1040,7 @@ const step1Function = {
                         })
                     );
                     this.refreshComponents();
-                }, 500);
+                }, 800);
 
             } 
             else if (pickid.split('-')[0] == 'needle_full' && hoverid.split('-')[0] == 'dib') {
@@ -1126,6 +1126,16 @@ const step1Function = {
                 });
                 this.now_score = this.step1.getNowScore();
             }
+            if(this.step1node15 == 0 && this.step1.node_array[15].score == 1){
+                this.step1node15 = 1;
+                setTimeout(() => {
+                    this.$notify({
+                        title: 'Completed',
+                        message: '你已经完成了第一步——反应前期准备',
+                        type: 'warning'
+                    });
+                }, 1000);
+            }
             var num = this.step1.unlockTools();
             var tool = ['', '装有硫辛酸的圆底烧瓶', '三氯化铁丙酮溶液', '装有dib试剂的针管']
             var message = '<strong><span style="color:black;">' +
@@ -1154,7 +1164,7 @@ const step1Function = {
                         message: message,
                         type: "warning"
                     });
-                }, 500);
+                }, 800);
             }
         }
     }

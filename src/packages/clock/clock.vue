@@ -85,11 +85,16 @@
 <script>
 export default {
   name:'myClock',
+  data(){
+	  return{
+		  timer:null
+	  }
+  },
   mounted(){
     var divH = document.getElementsByClassName("time_h")
     var divM = document.getElementsByClassName("time_m")
     var divS = document.getElementsByClassName("time_s")
-    setInterval(function() {
+    this.timer = setInterval(()=>{
       var newtime = new Date()
       var h = newtime.getHours()
       var m = newtime.getMinutes()
@@ -99,6 +104,11 @@ export default {
       divS[0].style.transform = "rotate(" + (-90 + s * 6) + "deg)"
     }, 1000)
   },
+  destroyed(){
+	  window.clearInterval(this.timer);
+	  this.timer = null;
+  }
+
   }
 
 </script>

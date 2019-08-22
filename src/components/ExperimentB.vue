@@ -34,8 +34,14 @@
               >{{step[1]}}</v-stepper-step>
               <v-divider></v-divider>
               <v-stepper-step
+                :complete="e1 > 3"
                 step="3"
               >{{step[2]}}</v-stepper-step>
+              <v-divider></v-divider>
+              <v-stepper-step
+                :complete="e1 > 4"              
+                step="4"
+              >{{step[3]}}</v-stepper-step>
             </v-stepper-header>
             <v-btn
               style="float:right"
@@ -252,7 +258,7 @@
                 <v-card @click="addPaper()">
                   <v-card-text>
                     <v-img
-                      src="/images/weightpaper.png"
+                      src="/images/paper.png"
                       aspect-ratio="1"
                     ></v-img>
                     <div class="body-2 text-xs-center">称量纸</div>
@@ -372,7 +378,7 @@
                 <v-card @click="addC8h14o2s2()">
                   <v-card-text>
                     <v-img
-                      src="/images/bottle.png"
+                      src="/images/brown_bottle.png"
                       aspect-ratio="1"
                     ></v-img>
                     <div class="body-2 text-xs-center">硫辛酸</div>
@@ -384,7 +390,7 @@
                 <v-card @click="addFecl3()">
                   <v-card-text>
                     <v-img
-                      src="/images/Fecl3.png"
+                      src="/images/brown_bottle.png"
                       aspect-ratio="1"
                     ></v-img>
                     <div class="body-2 text-xs-center">六水合三氯化铁</div>
@@ -396,7 +402,7 @@
                 <v-card @click="addAsetone()">
                   <v-card-text>
                     <v-img
-                      src="/images/asetone.png"
+                      src="/images/brown_bottle.png"
                       aspect-ratio="1"
                     ></v-img>
                     <div class="body-2 text-xs-center">丙酮</div>
@@ -408,7 +414,7 @@
                 <v-card @click="addDib()">
                   <v-card-text>
                     <v-img
-                      src="/images/dib.png"
+                      src="/images/brown_bottle.png"
                       aspect-ratio="1"
                     ></v-img>
                     <div class="body-2 text-xs-center">DIB交联剂</div>
@@ -441,7 +447,7 @@
               </v-flex>
 
               <v-flex xs3>
-                <v-card @click="addCap()">
+                <v-card @click="addCap(0,0.05,0)">
                   <v-card-text>
                     <v-img
                       src="/images/cap.png"
@@ -456,7 +462,7 @@
                 <v-card @click="addThermometer()">
                   <v-card-text>
                     <v-img
-                      src="/images/film.png"
+                      src="/images/temperature.png"
                       aspect-ratio="1"
                     ></v-img>
                     <div class="body-2 text-xs-center">温度计</div>
@@ -480,7 +486,7 @@
                 <v-card @click="addMagneton()">
                   <v-card-text>
                     <v-img
-                      src="/images/clock.png"
+                      src="/images/vibrate.png"
                       aspect-ratio="1"
                     ></v-img>
                     <div class="body-2 text-xs-center">小磁子</div>
@@ -492,7 +498,7 @@
                 <v-card @click="addTweezer()">
                   <v-card-text>
                     <v-img
-                      src="/images/clock.png"
+                      src="/images/tweezer.png"
                       aspect-ratio="1"
                     ></v-img>
                     <div class="body-2 text-xs-center">镊子</div>
@@ -501,10 +507,34 @@
               </v-flex>
 
               <v-flex xs3>
+                <v-card @click="addScissors()">
+                  <v-card-text>
+                    <v-img
+                      src="/images/scissors.png"
+                      aspect-ratio="1"
+                    ></v-img>
+                    <div class="body-2 text-xs-center">剪刀</div>
+                  </v-card-text>
+                </v-card>
+              </v-flex>
+
+              <v-flex xs3>
+                <v-card @click="addGlassPad()">
+                  <v-card-text>
+                    <v-img
+                      src="/images/glass_pad.png"
+                      aspect-ratio="1"
+                    ></v-img>
+                    <div class="body-2 text-xs-center">玻璃片</div>
+                  </v-card-text>
+                </v-card>
+              </v-flex>
+
+              <v-flex xs4>
                 <v-card @click="addRoundFlaskCone()" v-show="show1">
                   <v-card-text>
                     <v-img
-                      src="/images/film.png"
+                      src="/images/flask_with_powder.png"
                       aspect-ratio="1"
                     ></v-img>
                     <div class="body-2 text-xs-center">装有硫辛酸的圆底烧瓶</div>
@@ -512,11 +542,11 @@
                 </v-card>
               </v-flex>
 
-              <v-flex xs3>
+              <v-flex xs4>
                 <v-card @click="addTriFlaskFullFecl3Film()" v-show="show2">
                   <v-card-text>
                     <v-img
-                      src="/images/film.png"
+                      src="/images/flask_with_liquid.png"
                       aspect-ratio="1"
                     ></v-img>
                     <div class="body-2 text-xs-center">三氯化铁丙酮溶液</div>
@@ -524,11 +554,11 @@
                 </v-card>
               </v-flex>
 
-              <v-flex xs3>
+              <v-flex xs4>
                 <v-card @click="addNeedleFullCap()" v-show="show3">
                   <v-card-text>
                     <v-img
-                      src="/images/film.png"
+                      src="/images/needle_with_cap.png"
                       aspect-ratio="1"
                     ></v-img>
                     <div class="body-2 text-xs-center">装有dib试剂的针管</div>
@@ -536,17 +566,17 @@
                 </v-card>
               </v-flex>
 
-              <!-- <v-flex xs3>
-                <v-card @click="addRound_flask_conePotHeaterStand1()" v-show="show4">
+              <v-flex xs4>
+                <v-card @click="addNeedleFullTriFlask()" v-show="show4">
                   <v-card-text>
                     <v-img
-                      src="/images/film.png"
+                      src="/images/flask_with_needle.png"
                       aspect-ratio="1"
                     ></v-img>
-                    <div class="body-2 text-xs-center">待熔融的硫辛酸烧瓶装置</div>
+                    <div class="body-2 text-xs-center">装有胶黏生成物针管的锥形瓶</div>
                   </v-card-text>
                 </v-card>
-              </v-flex> -->
+              </v-flex>
 
             </v-layout>
           </v-container>
@@ -610,6 +640,87 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <!--对话框-->
+    <v-dialog
+      v-model="post_dialog"
+      max-width="500"
+    >
+      <v-card>
+        <v-card-title class="headline">实验总结</v-card-title>
+        <v-card-text>你本实验的分数为<span style="color:orange">{{post_score}}</span>分<br>
+        
+        <div>
+        <br><span style="color:#67C23A">反应前期准备</span><br>
+          <div v-if="post_errortext1.length!=0">
+          <span style="color:red">失分原因如下：</span><br>
+            <div
+              v-for="(item,index) in post_errortext1"
+              :key="index"
+            ><span style="color:orange">{{index+1}}</span>.{{item}}<br>
+            </div>
+          </div>
+          <div v-else>
+            <span style="color:red">恭喜！该步骤你得到了满分！</span><br>
+          </div>
+        </div>
+
+
+        <div>
+        <br><span style="color:#67C23A">搭建反应装置</span><br>
+          <div v-if="post_errortext2.length!=0">
+          <span style="color:red">失分原因如下：</span><br>
+            <div
+              v-for="(item,index) in post_errortext2"
+              :key="index"
+            ><span style="color:orange">{{index+1}}</span>.{{item}}<br>
+            </div>
+          </div>
+          <div v-else>
+            <span style="color:red">恭喜！该步骤你得到了满分！</span><br>
+          </div>
+        </div>
+
+        <div>
+        <br><span style="color:#67C23A">聚合物合成</span><br>
+          <div v-if="post_errortext3.length!=0">
+          <span style="color:red">失分原因如下：</span><br>
+            <div
+              v-for="(item,index) in post_errortext3"
+              :key="index"
+            ><span style="color:orange">{{index+1}}</span>.{{item}}<br>
+            </div>
+          </div>
+          <div v-else>
+            <span style="color:red">恭喜！该步骤你得到了满分！</span><br>
+          </div>
+        </div>
+
+        <div>
+        <br><span style="color:#67C23A">鉴定表征</span><br>
+          <div v-if="post_errortext4.length!=0">
+          <span style="color:red">失分原因如下：</span><br>
+            <div
+              v-for="(item,index) in post_errortext4"
+              :key="index"
+            ><span style="color:orange">{{index+1}}</span>.{{item}}<br>
+            </div>
+          </div>
+          <div v-else>
+            <span style="color:red">恭喜！该步骤你得到了满分！</span><br>
+          </div>
+        </div>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="green darken-1"
+            flat="flat"
+            @click="post_dialog=false;"
+          >确定</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
   </v-container>
 </template>
 
@@ -629,6 +740,7 @@ import addModels from '../js/addModels.js';
 import step1Function from '../js/step1func.js';
 import step2Function from '../js/step2func.js';
 import step3Function from '../js/step3func.js';
+import step4Function from '../js/step4func.js';
 import { clearTimeout } from 'timers';
 export default {
   data() {
@@ -643,29 +755,7 @@ export default {
       pickingObj: null,
       pickedObj: null, //上一次拾取的物品
       e1: 1,
-      step: ["反应前期准备", "", ""],
-      map: {
-        pot: "油浴锅",
-        round_flask: "圆底烧瓶",
-        weight: "电子称",
-        c8h14o2s2: "硫辛酸",
-        stand: "铁架台",
-        dropper: "滴管",
-        heater: "磁力搅拌器",
-        measuring_cylinder: "量筒",
-        needle: "针管",
-        paper: "称量纸",
-        spoon: "药匙",
-        tri_flask: "锥形瓶",
-        liquid_transferor: "移液枪",
-        weight_merged: "电子秤组合体",
-        spoon: "药匙",
-        trash_can: "垃圾桶",
-        "spoon_cone": "有硫辛酸的药匙",
-        "weight.paper_cone": "有硫辛酸的电子称",
-        paper_cone: "带有硫辛酸的称量纸",
-        cap:'针管冒',
-      },
+      step: ["反应前期准备", "", "",""],
       quality: {
         paper: [null, null, 0, 0, 0, 1],
         tri_flask: [null, 2, 0, 0, 0, 0],
@@ -687,6 +777,10 @@ export default {
       needshake:0,
       needshakeid:'',
       shaked :0,//用于判断是否给分
+      strech_count:0,
+      needstretch:0,
+      needstretchid:'',
+      stretched:0,
       activeIndex:"default",
       weightlist:[],
       weightprops:{}, //所有电子称属性 {id:[示数,name]}
@@ -717,7 +811,12 @@ export default {
       show4:false,
       bb8warning:'实验中请穿好实验服，戴好护目镜',
       stand_movable_high:0,
-      value2 :1000
+      post_dialog:false,
+      post_score:0,
+      post_errortext1:[],
+      post_errortext2:[],
+      post_errortext3:[],
+      post_errortext4:[],
     };
   },
   components:{
@@ -727,7 +826,7 @@ export default {
     myClock,
     myPipetteProgress
   },
-  mixins:[addModels,step1Function,step2Function,step3Function],
+  mixins:[addModels,step1Function,step2Function,step3Function,step4Function],
   methods: {
     async init() {
       this.canvas = document.getElementById("renderCanvas");
@@ -774,10 +873,101 @@ export default {
             //摇完了
             this.shake_count = 0;
             this.needshake = 0;
+            this.rotateflag = 1;
             var po = this.getMergedPosition(this.needshakeid);
             this.scene.removeMesh(this.scene.getMeshByID(this.needshakeid));
             this.needshakeid = '';
             this.addModel('tri_flask_full_fecl3',null,new BABYLON.Vector3(po[0],0,po[2]),null,['PointerDragBehavior'],null);
+          }
+        }
+
+        //拉伸
+        if(this.needstretch == 1){
+          if(this.strech_count <=200){
+            var mesh = this.scene.getMeshByID(this.needstretchid)
+            var n = 1/4;
+            if(mesh.rotation.z<Math.PI/10 && this.rotateflag == 1){
+              mesh.rotation.z+=n*Math.PI/10;
+              if(mesh.rotation.z==Math.PI/10)this.rotateflag = 2;
+            }
+            else if(mesh.rotation.z<=Math.PI/10 && this.rotateflag == 2){
+              mesh.rotation.z-=n*Math.PI/10;
+              if(mesh.rotation.z==0)this.rotateflag = 3;
+            }
+            else if(mesh.rotation.z>-Math.PI/10 && this.rotateflag == 3){
+              mesh.rotation.z-=n*Math.PI/10;
+              if(mesh.rotation.z==-Math.PI/10)this.rotateflag = 4;
+            }
+            else if(mesh.rotation.z>=-Math.PI/10 && this.rotateflag == 4){
+              mesh.rotation.z+=n*Math.PI/10;
+              if(mesh.rotation.z==0)this.rotateflag = 1;
+            }
+            this.strech_count++;
+          }
+          else{
+            //拉伸完了
+            this.strech_count = 0;
+            this.needstretch = 0;
+            var mesh = this.scene.getMeshByID(this.needstretchid)
+            mesh.id = 'glass_pad_yellow_cylinder_stretched';
+            mesh.id = this.addName(mesh.id);
+            mesh.rotation = new BABYLON.Vector3(0,0,0);
+            var po = this.getMergedPosition(mesh.id);
+            this.rotateflag = 1;
+            this.needstretchid = '';
+            if(this.step1.node_array[2].score ==1 && this.step1.node_array[6].score ==1&&
+            this.step1.node_array[9].score ==1 && this.step1.node_array[14].score ==1 &&
+            this.step3.node_array[0].score ==1 && this.step3.node_array[4].score ==1 &&
+            this.step3.node_array[5].score ==1 && this.step3.node_array[6].score ==1){
+              this.$notify({
+                title: '解锁成就!',
+                message: '你做出了拉伸后不会断裂，强度高，有弹性的胶黏物！',
+                type: 'success',
+                duration: 0
+              });
+            }
+            else {
+              this.scene.removeMesh(mesh);
+              this.addModel('yellow_cylinder', new BABYLON.Vector3(0.08, 0.08, 0.04),new BABYLON.Vector3(-po[0],po[1],po[2]), new BABYLON.Vector3(0,Math.PI/2,0),null,'yc1');
+              this.addModel('yellow_cylinder', new BABYLON.Vector3(0.08, 0.08, 0.04),new BABYLON.Vector3(-po[0]-0.1,po[1],po[2]), new BABYLON.Vector3(0,Math.PI/2,0),null, 'yc2');
+              this.addModel('glass_pad', new BABYLON.Vector3(0.01, 0.01, 0.01), new BABYLON.Vector3(-po[0]+0.03,po[1],po[2]), null,null, 'g1');
+              this.addModel('glass_pad', new BABYLON.Vector3(0.01, 0.01, 0.01), new BABYLON.Vector3(-po[0]+0.03,po[1]+0.02,po[2]), null,null, 'g2');
+              this.addModel('glass_pad', new BABYLON.Vector3(0.01, 0.01, 0.01), new BABYLON.Vector3(-po[0]-0.1-0.04,po[1],po[2]), null,null, 'g3');
+              this.addModel('glass_pad', new BABYLON.Vector3(0.01, 0.01, 0.01), new BABYLON.Vector3(-po[0]-0.1-0.04,po[1]+0.02,po[2]), null,null, 'g4'); 
+              setTimeout(() => {
+                var mesh1 = BABYLON.Mesh.MergeMeshes(
+                    [this.scene.getMeshByID('yc1'), this.scene.getMeshByID('g1'),this.scene.getMeshByID('g2')],
+                    true,
+                    true,
+                    undefined,
+                    false,
+                    true
+                );
+                mesh1.id = 'glass_pad_yellow_cylinder_break';
+                mesh1.id = this.addName(mesh1.id);
+                mesh1.addBehavior(
+                    new BABYLON.PointerDragBehavior({
+                        dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+                    })
+                );
+
+                var mesh2 = BABYLON.Mesh.MergeMeshes(
+                    [this.scene.getMeshByID('yc2'), this.scene.getMeshByID('g3'),this.scene.getMeshByID('g4')],
+                    true,
+                    true,
+                    undefined,
+                    false,
+                    true
+                );
+                mesh2.id = 'glass_pad_yellow_cylinder_break';
+                mesh2.id = this.addName(mesh2.id);
+                mesh2.addBehavior(
+                    new BABYLON.PointerDragBehavior({
+                        dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+                    })
+                );
+              }, 500);
+            }
           }
         }
 
@@ -823,7 +1013,12 @@ export default {
         else {
           if(this.scene.getMeshByID('heater_switch2')!=null && this.hl.hasMesh(this.scene.getMeshByID('heater_switch2'))){
             this.particleSystem.reset();
+            this.particleSystem = null;
             this.hl.removeMesh(this.scene.getMeshByID('heater_switch2'));
+            this.heater_stir_switch = false;
+            if(this.scene.getMeshByID('heater_switch1')!=null && this.hl.hasMesh(this.scene.getMeshByID('heater_switch1'))){
+              this.hl.removeMesh(this.scene.getMeshByID('heater_switch1'))
+            }
             this.temp_stable=0;
           }
         }
@@ -836,8 +1031,9 @@ export default {
         else if (this.e1==3) {
           this.getScore_step3()
         } 
-        else {
-        }
+        else if (this.e1==4) {
+          this.getScore_step4()
+        } 
         this.scene.render();
       });
 
@@ -868,7 +1064,9 @@ export default {
             "tri_flask_full_trans_powder_brown",
             "needle.cap",
             "needle_full.cap",
-            "tri_flask_full_fecl3.film"
+            "tri_flask_full_fecl3.film",
+            "needle_full.tri_flask",
+            'glass_pad_yellow_cylinder'
           ];
           if (pickResult.pickedMesh.id != "ground") {
             this.hl.addMesh(pickResult.pickedMesh, BABYLON.Color3.Purple());
@@ -918,7 +1116,6 @@ export default {
             else if(pickResult.pickedMesh.id.split('-')[0]==''){
               this.activeIndex = 'default'
             }
-            console.log(pickResult.pickedMesh.id);
             this.hl.addMesh(pickResult.pickedMesh, BABYLON.Color3.Purple());
             this.pickingObj = pickResult.pickedMesh;
           }
@@ -941,6 +1138,11 @@ export default {
         button1.background = "orange";
         button1.fontSize = 14;
       }
+      else if(hoverid.split('-').includes('glass_pad_yellow_cylinder')){
+        var button1 = GUI.Button.CreateSimpleButton("btn2", "拉伸");
+        button1.background = "orange";
+        button1.fontSize = 14;
+      }
       else{
         var button1 = GUI.Button.CreateSimpleButton("btn2", "分离");
         button1.background = "gray";
@@ -957,8 +1159,11 @@ export default {
       
       button1.onPointerClickObservable.add(() => {
         var array1 = hoverid.split('-')[0].split(".");
-        if(!(hoverid.split('-').includes("tri_flask_full_trans_powder_brown") || hoverid.split('-')[0]=='needle.cap' || hoverid.split('-')[0]=='needle_full.cap')){
-          //非这三者 都删除
+        if(!(hoverid.split('-').includes("tri_flask_full_trans_powder_brown") 
+        || hoverid.split('-')[0]=='needle.cap'
+        || hoverid.split('-')[0]=='needle_full.cap'
+        || hoverid.split('-')[0]=='glass_pad_yellow_cylinder')){
+          //非这四者 都删除
           this.scene.removeMesh(this.scene.getMeshByID(hoverid));
           if(this.weightlist.indexOf(hoverid)!=-1){
             this.weightlist.splice(this.weightlist.indexOf(hoverid),1)
@@ -1002,6 +1207,8 @@ export default {
               })
             );
           }, 500); 
+        }else if(hoverid.split('-')[0]=='needle_full.tri_flask'){
+          this.addNeedleFull();
         }
         for (var i = 0; i < array1.length; i++) {
           switch (array1[i]) {
@@ -1037,6 +1244,11 @@ export default {
               this.needshakeid = hoverid;
               this.needshake = 1;
               this.shaked = 1;
+              break;
+            case "glass_pad_yellow_cylinder":
+              this.needstretchid = hoverid;
+              this.needstretch = 1;
+              this.stretched = 1;
               break;
             case "tri_flask_full_fecl3":
               this.addModel('tri_flask_full_fecl3', null, null, null, ['PointerDragBehavior'], null);
@@ -1074,6 +1286,7 @@ export default {
             this.bb8warning = '注意在真实实验中，烧瓶浸没在油浴锅中的体积约为2/3'
             this.activeIndex = 'default'
           }
+          else if (hoverid.split('-')[0] == "trash_can") str = "移除";
           else if(pickid.split('-')[0] == 'thermometer' && hoverid.split('-')[0]=='round_flask_cone.pot.heater.stand1'){
             str = '插入';
             this.bb8warning = '真实实验中温度计不要触及到油浴锅底部并用铁夹悬挂'
@@ -1091,6 +1304,11 @@ export default {
           else if(pickid.split('-')[0]=='liquid_transferor' && hoverid.split('-')[0] == 'round_flask_c8h14o2s2')str = '准备倒入';
           else if(pickid.split('-')[0]=='needle_full' && hoverid.split('-')[0]=='tri_flask')str = '放入';      
           else if(pickid.split('-')[0]=='tweezer' && hoverid.split('-')[0]=='magneton')str = '夹起';                
+          break;
+        case 4:
+          var str = '拼接';
+          if (hoverid.split('-')[0] == "trash_can") str = "移除";
+          else if(pickid.split('-')[0]=='scissors' && hoverid.split('-')[0]=='needle_full_glue') str='剪开';
           break;
         default:
           break;
@@ -1149,8 +1367,11 @@ export default {
         else if(this.e1 == 2){
           this.checkPickHover2(pickid,hoverid);
         }
-        else if(this.e1==3){
+        else if(this.e1 == 3){
           this.checkPickHover3(pickid,hoverid);
+        }
+        else if(this.e1 == 4){
+          this.checkPickHover4(pickid,hoverid);
         }
         this.advancedTexture.removeControl(this.controller);
         this.controller = null;
@@ -1174,7 +1395,6 @@ export default {
 
     getMergedPosition(id){
       var mesh = this.scene.getMeshByID(id)
-      console.log(mesh)
       mesh.updateFacetData();
       if(id.split('-')[0] == 'stand1'){
         var po = mesh.getFacetPosition(mesh.facetNb-1);
@@ -1317,35 +1537,50 @@ export default {
       this.weightprops[name][0] = [null, null, 0, 0, 0, 0];
       this.$refs.weight[this.weightlist.indexOf(name)].setAllNumber(null, null, 0, 0, 0, 0, name);
     },
-
+    toStep1(){
+      this.e1 = 1;
+      this.addModel('stand',null,new BABYLON.Vector3(1,0,0),new BABYLON.Vector3(0,Math.PI,0),null,null);
+    },
     toStep2(){
-        this.e1 = 2;
-        this.step = ["", "搭建反应装置", ""];
-        this.show1 = true;
-        this.show2 = true;
-        this.show3 = true;
-        for(var i=0;i<this.scene.meshes.length;i++){
-          if(this.scene.meshes[i].id!='ground' && this.scene.meshes[i].id!='__root__' && this.scene.meshes[i].id.split('-')[0]!='trash_can'){
-            this.scene.removeMesh(this.scene.meshes[i]);
-          }
-        }
-        this.addRoundFlaskCone();
+      this.e1 = 2;
+      this.step = ["", "搭建反应装置", "",""];
+      this.show1 = true;
+      this.show2 = true;
+      this.show3 = true;
+      this.addRoundFlaskCone();
     },
     toStep3(){
       this.e1 = 3;
-      this.step = ["", "", "聚合物合成"];
+      this.step = ["", "", "聚合物合成",""];
+      this.show1 = true;
+      this.show2 = true;
+      this.show3 = true;
+      this.addRoundFlaskConePotHeaterStand1();
+      
+    },
+    removeSceneMesh(){
+      var list = [];
+      for(var i=0;i<this.scene.meshes.length;i++){
+        if(this.scene.meshes[i].id!="foutain" && this.scene.meshes[i].id!="ground" && this.scene.meshes[i].id.split('-')[0]!="trash_can")
+        {
+          list.push(this.scene.meshes[i].id)
+        }
+      }
+      for(var i=0;i<list.length;i++){
+        var mesh = this.scene.getMeshByID(list[i]);
+        this.scene.removeMesh(mesh)
+      }
+    },
+    toStep4(){
+      this.e1 = 4;
+      this.step = ["", "", "","鉴定表征"];
       this.btn_nextstep = true;
       this.btn_post = false;
       this.show1 = true;
       this.show2 = true;
       this.show3 = true;
       this.show4 = true;
-      for(var i=0;i<this.scene.meshes.length;i++){
-        if(this.scene.meshes[i].id!='ground' && this.scene.meshes[i].id!='__root__' && this.scene.meshes[i].id.split('-')[0]!='trash_can'){
-          this.scene.removeMesh(this.scene.meshes[i]);
-        }
-      }
-      this.addRound_flask_conePotHeaterStand1();
+      this.addNeedleFullTriFlask()
     },
     showErrorText(){
       switch (this.e1) {
@@ -1358,40 +1593,62 @@ export default {
         case 3:
           this.errortext = this.step3.getAllNodeErrorText();
           break;
+        case 4:
+          this.errortext = this.step4.getAllNodeErrorText();
         default:
           break;
       }
       this.dialog_result = true;
     },
     nextStep() {
-      for(var i=0;i<this.scene.meshes.length;i++){
-            if(this.scene.meshes[i].id!='ground'  &&  this.scene.meshes[i].id!='__root__' && this.scene.meshes[i].id.split('-')[0]!='trash_can'){
-              this.scene.removeMesh(this.scene.meshes[i]);
-            }
-          }
+      if(this.particleSystem!=null)this.particleSystem.reset();
+      this.activeIndex = 'default';
+      this.removeSceneMesh();
+      this.weightlist=[]
+      this.weightprops={}
+      this.measuring_cylinderlist=[]
+      this.measuring_cylinderprops={}
+      this.needlelist=[]
+      this.needleprops={}
+      this.standlist=[]
+      this.heater_temp_switch=false
+      this.heater_temp_value=0
+      this.heater_stir_switch=false
+      this.heater_stir_value=0
+      this.hasClock=false
+      this.liquid_transferorlist=[]
+      this.liquid_transferorprops={}
+      this.now_score = 0;
+      this.e1++;
       switch (this.e1) {
-        case 1:
-          this.step = ["", "搭建反应装置", ""];
+        case 2:
+          this.step = ["", "搭建反应装置", "",""];
           this.show1 = true;
           this.show2 = true;
           this.show3 = true;
           this.addRoundFlaskCone();
           break;
-        case 2:
-          this.step = ["", "", "聚合物合成"];
+        case 3:
+          this.step = ["", "", "聚合物合成",""];
+          this.show1 = true;
+          this.show2 = true;
+          this.show3 = true;
+          this.addRoundFlaskConePotHeaterStand1();
+          break;
+        case 4:         
+          this.step =["", "","","鉴定表征"];
           this.btn_nextstep = true;
           this.btn_post = false;
           this.show1 = true;
           this.show2 = true;
           this.show3 = true;
           this.show4 = true;
-          this.errortext = this.step2.getAllNodeErrorText();
-          this.addRound_flask_conePotHeaterStand1();
+          this.addNeedleFullTriFlask();
           break;
         default:
           break;
       }
-      this.e1++;
+      
     },
 
     refreshComponents(){
@@ -1452,9 +1709,6 @@ export default {
       groundMaterial.specularColor = BABYLON.Color3.Black();
       ground.material = groundMaterial;
       this.addTrash_can();
-      //this.addBB8();
-      this.addModel('stand',null,new BABYLON.Vector3(1,0,0),new BABYLON.Vector3(0,Math.PI,0),null,null);
-      //this.addStand();
     },
     startTouchBtn(){
       this.timeout1 = setTimeout(() => {
@@ -1508,13 +1762,29 @@ export default {
       this.liquid_transferor_btn_color = 'green';
       this.liquid_transferorprops[id][3] = ''; 
       this.refreshComponents()
+    },
+    post(){
+      this.post_dialog = true;
+      this.post_score = Math.floor((this.step1.getNowScore()+this.step2.getNowScore()+this.step3.getNowScore()+this.step4.getNowScore())*100/(this.step1.all_score+this.step2.all_score+this.step3.all_score+this.step4.all_score))
+      if(this.post_score==100){
+        this.$notify({
+          title: '解锁成就!',
+          message: '满分实验！',
+          type: 'success',
+          duration: 0
+        });
+      }
+      this.post_errortext1 = this.step1.getAllNodeErrorText();
+      this.post_errortext2 = this.step2.getAllNodeErrorText();
+      this.post_errortext3 = this.step3.getAllNodeErrorText();
+      this.post_errortext4 = this.step4.getAllNodeErrorText();
     }
   },
 
   mounted() {
     this.init();
     setTimeout(() => {
-      this.toStep3() 
+      this.toStep1() 
     }, 1000);
     setTimeout(() => {
       this.engine.resize();

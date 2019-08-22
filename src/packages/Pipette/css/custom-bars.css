@@ -283,6 +283,15 @@ input[type='checkbox']:checked~.flexy-column .bar[aria-valuenow] .tooltip:before
 .tooltip.white:after {
   border-bottom-color: #fefefe;
 }
+/* line 286, ../scss/custom-bars.scss */
+.bar[aria-valuenow='0'] .tooltip {
+  left: 0%;
+}
+
+/* line 289, ../scss/custom-bars.scss */
+.bar[aria-valuenow='0'] .tooltip:before {
+  content: "0μl";
+}
 
 /* line 286, ../scss/custom-bars.scss */
 .bar[aria-valuenow='1'] .tooltip {

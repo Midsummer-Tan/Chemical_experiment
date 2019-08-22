@@ -49,21 +49,21 @@ class Node1 extends Node {
         return 0;
     }
 }
-// class Node2 extends Node {
-//     errortext = '未将温度计插入至油浴锅中';
-//     successtext = '将温度计插入油浴锅';
-//     getScore() {
-//         for (var i = 0; i < this.scene.meshes.length; i++) {
-//             if (this.scene.meshes[i].id.split('-').includes('thermometer.round_flask_cone.pot.heater.stand1')) {
-//                 this.setScore(1);
-//                 return 1;
-//             }
-//         }
-//         return 0;
-//     }
-// }
+class Node2 extends Node {
+    errortext = '未固定装置';
+    successtext = '固定';
+    getScore() {
+        for (var i = 0; i < this.scene.meshes.length; i++) {
+            if (this.scene.meshes[i].id.split('-').includes('round_flask_cone.pot.heater.stand1')) {
+                this.setScore(1);
+                return 1;
+            }
+        }
+        return 0;
+    }
+}
 class Step2 {
-    all_score = 2; //总分
+    all_score = 3; //总分
     current_score = 0; //目前得分
     node_array = [];
     scene = null;
@@ -121,11 +121,12 @@ class Step2 {
 }
 var node0 = new Node0(0);
 var node1 = new Node1(1);
-//var node2 = new Node2(2);
+var node2 = new Node2(2);
 const step2Function = {
     data(){
         return {
-            step2:new Step2([node0, node1])
+            step2:new Step2([node0, node1,node2]),
+            step2node2:0
         }
     },
     methods:{
@@ -137,7 +138,7 @@ const step2Function = {
                 this.scene.getMeshByID(pickid).removeBehavior(this.scene.getMeshByID(pickid).behaviors[0]);
                 this.scene.getMeshByID(hoverid).removeBehavior(this.scene.getMeshByID(hoverid).behaviors[0]);
                 var po = this.getMergedPosition(hoverid)
-                this.scene.getMeshByID(pickid).position = new BABYLON.Vector3(-po[0]-0.22 , po[1]+0.02, po[2] + 0.25);
+                this.scene.getMeshByID(pickid).position = new BABYLON.Vector3(po[0]+0.22 , po[1]+0.02, po[2] + 0.25);
                 var mesh = BABYLON.Mesh.MergeMeshes(
                     [this.scene.getMeshByID(hoverid), this.scene.getMeshByID(pickid)],
                     true,
@@ -157,7 +158,7 @@ const step2Function = {
                 this.scene.getMeshByID(pickid).removeBehavior(this.scene.getMeshByID(pickid).behaviors[0]);
                 this.scene.getMeshByID(hoverid).removeBehavior(this.scene.getMeshByID(hoverid).behaviors[0]);
                 var po = this.getMergedPosition(hoverid);
-                this.scene.getMeshByID(pickid).position = new BABYLON.Vector3(po[0]-0.05, po[1] - 0.06, po[2] - 0.18);
+                this.scene.getMeshByID(pickid).position = new BABYLON.Vector3(po[0]+0.13, po[1] - 0.06, po[2] - 0.18);
                 var mesh = BABYLON.Mesh.MergeMeshes(
                     [this.scene.getMeshByID(hoverid), this.scene.getMeshByID(pickid)],
                     true,
@@ -179,7 +180,7 @@ const step2Function = {
                 var mesh2 = this.scene.getMeshByID(pickid);
                 mesh2.removeBehavior(mesh2.behaviors[0])
                 var po = this.getMergedPosition(hoverid)
-                mesh2.position = this.changeMergedPosition(pickid, -po[0] - 0.22, po[1] + 0.02, po[2]-0.02);
+                mesh2.position = this.changeMergedPosition(pickid, -po[0] - 0.18, po[1] + 0.02, po[2]-0.05);
                 var mesh = BABYLON.Mesh.MergeMeshes(
                     [mesh1, mesh2],
                     true,
@@ -284,24 +285,17 @@ const step2Function = {
                 });
                 this.now_score = this.step2.getNowScore();
             }
-            // {
-            //     if(this.step2.unlockTools()){
-            //        var message = '<strong><span style="color:black;">' +
-            //         '恭喜你！得到了新工具' +
-            //         "</span>&emsp;" +
-            //         '<span style="color: teal">' +
-            //         '待熔融的硫辛酸烧瓶装置' +
-            //         '</span></strong>';
-            //         this.show4 = true;
-            //         setTimeout(() => {
-            //             this.$message({
-            //                 dangerouslyUseHTMLString: true,
-            //                 message: message,
-            //                 type: "warning"
-            //             });
-            //         }, 500); 
-            //     }
-            // }
+            if (this.step2node2 == 0 && this.step2.node_array[2].score == 1) {
+                this.step2node2 = 1;
+                setTimeout(() => {
+                    this.$notify({
+                        title: 'Completed',
+                        message: '你已经完成了第二步——搭建反应装置',
+                        type: 'warning'
+                    });
+                }, 1000);
+                
+            }
         },
     }
 }

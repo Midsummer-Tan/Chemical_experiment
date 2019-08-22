@@ -180,20 +180,9 @@ class Node9 extends Node {
 class Step3 {
     all_score = 10; //总分
     current_score = 0; //目前得分
-    node_array = [];
     scene = null;
-    needleprops = {};
-    heater_temp_value=0;
-    temp_stable=0;
-    step3node1=1;
-    heater_temp_switch=false;
-    heater_stir_switch=false;
-    step3node3=0;
-    step3node4 = 0;
-    heater_stir_value = 0;
-    liquid_transferorprops = {};
-    correct_use_transferor=[0,0];
-    step3node8 =0;
+    node_array = [];
+    hasNeedleFullTriFlask=0;
     constructor(allnode) {
         for (var i = 0; i < allnode.length; i++) {
             this.node_array.push(allnode[i]);
@@ -234,6 +223,13 @@ class Step3 {
         return sum1;
     }
     unlockTools() {
+        for (var i = 0; i < this.scene.meshes.length; i++) {
+            if (this.hasNeedleFullTriFlask== 0 && this.scene.meshes[i].id.split('-').includes('needle_full.tri_flask') || this.scene.meshes[i].id.split('-').includes('needle_full.cap.tri_flask')) {
+                this.hasNeedleFullTriFlask = 1;
+                return 1;
+            } 
+        }
+        return 0;
     }
 }
 var node0 = new Node0(0);
@@ -250,6 +246,8 @@ const step3Function = {
     data(){
         return {
             step3:new Step3([node0,node1,node2,node3,node4,node5,node6,node7,node8,node9]),
+            step3node9:0,
+            
             step3node1:0,
             step3node3:0,
             step3node4:0,
@@ -268,7 +266,7 @@ const step3Function = {
                 }
                 var po = this.getMergedPosition(pickid);
                 this.scene.removeMesh(this.scene.getMeshByID(pickid));
-                this.addModel('tweezer', null, new BABYLON.Vector3(-po[0], po[1], po[2]), null, ['PointerDragBehavior'], null);
+                this.addModel('tweezer', new BABYLON.Vector3(0.03, 0.03, 0.03), new BABYLON.Vector3(-po[0], po[1], po[2]), null, ['PointerDragBehavior'], null);
                 var id1 = this.addMagneton();
                 this.scene.getMeshByID(id1).position = new BABYLON.Vector3(-0.5, 0.12, -0.33);
                 var CoR_At = new BABYLON.Vector3(-0.5, 0.12, -0.3);
@@ -421,7 +419,7 @@ const step3Function = {
                 );
             } else if (pickid.split('-')[0] == 'tweezer' && hoverid.split('-')[0] == 'magneton') {
                 var po = this.scene.getMeshByID(pickid).position;
-                this.scene.getMeshByID(hoverid).position = new BABYLON.Vector3(-po.x-0.08,po.y,po.z);
+                this.scene.getMeshByID(hoverid).position = new BABYLON.Vector3(-po.x,po.y,po.z);
                 var mesh = BABYLON.Mesh.MergeMeshes(
                     [this.scene.getMeshByID(pickid), this.scene.getMeshByID(hoverid)],
                     true,
@@ -437,7 +435,7 @@ const step3Function = {
                         dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
                     })
                 );
-            }else if (hoverid.split('-')[0] == "trash_can") {
+            } else if (hoverid.split('-')[0] == "trash_can") {
                 this.scene.removeMesh(this.scene.getMeshByID(pickid));
                 if (this.weightlist.indexOf(pickid) != -1) {
                     var index = this.weightlist.indexOf(pickid);
@@ -501,6 +499,32 @@ const step3Function = {
                     type: "success"
                 });
                 this.now_score = this.step3.getNowScore();
+            }
+            if (this.step3node9 == 0 && this.step3.node_array[9].score == 1) {
+                this.step3node9 = 1;
+                setTimeout(() => {
+                    this.$notify({
+                        title: 'Completed',
+                        message: '你已经完成了第三步——聚合物合成',
+                        type: 'warning'
+                    });
+                }, 1000);
+            }
+            if(this.step3.unlockTools()){
+                var message = '<strong><span style="color:black;">' +
+                    '恭喜你！得到了新工具' +
+                    "</span>&emsp;" +
+                    '<span style="color: teal">' +
+                    '装有胶黏生成物针管的锥形瓶' +
+                    '</span></strong>';
+                this.show4 = true;
+                setTimeout(() => {
+                    this.$message({
+                        dangerouslyUseHTMLString: true,
+                        message: message,
+                        type: "warning"
+                    });
+                }, 500);
             }
         },
     }

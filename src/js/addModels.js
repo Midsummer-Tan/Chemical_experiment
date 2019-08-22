@@ -62,7 +62,7 @@ const addModels = {
                 this.addModel('stand', null, null, new BABYLON.Vector3(0, Math.PI, 0), ['PointerDragBehavior'], null);
         },
         addPot() {
-            this.addModel('pot', null, null, null, ['PointerDragBehavior'], null);
+            this.addModel('pot', new BABYLON.Vector3(0.03,0.03,0.03), null, null, ['PointerDragBehavior'], null);
         },
         addDropper() {
             this.addModel('dropper', new BABYLON.Vector3(1.5, 1.5, 1.5), new BABYLON.Vector3(0, 0.2, 0), new BABYLON.Vector3(0, 0, Math.PI), ['PointerDragBehavior'], null);
@@ -318,6 +318,16 @@ const addModels = {
             }, 800);
 
         },
+        addNeedleFull(){
+            this.addModel('needle_full', null, new BABYLON.Vector3(0, 0 + 0.15, 0), new BABYLON.Vector3(0, 0, Math.PI), ['PointerDragBehavior'], 'needle_full_glue');
+            setTimeout(() => {
+                var mesh = this.scene.getMeshByID('needle_full_glue');
+                mesh.id = this.addName(mesh.id);
+                this.needlelist.push(mesh.id)
+                this.needleprops[mesh.id] = [1, ''];
+                this.activeIndex = mesh.id;
+            }, 500); 
+        },
         addPaperPowderBrown() {
             this.addModel('paper', null, new BABYLON.Vector3(0, 0.05, 0), null, null, "paper");
             this.addModel(
@@ -357,7 +367,7 @@ const addModels = {
             return magneton.id;
         },
         //添加铁架台 温度计 油浴装置 烧瓶合装置
-        addRound_flask_conePotHeaterStand1(){
+        addRoundFlaskConePotHeaterStand1(){
             this.activeIndex = 'heater'
             var x = 0.5;
             var z = -0.3;
@@ -366,15 +376,44 @@ const addModels = {
             this.addModel('heater_knob', null, new BABYLON.Vector3(0.14+x, 0.05, -0.27+z), null, null, null);
             this.addModel('heater_switch', null, new BABYLON.Vector3(0.197+x, 0.05, -0.25+z), new BABYLON.Vector3(0, Math.PI, 0), null, 'heater_switch2');
             this.addModel('heater_knob', null, new BABYLON.Vector3(0.03+x, 0.05, -0.27+z), null, null, null);
-            this.addModel('pot', null, new BABYLON.Vector3(0+x, 0.1, 0+z), null, null, null);
+            this.addModel('pot', new BABYLON.Vector3(0.03, 0.03, 0.03), new BABYLON.Vector3(0-x, 0.1, 0 + z), null,null, null);
             this.addModel('round_flask', null, new BABYLON.Vector3(0+x, 0.1, 0+z), null, null, 'round_flaskdel');
             this.addModel("cone",new BABYLON.Vector3(0.03, 0.03, 0.03),new BABYLON.Vector3(0+x, 0.18, 0+z),null,null,'conedel');
             this.addModel('stand1_movable', null, new BABYLON.Vector3(0.07+x, 0.3, 0+z), new BABYLON.Vector3(0, Math.PI, 0), null, null);
             this.addModel('stand1_pole', null, new BABYLON.Vector3(0.17+x, 0, 0+z), new BABYLON.Vector3(0, Math.PI, 0), null,null);
-            //this.addModel('thermometer', new BABYLON.Vector3(0.03, 0.03, 0.03), new BABYLON.Vector3(-(0.12+x), 0.12, 0+z), null, null, null);
         },
         addTweezer(){
-            this.addModel('tweezer', null, new BABYLON.Vector3(0,0.2,0), null, ['PointerDragBehavior'], null);
+            this.addModel('tweezer', new BABYLON.Vector3(0.03, 0.03, 0.03), new BABYLON.Vector3(0, 0.2, 0), null, ['PointerDragBehavior'], null);
+        },
+        addScissors(){
+            this.addModel('scissors', new BABYLON.Vector3(0.03, 0.03, 0.03),null, new BABYLON.Vector3(0, Math.PI / 2, 0), ['PointerDragBehavior'], null); 
+        },
+        addNeedleFullTriFlask(){
+            this.addModel('needle_full', null, new BABYLON.Vector3(0,0.01,0), new BABYLON.Vector3(0, 0,-Math.PI/6), null, 'needle_full');
+            this.addModel('tri_flask', null, null, null,null, 'tri_flask');
+            setTimeout(() => {
+                var mesh = BABYLON.Mesh.MergeMeshes(
+                    [this.scene.getMeshByID('needle_full'), this.scene.getMeshByID('tri_flask')],
+                    true,
+                    true,
+                    undefined,
+                    false,
+                    true
+                );
+                mesh.id = 'needle_full.tri_flask';
+                mesh.id = this.addName(mesh.id);
+                mesh.addBehavior(
+                    new BABYLON.PointerDragBehavior({
+                        dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+                    })
+                );
+            }, 500);
+        },
+        addYellowCylinder(){
+            this.addModel('yellow_cylinder', new BABYLON.Vector3(0.08, 0.08, 0.08), null, new BABYLON.Vector3(0, Math.PI / 2, 0), ['PointerDragBehavior'], null);
+        },
+        addGlassPad(){
+            this.addModel('glass_pad', new BABYLON.Vector3(0.01, 0.01, 0.01), null, null, ['PointerDragBehavior'], null);
         },
         addClock(){
             if(!this.hasClock){
