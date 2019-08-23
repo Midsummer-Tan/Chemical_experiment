@@ -64,14 +64,12 @@ class Node2 extends Node {
 }
 class Step2 {
     all_score = 3; //总分
-    current_score = 0; //目前得分
     node_array = [];
     scene = null;
     weightprops = {};
     measuring_cylinderprops = {};
     needleprops = {};
     stand_movable_high = 0;
-    hasThermometerRound_flask_conePotHeaterStand1 = 0;
     constructor(allnode) {
         for (var i = 0; i < allnode.length; i++) {
             this.node_array.push(allnode[i]);
@@ -110,13 +108,6 @@ class Step2 {
         return sum1;
     }
     unlockTools() {
-        for (var i = 0; i < this.scene.meshes.length; i++) {
-            if (this.hasThermometerRound_flask_conePotHeaterStand1 == 0 && this.scene.meshes[i].id.split('-')[0] == 'thermometer.round_flask_cone.pot.heater.stand1') {
-                this.hasThermometerRound_flask_conePotHeaterStand1 = 1;
-                return 1;
-            }
-        }
-        return 0;
     }
 }
 var node0 = new Node0(0);
@@ -297,6 +288,21 @@ const step2Function = {
                 
             }
         },
+        clearAllScore2() {
+            for (var i = 0; i < this.step2.node_array.length; i++) {
+                this.step2.node_array[i].score = 0;
+            }
+            this.step2node2 = 0;
+        },
+        getScoreString2() {
+            var str = "";
+            for (var i = 0; i < this.step2.node_array.length; i++) {
+                str += this.step2.node_array[i].score;
+                str += ',';
+            }
+            str = str.substr(0, str.length - 1);
+            return str;
+        }
     }
 }
 export default step2Function

@@ -7,23 +7,23 @@ export default new Router({
   routes: [
     {
       path: "/",
-      component: () => import("./views/Login")
+      component:resolve => require(["./views/Login"],resolve)
+    },
+    {
+      path: "/adminchemistry",
+      component: resolve => require(["./views/admin"], resolve)
     },
     {
       path: "index",
-      component: () => import("./views/Index"),
+      component: resolve => require(["./views/Index"], resolve),
       children: [
         {
           path: "/collection",
-          component: () => import("./components/Collection")
-        },
-        {
-          path: "/experiment/1",
-          component: () => import("./components/Experiment")
+          component: resolve => require(["./components/Collection"], resolve)
         },
         {
           path: "/experiment_b/:id",
-          component: () => import("./components/ExperimentB")
+          component: resolve => require(["./components/ExperimentB"], resolve)
         }
       ]
     }

@@ -1,5 +1,7 @@
 module.exports = {
   // 基本路径
   publicPath: './',
-  // 输出文件目录
+  devServer: {
+    proxy: 'http://chemistryapi.3d1.top/api'
+  }
 }

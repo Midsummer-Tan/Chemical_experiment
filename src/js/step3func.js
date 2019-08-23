@@ -224,7 +224,7 @@ class Step3 {
     }
     unlockTools() {
         for (var i = 0; i < this.scene.meshes.length; i++) {
-            if (this.hasNeedleFullTriFlask== 0 && this.scene.meshes[i].id.split('-').includes('needle_full.tri_flask') || this.scene.meshes[i].id.split('-').includes('needle_full.cap.tri_flask')) {
+            if (this.hasNeedleFullTriFlask== 0 && (this.scene.meshes[i].id.split('-').includes('needle_full.tri_flask') || this.scene.meshes[i].id.split('-').includes('needle_full.cap.tri_flask'))) {
                 this.hasNeedleFullTriFlask = 1;
                 return 1;
             } 
@@ -307,16 +307,19 @@ const step3Function = {
                 var po = this.getMergedPosition(pickid);
                 this.scene.removeMesh(this.scene.getMeshByID(pickid))
                 this.addModel('needle', new BABYLON.Vector3(1.2, 1.2, 1.2), new BABYLON.Vector3(po[0], po[1] + 0.3, po[2]), new BABYLON.Vector3(0, 0, Math.PI), ['PointerDragBehavior'], 'needle');
-                setTimeout(() => {
-                    var mesh = this.scene.getMeshByID('needle');
-                    mesh.id = this.addName(mesh.id);
-                    this.needlelist[this.needlelist.indexOf(pickid)] = mesh.id;
-                    this.needleprops[mesh.id] = this.needleprops[pickid]
-                    this.needleprops[mesh.id][0] = 0;
-                    delete(this.needleprops[pickid])
-                    this.activeIndex = mesh.id;
-                    this.refreshComponents()
-                }, 500);
+                var timer = setInterval(() => {
+                    if (this.scene.getMeshByID('needle')!=undefined){
+                        var mesh = this.scene.getMeshByID('needle');
+                        mesh.id = this.addName(mesh.id);
+                        this.needlelist[this.needlelist.indexOf(pickid)] = mesh.id;
+                        this.needleprops[mesh.id] = this.needleprops[pickid]
+                        this.needleprops[mesh.id][0] = 0;
+                        delete(this.needleprops[pickid])
+                        this.activeIndex = mesh.id;
+                        this.refreshComponents()
+                        window.clearInterval(timer);
+                    }
+                }, 100);
             } else if (pickid.split('-')[0] == 'needle' && hoverid.split('-')[0] == 'round_flask_c8h14o2s2') {
                 this.step3node8 = 1;
                 var po = this.getMergedPosition(pickid);
@@ -325,16 +328,19 @@ const step3Function = {
                 var po1 = this.getMergedPosition(hoverid);
                 this.scene.removeMesh(this.scene.getMeshByID(hoverid))
                 this.addModel('round_flask', null, new BABYLON.Vector3(-po1[0]+0.03, po1[1]-0.05, po1[2]-0.08), null, null, null);                
-                setTimeout(() => {
-                    var mesh = this.scene.getMeshByID('needle_full');
-                    mesh.id = this.addName(mesh.id);
-                    this.needlelist[this.needlelist.indexOf(pickid)] = mesh.id;
-                    this.needleprops[mesh.id] = this.needleprops[pickid]
-                    this.needleprops[mesh.id][0] = 1;
-                    delete(this.needleprops[pickid])
-                    this.activeIndex = mesh.id;
-                    this.refreshComponents()
-                }, 500);
+                var timer = setInterval(() => {
+                    if (this.scene.getMeshByID('needle_full')!=undefined){
+                        var mesh = this.scene.getMeshByID('needle_full');
+                        mesh.id = this.addName(mesh.id);
+                        this.needlelist[this.needlelist.indexOf(pickid)] = mesh.id;
+                        this.needleprops[mesh.id] = this.needleprops[pickid]
+                        this.needleprops[mesh.id][0] = 1;
+                        delete(this.needleprops[pickid])
+                        this.activeIndex = mesh.id;
+                        this.refreshComponents()
+                        window.clearInterval(timer);
+                    }
+                }, 100);
             } else if (pickid.split('-')[0] == 'film' && hoverid.split('-')[0] == 'tri_flask_full_fecl3') {
                 var po = this.getMergedPosition(hoverid);
                 this.scene.getMeshByID(pickid).position = new BABYLON.Vector3(-po[0], po[1], po[2] - 0.002);
@@ -527,6 +533,28 @@ const step3Function = {
                 }, 500);
             }
         },
+        clearAllScore3() {
+            this.step3.hasNeedleFullTriFlask = 0;
+            for (var i = 0; i < this.step3.node_array.length; i++) {
+                this.step3.node_array[i].score = 0;
+            }
+            this.step2node2 = 0;
+            this.step3node9=0;
+            this.step3node1=0;
+            this.step3node3=0;
+            this.step3node4=0;
+            this.step3node8=0;
+            this.dib_in_flask_5min=0;
+        },
+        getScoreString3() {
+            var str = "";
+            for (var i = 0; i < this.step3.node_array.length; i++) {
+                str += this.step3.node_array[i].score;
+                str += ',';
+            }
+            str = str.substr(0, str.length - 1);
+            return str;
+        }
     }
 }
 export default step3Function

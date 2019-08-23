@@ -61,6 +61,24 @@
             >
               <v-icon>fa fa-chevron-right</v-icon>
             </v-btn>
+
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on }">
+                <v-btn
+                  style="float:right"
+                  fab
+                  dark
+                  small
+                  v-on="on"
+                  color="pink"
+                  @click="reset_dialog=true"
+                >
+                  <v-icon>fa fa-fast-backward</v-icon>
+                </v-btn>
+              </template>
+              <span>重置整个实验</span>
+            </v-tooltip>
+
             <div style="padding:5px;">
               <span style="color:teal"><strong>本步骤总得分:&nbsp;<span style="color:orange">{{all_score}}</span><br>
                   当前得分:&nbsp;<span style="color:orange">{{now_score}}</span></strong></span>
@@ -720,6 +738,29 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <!--对话框-->
+    <v-dialog
+      v-model="reset_dialog"
+      max-width="290"
+    >
+      <v-card>
+        <v-card-title class="headline">重置实验</v-card-title>
+        <v-card-text><span style="color:orange">你确定重置整个实验吗？重置后你目前的进度将清空。</span></v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="green darken-1"
+            flat="flat"
+            @click="reset_dialog  = false"
+          >取消</v-btn>
+          <v-btn
+            color="green darken-1"
+            flat="flat"
+            @click="reset_dialog = false;toStep1()"
+          >确定</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
 
   </v-container>
 </template>
@@ -748,8 +789,6 @@ export default {
       canvas: null,
       engine: null,
       scene: null,
-      stand: null,
-      weight: null,
       hl: null,
       hoveredObj: null,
       pickingObj: null,
@@ -817,6 +856,7 @@ export default {
       post_errortext2:[],
       post_errortext3:[],
       post_errortext4:[],
+      reset_dialog:false,
     };
   },
   components:{
@@ -934,39 +974,48 @@ export default {
               this.addModel('glass_pad', new BABYLON.Vector3(0.01, 0.01, 0.01), new BABYLON.Vector3(-po[0]+0.03,po[1]+0.02,po[2]), null,null, 'g2');
               this.addModel('glass_pad', new BABYLON.Vector3(0.01, 0.01, 0.01), new BABYLON.Vector3(-po[0]-0.1-0.04,po[1],po[2]), null,null, 'g3');
               this.addModel('glass_pad', new BABYLON.Vector3(0.01, 0.01, 0.01), new BABYLON.Vector3(-po[0]-0.1-0.04,po[1]+0.02,po[2]), null,null, 'g4'); 
-              setTimeout(() => {
-                var mesh1 = BABYLON.Mesh.MergeMeshes(
+              var timer = setInterval(() => {
+                if(this.scene.getMeshByID('yc1')!=undefined &&
+                this.scene.getMeshByID('yc2')!=undefined &&
+                this.scene.getMeshByID('g1')!=undefined &&
+                this.scene.getMeshByID('g2')!=undefined &&
+                this.scene.getMeshByID('g3')!=undefined &&
+                this.scene.getMeshByID('g4')!=undefined
+                ){
+                  console.log('kkkk')
+                  var mesh1 = BABYLON.Mesh.MergeMeshes(
                     [this.scene.getMeshByID('yc1'), this.scene.getMeshByID('g1'),this.scene.getMeshByID('g2')],
                     true,
                     true,
                     undefined,
                     false,
                     true
-                );
-                mesh1.id = 'glass_pad_yellow_cylinder_break';
-                mesh1.id = this.addName(mesh1.id);
-                mesh1.addBehavior(
-                    new BABYLON.PointerDragBehavior({
-                        dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
-                    })
-                );
-
-                var mesh2 = BABYLON.Mesh.MergeMeshes(
-                    [this.scene.getMeshByID('yc2'), this.scene.getMeshByID('g3'),this.scene.getMeshByID('g4')],
-                    true,
-                    true,
-                    undefined,
-                    false,
-                    true
-                );
-                mesh2.id = 'glass_pad_yellow_cylinder_break';
-                mesh2.id = this.addName(mesh2.id);
-                mesh2.addBehavior(
-                    new BABYLON.PointerDragBehavior({
-                        dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
-                    })
-                );
-              }, 500);
+                  );
+                  mesh1.id = 'glass_pad_yellow_cylinder_break';
+                  mesh1.id = this.addName(mesh1.id);
+                  mesh1.addBehavior(
+                      new BABYLON.PointerDragBehavior({
+                          dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+                      })
+                  );
+                  var mesh2 = BABYLON.Mesh.MergeMeshes(
+                      [this.scene.getMeshByID('yc2'), this.scene.getMeshByID('g3'),this.scene.getMeshByID('g4')],
+                      true,
+                      true,
+                      undefined,
+                      false,
+                      true
+                  );
+                  mesh2.id = 'glass_pad_yellow_cylinder_break';
+                  mesh2.id = this.addName(mesh2.id);
+                  mesh2.addBehavior(
+                      new BABYLON.PointerDragBehavior({
+                          dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+                      })
+                  );
+                  window.clearInterval(timer);
+                }
+              }, 100);
             }
           }
         }
@@ -1176,37 +1225,43 @@ export default {
           this.scene.removeMesh(this.scene.getMeshByID(hoverid));
           this.addCap(po[0],po[1]+0.02,po[2]);
           this.addModel('needle',new BABYLON.Vector3(1.2,1.2,1.2),new BABYLON.Vector3(po[0],po[1]+0.2,po[2]),new BABYLON.Vector3(0,0,Math.PI),null,'needle');
-          setTimeout(() => {
-            var mesh = this.scene.getMeshByID('needle');
-            mesh.id = this.addName(mesh.id);
-            this.needlelist[this.needlelist.indexOf(hoverid)] = mesh.id;
-            this.needleprops[mesh.id] = this.needleprops[hoverid]
-            delete(this.needleprops[hoverid])
-            this.activeIndex = mesh.id
-            mesh.addBehavior(
-              new BABYLON.PointerDragBehavior({
-                dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
-              })
-            );
-          }, 500); 
+          var timer = setInterval(() => {
+            if(this.scene.getMeshByID('needle')!=undefined){
+              var mesh = this.scene.getMeshByID('needle');
+              mesh.id = this.addName(mesh.id);
+              this.needlelist[this.needlelist.indexOf(hoverid)] = mesh.id;
+              this.needleprops[mesh.id] = this.needleprops[hoverid]
+              delete(this.needleprops[hoverid])
+              this.activeIndex = mesh.id
+              mesh.addBehavior(
+                new BABYLON.PointerDragBehavior({
+                  dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+                })
+              );
+              window.clearInterval(timer);
+            }
+          }, 100); 
         }else if(hoverid.split('-')[0]=='needle_full.cap'){
           var po = this.getMergedPosition(hoverid);
           this.scene.removeMesh(this.scene.getMeshByID(hoverid));
           this.addCap(po[0],po[1]-0.13,po[2]);
           this.addModel('needle_full',new BABYLON.Vector3(1.2,1,1.2),new BABYLON.Vector3(po[0],po[1],po[2]),new BABYLON.Vector3(0,0,Math.PI),null,'needle_full');
-          setTimeout(() => {
-            var mesh = this.scene.getMeshByID('needle_full');
-            mesh.id = this.addName(mesh.id);
-            this.needlelist[this.needlelist.indexOf(hoverid)] = mesh.id;
-            this.needleprops[mesh.id] = this.needleprops[hoverid]
-            delete(this.needleprops[hoverid])
-            this.activeIndex = mesh.id
-            mesh.addBehavior(
-              new BABYLON.PointerDragBehavior({
-                dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
-              })
-            );
-          }, 500); 
+          var timer = setInterval(() => {
+            if(this.scene.getMeshByID('needle_full')!=undefined){
+              var mesh = this.scene.getMeshByID('needle_full');
+              mesh.id = this.addName(mesh.id);
+              this.needlelist[this.needlelist.indexOf(hoverid)] = mesh.id;
+              this.needleprops[mesh.id] = this.needleprops[hoverid]
+              delete(this.needleprops[hoverid])
+              this.activeIndex = mesh.id
+              mesh.addBehavior(
+                new BABYLON.PointerDragBehavior({
+                  dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+                })
+              );
+              window.clearInterval(timer);
+            }
+          }, 100); 
         }else if(hoverid.split('-')[0]=='needle_full.tri_flask'){
           this.addNeedleFull();
         }
@@ -1412,27 +1467,24 @@ export default {
       var index = this.standlist.indexOf(array);
       this.standlist.splice(index,1);
       this.activeIndex = 'default'
-      setTimeout(() => {
-          var mesh = BABYLON.Mesh.MergeMeshes(
-              [
-                  this.scene.getMeshByID(array[0]),
-                  this.scene.getMeshByID(array[1])
-              ],
-              true,
-              true,
-              undefined,
-              false,
-              true
-          );
-          mesh.addBehavior(
-              new BABYLON.PointerDragBehavior({
-                  dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
-              })
-          );
-          mesh.id = 'stand1';
-          mesh.id = this.addName(mesh.id);
-          
-      }, 500);
+      var mesh = BABYLON.Mesh.MergeMeshes(
+          [
+              this.scene.getMeshByID(array[0]),
+              this.scene.getMeshByID(array[1])
+          ],
+          true,
+          true,
+          undefined,
+          false,
+          true
+      );
+      mesh.addBehavior(
+          new BABYLON.PointerDragBehavior({
+              dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+          })
+      );
+      mesh.id = 'stand1';
+      mesh.id = this.addName(mesh.id);
     },
     addModel(name, scaling, position, rotation, behavior,id) {
       /*
@@ -1538,7 +1590,45 @@ export default {
       this.$refs.weight[this.weightlist.indexOf(name)].setAllNumber(null, null, 0, 0, 0, 0, name);
     },
     toStep1(){
+      this.axios.request(
+        {
+          url:'/experiment/',
+          method:'PUT',
+          data:{
+            username:sessionStorage.getItem('username'),
+            step1score:"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+            step2score:"0,0,0",
+            step3score:"0,0,0,0,0,0,0,0,0,0",
+            step4score:"0,0",
+            nowstep:1
+          }
+        }
+      )
       this.e1 = 1;
+      this.step = ["反应前期准备", "", "",""];
+      this.show1 = true;
+      this.show2 = true;
+      this.show3 = true;
+      this.now_score = 0;
+      this.btn_nextstep = false;
+      this.btn_post = true;
+      if(this.particleSystem!=null)this.particleSystem.reset();
+      this.activeIndex = 'default';
+      this.weightlist=[]
+      this.weightprops={}
+      this.measuring_cylinderlist=[]
+      this.measuring_cylinderprops={}
+      this.needlelist=[]
+      this.needleprops={}
+      this.standlist=[]
+      this.hasClock=false
+      this.liquid_transferorlist=[]
+      this.liquid_transferorprops={}
+      this.clearAllScore1();
+      this.clearAllScore2();
+      this.clearAllScore3();
+      this.clearAllScore4();
+      this.removeSceneMesh();
       this.addModel('stand',null,new BABYLON.Vector3(1,0,0),new BABYLON.Vector3(0,Math.PI,0),null,null);
     },
     toStep2(){
@@ -1547,6 +1637,23 @@ export default {
       this.show1 = true;
       this.show2 = true;
       this.show3 = true;
+      this.now_score = 0;
+      this.btn_nextstep = false;
+      this.btn_post = true;
+      if(this.particleSystem!=null)this.particleSystem.reset();
+      this.activeIndex = 'default';
+      this.weightlist=[]
+      this.weightprops={}
+      this.measuring_cylinderlist=[]
+      this.measuring_cylinderprops={}
+      this.needlelist=[]
+      this.needleprops={}
+      this.standlist=[]
+      this.hasClock=false
+      this.liquid_transferorlist=[]
+      this.liquid_transferorprops={}
+      this.now_score = 0;
+      this.removeSceneMesh();
       this.addRoundFlaskCone();
     },
     toStep3(){
@@ -1555,8 +1662,59 @@ export default {
       this.show1 = true;
       this.show2 = true;
       this.show3 = true;
+      this.btn_nextstep = false;
+      this.btn_post = true;
+      this.now_score = 0;
+      if(this.particleSystem!=null)this.particleSystem.reset();
+      this.activeIndex = 'default';
+      this.weightlist=[]
+      this.weightprops={}
+      this.measuring_cylinderlist=[]
+      this.measuring_cylinderprops={}
+      this.needlelist=[]
+      this.needleprops={}
+      this.standlist=[]
+      this.heater_temp_switch=false
+      this.heater_temp_value=0
+      this.heater_stir_switch=false
+      this.heater_stir_value=0
+      this.hasClock=false
+      this.liquid_transferorlist=[]
+      this.liquid_transferorprops={}
+      this.now_score = 0;
+      this.removeSceneMesh();
       this.addRoundFlaskConePotHeaterStand1();
-      
+    },
+    toStep4(){
+      this.e1 = 4;
+      this.step = ["", "", "","鉴定表征"];
+      this.btn_nextstep = true;
+      this.btn_post = false;
+      this.show1 = true;
+      this.show2 = true;
+      this.show3 = true;
+      this.show4 = true;
+      this.now_score = 0;
+      if(this.particleSystem!=null)this.particleSystem.reset();
+      this.activeIndex = 'default';
+      this.removeSceneMesh();
+      this.weightlist=[]
+      this.weightprops={}
+      this.measuring_cylinderlist=[]
+      this.measuring_cylinderprops={}
+      this.needlelist=[]
+      this.needleprops={}
+      this.standlist=[]
+      this.heater_temp_switch=false
+      this.heater_temp_value=0
+      this.heater_stir_switch=false
+      this.heater_stir_value=0
+      this.hasClock=false
+      this.liquid_transferorlist=[]
+      this.liquid_transferorprops={}
+      this.now_score = 0;
+      this.removeSceneMesh();
+      this.addNeedleFullTriFlask()
     },
     removeSceneMesh(){
       var list = [];
@@ -1570,17 +1728,6 @@ export default {
         var mesh = this.scene.getMeshByID(list[i]);
         this.scene.removeMesh(mesh)
       }
-    },
-    toStep4(){
-      this.e1 = 4;
-      this.step = ["", "", "","鉴定表征"];
-      this.btn_nextstep = true;
-      this.btn_post = false;
-      this.show1 = true;
-      this.show2 = true;
-      this.show3 = true;
-      this.show4 = true;
-      this.addNeedleFullTriFlask()
     },
     showErrorText(){
       switch (this.e1) {
@@ -1601,49 +1748,34 @@ export default {
       this.dialog_result = true;
     },
     nextStep() {
-      if(this.particleSystem!=null)this.particleSystem.reset();
-      this.activeIndex = 'default';
-      this.removeSceneMesh();
-      this.weightlist=[]
-      this.weightprops={}
-      this.measuring_cylinderlist=[]
-      this.measuring_cylinderprops={}
-      this.needlelist=[]
-      this.needleprops={}
-      this.standlist=[]
-      this.heater_temp_switch=false
-      this.heater_temp_value=0
-      this.heater_stir_switch=false
-      this.heater_stir_value=0
-      this.hasClock=false
-      this.liquid_transferorlist=[]
-      this.liquid_transferorprops={}
-      this.now_score = 0;
       this.e1++;
+      var step1score = this.getScoreString1();
+      var step2score = this.getScoreString2();
+      var step3score = this.getScoreString3();
+      var step4score = this.getScoreString4();
+      this.axios.request(
+        {
+          url:'/experiment/',
+          method:'PUT',
+          data:{
+            username:sessionStorage.getItem('username'),
+            step1score:step1score,
+            step2score:step2score,
+            step3score:step3score,
+            step4score:step4score,
+            nowstep:this.e1
+          }
+        }
+      )
       switch (this.e1) {
         case 2:
-          this.step = ["", "搭建反应装置", "",""];
-          this.show1 = true;
-          this.show2 = true;
-          this.show3 = true;
-          this.addRoundFlaskCone();
+          this.toStep2();
           break;
         case 3:
-          this.step = ["", "", "聚合物合成",""];
-          this.show1 = true;
-          this.show2 = true;
-          this.show3 = true;
-          this.addRoundFlaskConePotHeaterStand1();
+          this.toStep3();
           break;
         case 4:         
-          this.step =["", "","","鉴定表征"];
-          this.btn_nextstep = true;
-          this.btn_post = false;
-          this.show1 = true;
-          this.show2 = true;
-          this.show3 = true;
-          this.show4 = true;
-          this.addNeedleFullTriFlask();
+          this.toStep4();
           break;
         default:
           break;
@@ -1764,6 +1896,29 @@ export default {
       this.refreshComponents()
     },
     post(){
+      this.axios.request({
+      url:'/experiment/',
+      method:'GET'}).then(data=>{
+        data=data.data[0];
+        var step1score = data.step1score;
+        var step2score = data.step2score;
+        var step3score = data.step3score;
+        var step4score = this.getScoreString4();
+        this.axios.request(
+          {
+            url:'/experiment/',
+            method:'PUT',
+            data:{
+              username:sessionStorage.getItem('username'),
+              step1score:step1score,
+              step2score:step2score,
+              step3score:step3score,
+              step4score:step4score,
+              nowstep:4
+            }
+          }
+        )
+      })
       this.post_dialog = true;
       this.post_score = Math.floor((this.step1.getNowScore()+this.step2.getNowScore()+this.step3.getNowScore()+this.step4.getNowScore())*100/(this.step1.all_score+this.step2.all_score+this.step3.all_score+this.step4.all_score))
       if(this.post_score==100){
@@ -1783,9 +1938,44 @@ export default {
 
   mounted() {
     this.init();
-    setTimeout(() => {
-      this.toStep1() 
-    }, 1000);
+    this.axios.request({
+      url:'/experiment/',
+      method:'GET'}).then(data=>{
+        data=data.data[0];
+        var nowstep = data.nowstep;
+        var step1score = data.step1score;
+        var step2score = data.step2score;
+        var step3score = data.step3score;
+        var step4score = data.step4score;
+        for(var i=0;i<step1score.split(',').length;i++){
+          this.step1.node_array[i].score=parseInt(step1score.split(',')[i]);
+        }
+        for(var i=0;i<step2score.split(',').length;i++){
+          this.step2.node_array[i].score=parseInt(step2score.split(',')[i]);
+        }
+        for(var i=0;i<step3score.split(',').length;i++){
+          this.step3.node_array[i].score=parseInt(step3score.split(',')[i]);
+        }
+        for(var i=0;i<step4score.split(',').length;i++){
+          this.step4.node_array[i].score=parseInt(step4score.split(',')[i]);
+        }
+        switch (nowstep) {
+          case 1:
+            this.toStep1()
+            break;
+          case 2:
+            this.toStep2()
+            break;
+          case 3:
+            this.toStep3()
+            break;
+          case 4:
+            this.toStep4()
+            break;
+          default:
+            break;
+        }
+    })
     setTimeout(() => {
       this.engine.resize();
     }, 500);

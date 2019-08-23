@@ -81,6 +81,16 @@ export default {
         var response=response.data
         if(response['check']==1){
           this.$message({message:'登陆成功',type:'success'});
+          sessionStorage.setItem("username",this.username);
+          this.axios.request(
+            {
+              url:'/experiment/',
+              method:'POST',
+              data:{
+                username:this.username,
+              }
+            }
+          )
           this.$router.push({ path: "/collection" });
         }
         else 
@@ -88,10 +98,9 @@ export default {
       })
     }
   },
-  mounted() {
-    this.$router.push({ path: "/collection" });
-  },
-
+  mounted(){
+    if(sessionStorage.getItem("username")!=null)this.$router.push({ path: "/collection" });
+  }
 };
 </script>
 

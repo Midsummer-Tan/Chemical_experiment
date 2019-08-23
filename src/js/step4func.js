@@ -45,7 +45,6 @@ class Node1 extends Node {
 }
 class Step4 {
     all_score = 2; //总分
-    current_score = 0; //目前得分
     node_array = [];
     constructor(allnode) {
         for (var i = 0; i < allnode.length; i++) {
@@ -80,7 +79,6 @@ class Step4 {
         for (var i = 0; i < this.node_array.length; i++) {
             sum1 += this.node_array[i].score;
         }
-        this.current_score = sum1;
         return sum1;
     }
     unlockTools() {
@@ -118,25 +116,29 @@ const step4Function = {
                 this.addModel('glass_pad', new BABYLON.Vector3(0.01, 0.01, 0.01), new BABYLON.Vector3(po.x + 0.05, po.y, po.z), null, null, 'g2');
                 this.addModel('glass_pad', new BABYLON.Vector3(0.01, 0.01, 0.01), new BABYLON.Vector3(po.x - 0.07, po.y + 0.02, po.z), null, null, 'g3');
                 this.addModel('glass_pad', new BABYLON.Vector3(0.01, 0.01, 0.01), new BABYLON.Vector3(po.x + 0.05, po.y + 0.02, po.z), null, null, 'g4');
-                setTimeout(() => {
-                    var mesh = BABYLON.Mesh.MergeMeshes(
-                        [this.scene.getMeshByID('g1'), this.scene.getMeshByID('g2'),
-                            this.scene.getMeshByID('g3'), this.scene.getMeshByID('g4'), this.scene.getMeshByID(hoverid)
-                        ],
-                        true,
-                        true,
-                        undefined,
-                        false,
-                        true
-                    );
-                    mesh.id = 'glass_pad_yellow_cylinder';
-                    mesh.id = this.addName(mesh.id);
-                    mesh.addBehavior(
-                        new BABYLON.PointerDragBehavior({
-                            dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
-                        })
-                    );
-                }, 500);
+                var timer = setInterval(() => {
+                    if (this.scene.getMeshByID('g1')!=undefined && this.scene.getMeshByID('g2')!=undefined &&
+                        this.scene.getMeshByID('g3')!=undefined && this.scene.getMeshByID('g4')!=undefined){
+                            var mesh = BABYLON.Mesh.MergeMeshes(
+                                [this.scene.getMeshByID('g1'), this.scene.getMeshByID('g2'),
+                                    this.scene.getMeshByID('g3'), this.scene.getMeshByID('g4'), this.scene.getMeshByID(hoverid)
+                                ],
+                                true,
+                                true,
+                                undefined,
+                                false,
+                                true
+                            );
+                            mesh.id = 'glass_pad_yellow_cylinder';
+                            mesh.id = this.addName(mesh.id);
+                            mesh.addBehavior(
+                                new BABYLON.PointerDragBehavior({
+                                    dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+                                })
+                            );
+                            window.clearInterval(timer);
+                        } 
+                }, 100);
             } else if (hoverid.split('-')[0] == "trash_can") {
                 this.scene.removeMesh(this.scene.getMeshByID(pickid));
                 if (this.weightlist.indexOf(pickid) != -1) {
@@ -210,6 +212,21 @@ const step4Function = {
                 }, 1000);
             }
         },
+        clearAllScore4() {
+            for (var i = 0; i < this.step4.node_array.length; i++) {
+                this.step4.node_array[i].score = 0;
+            }
+            this.step4node1 = 0;
+        },
+        getScoreString4() {
+            var str = "";
+            for (var i = 0; i < this.step4.node_array.length; i++) {
+                str += this.step4.node_array[i].score;
+                str += ',';
+            }
+            str = str.substr(0, str.length - 1);
+            return str;
+        }
     }
 }
 export default step4Function
