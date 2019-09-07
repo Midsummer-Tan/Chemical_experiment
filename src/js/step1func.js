@@ -8,15 +8,23 @@ class Node {
     measuring_cylinderprops = {};
     needleprops = {};
     shaked = 0;
+    step1node2 = 0;
+    step1node6 = 0;
+    step1node9 = 0;
+    step1node14 = 0;
     constructor(id) {
         this.id = id;
     }
-    setNodeNeed(scene, weightprops, measuring_cylinderprops, needleprops, shaked) {
+    setNodeNeed(scene, weightprops, measuring_cylinderprops, needleprops, shaked, step1node2, step1node6, step1node9, step1node14) {
         this.scene = scene;
         this.weightprops = weightprops;
         this.measuring_cylinderprops = measuring_cylinderprops;
         this.needleprops = needleprops;
         this.shaked = shaked;
+        this.step1node2 = step1node2;
+        this.step1node6 = step1node6;
+        this.step1node9 = step1node9;
+        this.step1node14 = step1node14;
     } //node节点需要ExperimengtB中的哪些东西
     setScore(score) {
         this.score = score;
@@ -72,11 +80,9 @@ class Node2 extends Node {
     errortext = '硫辛酸药品未到2.000g';
     successtext = '量取2.000g硫辛酸药品';
     getScore() {
-        for (var i = 0; i < this.scene.meshes.length; i++) {
-            if (this.scene.meshes[i].id.split('-').includes('weight.paper_cone') && this.weightprops[this.scene.meshes[i].id][0].toString() == [null, null, 2, 0, 0, 0].toString()) {
-                this.setScore(1);
-                return 1;
-            }
+        if (this.step1node2 == 1) {
+            this.setScore(1);
+            return 1;
         }
         return 0;
     }
@@ -156,12 +162,9 @@ class Node6 extends Node {
     errortext = '六水合三氯化铁质量未达到0.100g';
     successtext = '六水合三氯化铁质量达到0.100g';
     getScore() {
-        var number = 0;
-        for (var i = 0; i < this.scene.meshes.length; i++) {
-            if (this.scene.meshes[i].id.split('-').includes('weight.paper_powder_brown') && this.weightprops[this.scene.meshes[i].id][0] == [null, null, 0, 1, 0, 0].toString()) {
-                this.setScore(1);
-                return 1;
-            }
+        if (this.step1node6==1) {
+            this.setScore(1);
+            return 1;
         }
         return 0;
     }
@@ -204,11 +207,9 @@ class Node9 extends Node {
     errortext = "丙酮液面未达到量筒的14ml刻度处";
     successtext = "量取14ml丙酮";
     getScore() {
-        for (var i = 0; i < this.scene.meshes.length; i++) {
-            if (this.scene.meshes[i].id.split('-').includes('measuring_cylinder_full') && this.measuring_cylinderprops[this.scene.meshes[i].id] != undefined && this.measuring_cylinderprops[this.scene.meshes[i].id][0] == 14) {
-                this.setScore(1);
-                return 1;
-            }
+        if (this.step1node9 == 1) {
+            this.setScore(1);
+            return 1;
         }
         return 0;
     }
@@ -279,11 +280,9 @@ class Node14 extends Node {
     errortext = 'DIB试剂并未达到针管的0.45ml刻度处';
     successtext = '量取0.45mlDIB试剂';
     getScore() {
-        for (var i = 0; i < this.scene.meshes.length; i++) {
-            if (this.scene.meshes[i].id.split('-').includes('needle_full') && this.needleprops[this.scene.meshes[i].id]!=undefined && this.needleprops[this.scene.meshes[i].id][0] == 0.45) {
-                this.setScore(1);
-                return 1;
-            }
+        if (this.step1node14 == 1) {
+            this.setScore(1);
+            return 1;
         }
         return 0;
     }
@@ -318,10 +317,10 @@ class Step1 {
         }
 
     }
-    setStepNeed(scene, weightprops, measuring_cylinderprops, needleprops, shaked) {
+    setStepNeed(scene, weightprops, measuring_cylinderprops, needleprops, shaked, step1node2, step1node6, step1node9, step1node14) {
         this.scene = scene;
         for (var i = 0; i < this.node_array.length; i++) {
-            this.node_array[i].setNodeNeed(scene, weightprops, measuring_cylinderprops, needleprops, shaked);
+            this.node_array[i].setNodeNeed(scene, weightprops, measuring_cylinderprops, needleprops, shaked, step1node2, step1node6, step1node9, step1node14);
         }
     }
     checkAllNodeScore() {
@@ -386,7 +385,11 @@ const step1Function = {
         return {
             step1:new Step1([node0, node1, node2, node3, node4, node5, node6, 
                 node7, node8, node9, node10, node11, node12, node13, node14, node15]),
-            step1node15:0
+            step1node2: 0,
+            step1node6: 0,
+            step1node9: 0,
+            step1node14:0,
+            step1node15:0,
         }
     },
     methods:{
@@ -936,7 +939,9 @@ const step1Function = {
                 this.refreshComponents()
             } 
             else if (pickid.split('-')[0] == 'measuring_cylinder_full' && hoverid.split('-')[0] == 'tri_flask_powder_brown') {
-                //this.scene.getMeshByID().position;
+                if (this.measuring_cylinderprops[pickid][0] == 14){
+                    this.step1node9 = 1;
+                }
                 var poarray = this.getMergedPosition(hoverid);
                 var x = poarray[0];
                 var y = poarray[1];
@@ -1033,33 +1038,12 @@ const step1Function = {
                 );
             } 
             else if (pickid.split('-')[0] == 'needle' && hoverid.split('-')[0] == 'dib') {
-                this.needleprops[pickid][0] += 0.05;
-                this.needleprops[pickid][0] = Math.floor(this.needleprops[pickid][0] * 100) / 100;
-                var po = this.getMergedPosition(pickid);
-                this.addModel('needle_full', new BABYLON.Vector3(1.5,1.5,1.5), new BABYLON.Vector3(po[0], po[1] + 0.2, po[2]), new BABYLON.Vector3(0, 0, Math.PI), null, 'needle_full');
-                this.scene.removeMesh(this.scene.getMeshByID(pickid));
-                var timer = setInterval(() => {
-                    if (this.scene.getMeshByID('needle_full')!=undefined){
-                        var mesh = this.scene.getMeshByID('needle_full')
-                        mesh.id = this.addName(mesh.id)
-                        this.activeIndex = mesh.id;
-                        this.needlelist[this.needlelist.indexOf(pickid)] = mesh.id
-                        this.needleprops[mesh.id] = this.needleprops[pickid]
-                        delete(this.needleprops[pickid])
-                        mesh.addBehavior(
-                            new BABYLON.PointerDragBehavior({
-                                dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
-                            })
-                        );
-                        this.refreshComponents();
-                        window.clearInterval(timer);
-                    }
-                }, 100);
-            } 
-            else if (pickid.split('-')[0] == 'needle_full' && hoverid.split('-')[0] == 'dib') {
-                this.needleprops[pickid][0] += 0.05;
-                this.needleprops[pickid][0] = Math.floor(this.needleprops[pickid][0] * 100) / 100;
-                this.refreshComponents()
+                this.needle_value_btn_up = false;
+                this.needle_value_btn_down = false;
+                this.needle_value_btn_post = false;
+                this.needleprops[pickid][1] = hoverid;
+                this.scene.getMeshByID(pickid).removeBehavior(this.scene.getMeshByID(pickid).behaviors[0]);
+                this.scene.getMeshByID(hoverid).removeBehavior(this.scene.getMeshByID(hoverid).behaviors[0]);
             } 
             else if (pickid.split('-')[0] == 'cap' && hoverid.split('-')[0] == 'needle_full') {
                 var mesh1 = this.scene.getMeshByID(pickid);
@@ -1126,7 +1110,7 @@ const step1Function = {
         },
         getScore_step1() {
             this.all_score = this.step1.all_score;
-            this.step1.setStepNeed(this.scene, this.weightprops, this.measuring_cylinderprops, this.needleprops, this.shaked);
+            this.step1.setStepNeed(this.scene, this.weightprops, this.measuring_cylinderprops, this.needleprops, this.shaked, this.step1node2, this.step1node6, this.step1node9, this.step1node14);
             var node = this.step1.checkAllNodeScore();
             if (node != null) {
                 this.$message({

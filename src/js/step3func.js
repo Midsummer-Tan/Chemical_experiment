@@ -265,7 +265,8 @@ const step3Function = {
                 this.scene.getMeshByID(id1).position = new BABYLON.Vector3(-0.5, 0.12, -0.32);
                 this.scene.getMeshByID(id1).id = 'magneton_stiring'
                 this.scene.getMeshByID('magneton_stiring').id = this.addName('magneton_stiring')
-            }else if (pickid.split('-')[0] == 'magneton.tweezer' && hoverid.split('-')[0] == 'round_flaskdel') {
+            }
+            else if (pickid.split('-')[0] == 'magneton.tweezer' && hoverid.split('-')[0] == 'round_flaskdel') {
                 var po = this.getMergedPosition(pickid);
                 this.scene.removeMesh(this.scene.getMeshByID(pickid));
                 this.addModel('tweezer', new BABYLON.Vector3(0.03, 0.03, 0.03), new BABYLON.Vector3(-po[0], po[1], po[2]), null, ['PointerDragBehavior'], null);
@@ -345,7 +346,8 @@ const step3Function = {
                         window.clearInterval(timer);
                     }
                 }, 100);
-            } else if (pickid.split('-')[0] == 'needle' && hoverid.split('-')[0] == 'round_flask_c8h14o2s2') {
+            } 
+            else if (pickid.split('-')[0] == 'needle' && hoverid.split('-')[0] == 'round_flask_c8h14o2s2') {
                 this.step3node8 = 1;
                 var po = this.getMergedPosition(pickid);
                 this.scene.removeMesh(this.scene.getMeshByID(pickid))
@@ -366,7 +368,8 @@ const step3Function = {
                         window.clearInterval(timer);
                     }
                 }, 100);
-            } else if (pickid.split('-')[0] == 'film' && hoverid.split('-')[0] == 'tri_flask_full_fecl3') {
+            }
+            else if (pickid.split('-')[0] == 'film' && hoverid.split('-')[0] == 'tri_flask_full_fecl3') {
                 var po = this.getMergedPosition(hoverid);
                 this.scene.getMeshByID(pickid).position = new BABYLON.Vector3(-po[0], po[1], po[2] - 0.002);
                 var mesh = BABYLON.Mesh.MergeMeshes(
@@ -384,19 +387,22 @@ const step3Function = {
                         dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
                     })
                 );
-            } else if (pickid.split('-')[0] == 'liquid_transferor' && hoverid.split('-')[0] == 'tri_flask_full_fecl3' && this.liquid_transferorprops[pickid][0] == 0) {
+            } 
+            else if (pickid.split('-')[0] == 'liquid_transferor' && hoverid.split('-')[0] == 'tri_flask_full_fecl3' && this.liquid_transferorprops[pickid][0] == 0) {
                 this.liquid_transferorprops[pickid][2] = false; //按钮取消禁用
                 this.liquid_transferorprops[pickid][3] = hoverid;
                 this.refreshComponents();
                 this.scene.getMeshByID(pickid).removeBehavior(this.scene.getMeshByID(pickid).behaviors[0]);
                 this.scene.getMeshByID(hoverid).removeBehavior(this.scene.getMeshByID(hoverid).behaviors[0]);
                 //不挤出液体就不让这两个物体移动
-            } else if (pickid.split('-')[0] == 'liquid_transferor' && hoverid.split('-')[0] == 'round_flask_c8h14o2s2' && this.liquid_transferorprops[pickid][0] != 0) {
+            } 
+            else if (pickid.split('-')[0] == 'liquid_transferor' && hoverid.split('-')[0] == 'round_flask_c8h14o2s2' && this.liquid_transferorprops[pickid][0] != 0) {
                 this.liquid_transferorprops[pickid][2] = false;
                 this.liquid_transferorprops[pickid][3] = hoverid;
                 this.refreshComponents();
                 this.scene.getMeshByID(pickid).removeBehavior(this.scene.getMeshByID(pickid).behaviors[0]);
-            } else if (pickid.split('-')[0] == 'needle_full' && hoverid.split('-')[0] == 'tri_flask') {
+            } 
+            else if (pickid.split('-')[0] == 'needle_full' && hoverid.split('-')[0] == 'tri_flask') {
                 var po = this.scene.getMeshByID(hoverid).position;
                 this.scene.getMeshByID(pickid).position = new BABYLON.Vector3(-po.x-0.07, po.y + 0.01, po.z);
                 this.scene.getMeshByID(pickid).rotation.z += 5 * Math.PI / 6;
@@ -422,7 +428,8 @@ const step3Function = {
                         dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
                     })
                 );
-            } else if (pickid.split('-')[0] == 'tweezer' && hoverid.split('-')[0] == 'magneton') {
+            } 
+            else if (pickid.split('-')[0] == 'tweezer' && hoverid.split('-')[0] == 'magneton') {
                 var po = this.scene.getMeshByID(pickid).position;
                 this.scene.getMeshByID(hoverid).position = new BABYLON.Vector3(-po.x,po.y,po.z);
                 var mesh = BABYLON.Mesh.MergeMeshes(
@@ -440,7 +447,8 @@ const step3Function = {
                         dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
                     })
                 );
-            } else if (hoverid.split('-')[0] == "trash_can") {
+            } 
+            else if (hoverid.split('-')[0] == "trash_can") {
                 this.scene.removeMesh(this.scene.getMeshByID(pickid));
                 if (this.weightlist.indexOf(pickid) != -1) {
                     var index = this.weightlist.indexOf(pickid);

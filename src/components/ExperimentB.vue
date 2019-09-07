@@ -124,8 +124,19 @@
 
         <template v-for="i in needlelist" >
           <el-tab-pane :label="'针管('+i+')'"  :name="i" :key="i" v-if="refresh">
-            <div style="height:150px;">
+            <div style="height:130px;">
               <my-needle-progress :valueNow="needleprops[i][0]" ></my-needle-progress >
+            </div>
+            <div style="height:50px;text-align:center">
+              <v-btn class="mx-2" fab color='pink'>
+                <v-icon dark @click="changeNeedleValue(i,'up')" :disabled='needle_value_btn_up'>fa fa-chevron-up</v-icon>
+              </v-btn>
+              &emsp;
+              <v-btn class="mx-2" fab color='pink'>
+                <v-icon dark @click="changeNeedleValue(i,'down')" :disabled='needle_value_btn_down'>fa fa-chevron-down</v-icon>
+              </v-btn>
+              &emsp;
+              <v-btn color='pink' large @click="finishChangeNeedleValue(i)" :disabled='needle_value_btn_post'>确定</v-btn>
             </div>
           </el-tab-pane>
         </template>
@@ -860,6 +871,9 @@ export default {
       post_errortext3:[],
       post_errortext4:[],
       reset_dialog:false,
+      needle_value_btn_up:true,
+      needle_value_btn_down:true,
+      needle_value_btn_post:true
     };
   },
   components:{
@@ -1303,6 +1317,16 @@ export default {
         else if(hoverid.split('-')[0]=='needle_full.tri_flask'){
           this.addNeedleFull();
         }
+        else if(hoverid.split('-')[0]=='weight.paper_cone'){
+          if(this.weightprops[hoverid][0].toString() == [null, null, 2, 0, 0, 0].toString()){
+            this.step1node2 = 1;
+          }
+        }
+        else if(hoverid.split('-')[0]=='weight.paper_powder_brown'){
+          if(this.weightprops[hoverid][0].toString() == [null, null, 0, 1, 0, 0].toString()){
+            this.step1node6 = 1;
+          }
+        }
         for (var i = 0; i < array1.length; i++) {
           switch (array1[i]) {
             case "weight":
@@ -1367,12 +1391,13 @@ export default {
       switch (this.e1) {
         case 1:
           var str = "拼接";
-          if (hoverid.split('-')[0] == "weight" || hoverid.split('-')[0].indexOf("weight") != -1 || (pickid.split('-')[0] =='pot' && hoverid.split('-')[0] == 'heater')) str = "放置";
+          if (hoverid.split('-')[0] == "weight" || (pickid.split('-')[0] =='pot' && hoverid.split('-')[0] == 'heater')) str = "放置";
           else if (hoverid.split('-')[0] == "trash_can") str = "移除";
           else if (pickid.split('-')[0] == "spoon") str = "拾取";
-          else if ( hoverid.split('-')[0] == "round_flask" ||hoverid.split('-')[0] == 'tri_flask'|| pickid.split('-')[0] == 'dropper_full' 
-          || hoverid.split('-')[0] == 'tri_flask_powder_brown') str = "倒入";
-          else if((pickid.split('-')[0] == 'dropper' && hoverid.split('-')[0] == 'c3h6o') || hoverid.split('-')[0]=='dib') str = '吸取';
+          else if ( hoverid.split('-')[0] == "round_flask" ||hoverid.split('-')[0] == 'tri_flask') str = "倒入";
+          else if(pickid.split('-')[0] == 'dropper_full' && hoverid.split('-')[0] == 'tri_flask_powder_brown')str = '挤入';
+          else if(pickid.split('-')[0] == 'dropper' && hoverid.split('-')[0] == 'c3h6o') str = '吸入';
+          else if(pickid.split('-')[0] == 'needle' && hoverid.split('-')[0] == 'dib')str = '准备吸入';
           else if( pickid.split('-')[0] =='film') str = '封口';
           break;
         case 2:
@@ -1611,6 +1636,85 @@ export default {
       for(var i=0;i<this.weightlist.length;i++){
         var re = this.weightprops[this.weightlist[i]][0]
         this.$refs.weight[i].setAllNumber(re[0],re[1],re[2],re[3],re[4],re[5],this.weightlist[i]);
+      }
+    },
+
+    changeNeedleValue(id,str){
+      switch (str) {
+        case "up":
+          if(this.needleprops[id][0]==0){
+            this.needleprops[id][0]+=0.05;
+            this.needleprops[id][0] = Math.floor(this.needleprops[id][0] * 100) / 100;
+            var po = this.getMergedPosition(id);
+            this.scene.removeMesh(this.scene.getMeshByID(id));
+            this.addModel('needle_full', new BABYLON.Vector3(1.5,1.5,1.5), new BABYLON.Vector3(po[0], po[1] + 0.2, po[2]), new BABYLON.Vector3(0, 0, Math.PI), null, 'needle_full');
+            var timer = setInterval(() => {
+              if (this.scene.getMeshByID('needle_full')!=undefined){
+                var mesh = this.scene.getMeshByID('needle_full')
+                mesh.id = this.addName(mesh.id)
+                this.activeIndex = mesh.id;
+                this.needlelist[this.needlelist.indexOf(id)] = mesh.id
+                this.needleprops[mesh.id] = this.needleprops[id]
+                delete(this.needleprops[id])
+                window.clearInterval(timer);
+              }
+            }, 100);
+          }
+          else if(this.needleprops[id][0]==1)return;
+          else {
+            this.needleprops[id][0]+=0.05;
+            this.needleprops[id][0] = Math.floor(this.needleprops[id][0] * 100) / 100;
+          }
+          this.refreshComponents();
+          break;
+        default:
+          if(this.needleprops[id][0]==0)return;
+          else if(this.needleprops[id][0]==0.05){
+            this.needleprops[id][0]-=0.05;
+            this.needleprops[id][0] = Math.floor(this.needleprops[id][0] * 100) / 100;
+            var po = this.getMergedPosition(id);
+            this.scene.removeMesh(this.scene.getMeshByID(id));
+            this.addModel('needle', new BABYLON.Vector3(1.5,1.5,1.5), new BABYLON.Vector3(po[0], po[1] + 0.2, po[2]), new BABYLON.Vector3(0, 0, Math.PI), null, 'needle');
+            var timer = setInterval(() => {
+              if (this.scene.getMeshByID('needle')!=undefined){
+                var mesh = this.scene.getMeshByID('needle')
+                mesh.id = this.addName(mesh.id)
+                this.activeIndex = mesh.id;
+                this.needlelist[this.needlelist.indexOf(id)] = mesh.id
+                this.needleprops[mesh.id] = this.needleprops[id]
+                delete(this.needleprops[id])
+                window.clearInterval(timer);
+              }
+            }, 100);
+          }
+          else {
+            this.needleprops[id][0]-=0.05;
+            this.needleprops[id][0] = Math.floor(this.needleprops[id][0] * 100) / 100;
+          }
+          this.refreshComponents();
+          break;
+      }
+    },
+
+    finishChangeNeedleValue(id){
+      this.needle_value_btn_up = true;
+      this.needle_value_btn_down = true;
+      this.needle_value_btn_post = true;
+      if(this.needleprops[id][0]==0.45){
+        this.step1node14 = 1;
+      }
+      this.scene.getMeshByID(id).addBehavior(
+          new BABYLON.PointerDragBehavior({
+              dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+          })
+      );
+      if(this.needleprops[id][1]!=''){
+        this.scene.getMeshByID(this.needleprops[id][1]).addBehavior(
+            new BABYLON.PointerDragBehavior({
+                dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+            })
+        );
+        this.needleprops[id][1]='';
       }
     },
 
