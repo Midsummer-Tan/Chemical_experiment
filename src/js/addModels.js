@@ -13,7 +13,7 @@ const addModels = {
             this.addModel('round_flask', null, null, null, ['PointerDragBehavior'], null);
         },
         addWeight() {
-            this.addModel('weight', null, null, new BABYLON.Vector3(0, Math.PI, 0), null, 'weight');
+            this.addModel('weight', new BABYLON.Vector3(0.03,0.03,0.03), null, new BABYLON.Vector3(0, Math.PI, 0), null, 'weight');
             var timer = setInterval(() => {
                 if (this.scene.getMeshByID('weight')!=undefined){
                     var mesh = this.scene.getMeshByID('weight');
@@ -52,7 +52,12 @@ const addModels = {
         },
         addStand() {
             if(this.e1==2){
-                this.addModel('stand1_movable', null, new BABYLON.Vector3(0.9, 0.6, 0), new BABYLON.Vector3(0, Math.PI, 0), null, 'stand1_movable');
+                for (var i = 0; i < this.scene.meshes.length; i++) {
+                    if (this.scene.meshes[i].id.split('-').includes('stand1_movable') || this.scene.meshes[i].id.split('-').includes('stand1_pole')) {
+                        return;
+                    }
+                }
+                this.addModel('stand1_movable', new BABYLON.Vector3(0.02,0.02,0.02), new BABYLON.Vector3(-0.98, 0.4, 0), new BABYLON.Vector3(0, Math.PI/2, 0), null, 'stand1_movable');
                 this.addModel('stand1_pole', null, new BABYLON.Vector3(1, 0, 0), new BABYLON.Vector3(0, Math.PI, 0), null, 'stand1_pole');
                 var timer = setInterval(() => {
                     if (this.scene.getMeshByID('stand1_movable') != undefined && this.scene.getMeshByID('stand1_pole')!=undefined){
@@ -73,7 +78,7 @@ const addModels = {
             this.addModel('pot', new BABYLON.Vector3(0.03,0.03,0.03), null, null, ['PointerDragBehavior'], null);
         },
         addDropper() {
-            this.addModel('dropper', new BABYLON.Vector3(1.5, 1.5, 1.5), new BABYLON.Vector3(0, 0.2, 0), new BABYLON.Vector3(0, 0, Math.PI), ['PointerDragBehavior'], null);
+            this.addModel('dropper', new BABYLON.Vector3(2, 2, 2), new BABYLON.Vector3(0, 0.2, 0), new BABYLON.Vector3(0, 0, Math.PI), ['PointerDragBehavior'], null);
         },
         addHeater() {
             this.addModel('heater', null, null, new BABYLON.Vector3(0, Math.PI, 0),null, 'heater');
@@ -108,7 +113,7 @@ const addModels = {
            
         },
         addLiquidTransferor() {
-            this.addModel('liquid_transferor', null, new BABYLON.Vector3(0, 0.2, 0), new BABYLON.Vector3(0, 0, Math.PI), ['PointerDragBehavior'], 'liquid_transferor');
+            this.addModel('liquid_transferor', new BABYLON.Vector3(0.03,0.03,0.03), new BABYLON.Vector3(0, 0.3, 0), new BABYLON.Vector3(0, Math.PI, Math.PI), ['PointerDragBehavior'], 'liquid_transferor');
             var timer = setInterval(() => {
                 if (this.scene.getMeshByID('liquid_transferor')!=undefined){
                     var mesh = this.scene.getMeshByID('liquid_transferor');
@@ -139,7 +144,7 @@ const addModels = {
             }, 100);
         },
         addNeedle() {
-            this.addModel('needle', new BABYLON.Vector3(1.2, 1.2, 1.2), new BABYLON.Vector3(0, 0.2, 0), new BABYLON.Vector3(0, 0, Math.PI), ['PointerDragBehavior'], null);
+            this.addModel('needle', new BABYLON.Vector3(1.5, 1.5, 1.5), new BABYLON.Vector3(0, 0.23, 0), new BABYLON.Vector3(0, 0, Math.PI), ['PointerDragBehavior'], null);
         },
         //addCap(0,0.01,0)
         addCap(x, y, z) {
@@ -157,16 +162,16 @@ const addModels = {
             return mesh;
         },
         addSpoon() {
-            this.addModel('spoon', new BABYLON.Vector3(1.5, 1.5, 1.5), new BABYLON.Vector3(0, 0.05, 0), null, ['PointerDragBehavior'], null);
+            this.addModel('spoon', new BABYLON.Vector3(2.5, 2.5, 2.5), new BABYLON.Vector3(0, 0.05, 0), null, ['PointerDragBehavior'], null);
         },
         addTriFlask() {
-            this.addModel('tri_flask', null, null, null, ['PointerDragBehavior'], null);
+            this.addModel('tri_flask', new BABYLON.Vector3(0.8,0.8,0.8), null, null, ['PointerDragBehavior'], null);
         },
         addFilm() {
             this.addModel('film', null, null, null, ['PointerDragBehavior'], null);
         },
         addNeedleCap() {
-            this.addModel('needle', new BABYLON.Vector3(1.2, 1.2, 1.2), new BABYLON.Vector3(0, 0.2, 0), new BABYLON.Vector3(0, 0, Math.PI), null, 'needle');
+            this.addModel('needle', new BABYLON.Vector3(1.5, 1.5, 1.5), new BABYLON.Vector3(0, 0.23, 0), new BABYLON.Vector3(0, 0, Math.PI), null, 'needle');
             BABYLON.Mesh.CreateCylinder("cap", 0.01, 0.01, 0.01, 10, 1, this.scene, false, BABYLON.Mesh.DEFAULTSIDE);
             this.scene.getMeshByID('cap').position = new BABYLON.Vector3(0.002, 0.05, 0);
             var mater = new BABYLON.StandardMaterial("texture1", this.scene);
@@ -299,8 +304,8 @@ const addModels = {
             }, 100);
         },
         addTriFlaskFullFecl3Film() {
-            this.addModel('tri_flask_full_fecl3', null, null, null, null, 'tri_flask_full_fecl3');
-            this.addModel('film', null, new BABYLON.Vector3(0, 0.27, 0), null, null, 'film');
+            this.addModel('tri_flask_full_fecl3', new BABYLON.Vector3(0.8,0.8,0.8), null, null, null, 'tri_flask_full_fecl3');
+            this.addModel('film', null, new BABYLON.Vector3(0, 0.2, 0), null, null, 'film');
             var timer = setInterval(() => {
                 if (this.scene.getMeshByID('tri_flask_full_fecl3') != undefined && this.scene.getMeshByID('film')!=undefined){
                     var mesh = BABYLON.Mesh.MergeMeshes(
@@ -326,8 +331,8 @@ const addModels = {
             }, 100);
         },
         addNeedleFullCap() {
-            this.addModel('needle_full', null, new BABYLON.Vector3(0, 0 + 0.15, 0), new BABYLON.Vector3(0, 0, Math.PI), null, 'needle_full');
-            var mesh1 = this.addCap(0, 0.02, 0);
+            this.addModel('needle_full', new BABYLON.Vector3(1.5,1.5,1.5), new BABYLON.Vector3(0, 0 + 0.23, 0), new BABYLON.Vector3(0, 0, Math.PI), null, 'needle_full');
+            var mesh1 = this.addCap(0, 0.05, 0);
             mesh1.removeBehavior(mesh1.behaviors[0]);
             mesh1.id = 'cap'
             var timer = setInterval(() => {
@@ -355,7 +360,7 @@ const addModels = {
             }, 100);
         },
         addNeedleFull(){
-            this.addModel('needle_full', null, new BABYLON.Vector3(0, 0 + 0.15, 0), new BABYLON.Vector3(0, 0, Math.PI), ['PointerDragBehavior'], 'needle_full_glue');
+            this.addModel('needle_full', new BABYLON.Vector3(1.5,1.5,1.5), new BABYLON.Vector3(0,0.23, 0), new BABYLON.Vector3(0, 0, Math.PI), ['PointerDragBehavior'], 'needle_full_glue');
             var timer = setInterval(() => {
                 if (this.scene.getMeshByID('needle_full_glue')!=undefined){
                     var mesh = this.scene.getMeshByID('needle_full_glue');
@@ -421,8 +426,8 @@ const addModels = {
             this.addModel('pot', new BABYLON.Vector3(0.03, 0.03, 0.03), new BABYLON.Vector3(0-x, 0.1, 0 + z), null,null, null);
             this.addModel('round_flask', null, new BABYLON.Vector3(0+x, 0.1, 0+z), null, null, 'round_flaskdel');
             this.addModel("cone",new BABYLON.Vector3(0.03, 0.03, 0.03),new BABYLON.Vector3(0+x, 0.18, 0+z),null,null,'conedel');
-            this.addModel('stand1_movable', null, new BABYLON.Vector3(0.07 + x, 0.3, 0 + z), new BABYLON.Vector3(0, Math.PI, 0), null, 'stand1_movable');
-            this.addModel('stand1_pole', null, new BABYLON.Vector3(0.17 + x, 0, 0 + z), new BABYLON.Vector3(0, Math.PI, 0), null, 'stand1_pole');
+            this.addModel('stand1_movable', new BABYLON.Vector3(0.02, 0.02, 0.02), new BABYLON.Vector3(-0.38-x, 0.1, 0 + z), new BABYLON.Vector3(0, Math.PI/2, 0), null, 'stand1_movable');
+            this.addModel('stand1_pole', null, new BABYLON.Vector3(0.4+x, 0, 0 + z), new BABYLON.Vector3(0, Math.PI, 0), null, 'stand1_pole');
             var timer = setInterval(() => {
                 if (this.scene.getMeshByID('stand1_pole') != undefined && this.scene.getMeshByID('stand1_movable')!= undefined){
                     var mesh = BABYLON.Mesh.MergeMeshes(
@@ -446,8 +451,8 @@ const addModels = {
             this.addModel('scissors', new BABYLON.Vector3(0.03, 0.03, 0.03),null, new BABYLON.Vector3(0, Math.PI / 2, 0), ['PointerDragBehavior'], null); 
         },
         addNeedleFullTriFlask(){
-            this.addModel('needle_full', null, new BABYLON.Vector3(0,0.01,0), new BABYLON.Vector3(0, 0,-Math.PI/6), null, 'needle_full');
-            this.addModel('tri_flask', null, null, null,null, 'tri_flask');
+            this.addModel('needle_full', null, new BABYLON.Vector3(-0.01,0.01,0), new BABYLON.Vector3(0, 0,-Math.PI/6), null, 'needle_full');
+            this.addModel('tri_flask', new BABYLON.Vector3(0.8,0.8,0.8), null, null,null, 'tri_flask');
             var timer = setInterval(() => {
                 if (this.scene.getMeshByID('needle_full')!=undefined && this.scene.getMeshByID('tri_flask')!=undefined){
                     var mesh = BABYLON.Mesh.MergeMeshes(

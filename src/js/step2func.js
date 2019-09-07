@@ -8,15 +8,17 @@ class Node {
     measuring_cylinderprops = {};
     needleprops = {};
     stand_movable_high = 0;
+    step2node2 = 0;
     constructor(id) {
         this.id = id;
     }
-    setNodeNeed(scene, weightprops, measuring_cylinderprops, needleprops, stand_movable_high) {
+    setNodeNeed(scene, weightprops, measuring_cylinderprops, needleprops, stand_movable_high, step2node2) {
         this.scene = scene;
         this.weightprops = weightprops;
         this.measuring_cylinderprops = measuring_cylinderprops;
         this.needleprops = needleprops;
         this.stand_movable_high = stand_movable_high;
+        this.step2node2 = step2node2;
     } //node节点需要ExperimengtB中的哪些东西
     setScore(score) {
         this.score = score;
@@ -26,11 +28,11 @@ class Node {
     }
 }
 class Node0 extends Node {
-    errortext = '未将硫辛酸烧瓶放置于油浴锅中';
-    successtext = "将硫辛酸烧瓶放置于油浴锅中待加热";
+    errortext = '未将油浴锅置于磁力搅拌器上';
+    successtext = "将油浴锅置于磁力搅拌器上";
     getScore() {
         for (var i = 0; i < this.scene.meshes.length; i++) {
-            if (this.scene.meshes[i].id.split('-').includes('round_flask_cone.pot.heater')) {
+            if (this.scene.meshes[i].id.split('-').includes('pot.heater')) {
                 this.setScore(1);
                 return 1;
             }
@@ -42,7 +44,7 @@ class Node1 extends Node {
     errortext = '未调整好铁夹高度';
     successtext = '调整铁夹高度';
     getScore() {
-        if (this.stand_movable_high == 0.3) {
+        if (this.stand_movable_high == -0.3) {
             this.setScore(1);
             return 1;
         }
@@ -50,14 +52,12 @@ class Node1 extends Node {
     }
 }
 class Node2 extends Node {
-    errortext = '未固定装置';
-    successtext = '固定';
+    errortext = '未将装有硫辛酸的圆底烧瓶浸入油浴锅中';
+    successtext = '将装有硫辛酸的圆底烧瓶浸入油浴锅中';
     getScore() {
-        for (var i = 0; i < this.scene.meshes.length; i++) {
-            if (this.scene.meshes[i].id.split('-').includes('round_flask_cone.pot.heater.stand1')) {
-                this.setScore(1);
-                return 1;
-            }
+        if (this.step2node2==1) {
+            this.setScore(1);
+            return 1;
         }
         return 0;
     }
@@ -70,16 +70,17 @@ class Step2 {
     measuring_cylinderprops = {};
     needleprops = {};
     stand_movable_high = 0;
+    step2node2 = 0;
     constructor(allnode) {
         for (var i = 0; i < allnode.length; i++) {
             this.node_array.push(allnode[i]);
         }
 
     }
-    setStepNeed(scene, weightprops, measuring_cylinderprops, needleprops, stand_movable_high) {
+    setStepNeed(scene, weightprops, measuring_cylinderprops, needleprops, stand_movable_high, step2node2) {
         this.scene = scene;
         for (var i = 0; i < this.node_array.length; i++) {
-            this.node_array[i].setNodeNeed(scene, weightprops, measuring_cylinderprops, needleprops, stand_movable_high);
+            this.node_array[i].setNodeNeed(scene, weightprops, measuring_cylinderprops, needleprops, stand_movable_high, step2node2);
         }
     }
     checkAllNodeScore() {
@@ -122,9 +123,6 @@ const step2Function = {
     },
     methods:{
         checkPickHover2(pickid, hoverid) {
-            var x = this.scene.getMeshByID(hoverid).position.x;
-            var y = this.scene.getMeshByID(hoverid).position.y;
-            var z = this.scene.getMeshByID(hoverid).position.z;
             if (pickid.split('-')[0] == 'pot' && hoverid.split('-')[0] == 'heater') {
                 this.scene.getMeshByID(pickid).removeBehavior(this.scene.getMeshByID(pickid).behaviors[0]);
                 this.scene.getMeshByID(hoverid).removeBehavior(this.scene.getMeshByID(hoverid).behaviors[0]);
@@ -145,11 +143,34 @@ const step2Function = {
                         dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
                     })
                 );
-            } else if (pickid.split('-')[0] == 'round_flask_cone' && hoverid.split('-')[0] == 'pot.heater') {
-                this.scene.getMeshByID(pickid).removeBehavior(this.scene.getMeshByID(pickid).behaviors[0]);
-                this.scene.getMeshByID(hoverid).removeBehavior(this.scene.getMeshByID(hoverid).behaviors[0]);
+            }
+            else if (pickid.split('-')[0] == 'round_flask_cone' && hoverid.split('-')[0] == 'stand1_movable') {
+                var mesh1 = this.scene.getMeshByID(hoverid);
+                var mesh2 = this.scene.getMeshByID(pickid);
+                mesh2.removeBehavior(mesh2.behaviors[0])
                 var po = this.getMergedPosition(hoverid);
-                this.scene.getMeshByID(pickid).position = new BABYLON.Vector3(po[0]+0.13, po[1] - 0.06, po[2] - 0.18);
+                mesh2.position = new BABYLON.Vector3(po[0]+0.02,po[1]-0.2,po[2]);
+                var mesh = BABYLON.Mesh.MergeMeshes(
+                    [mesh1,mesh2],
+                    true,
+                    true,
+                    undefined,
+                    false,
+                    true
+                );
+                mesh.id = "stand1_movable.round_flask_cone";
+                mesh.id = this.addName(mesh.id)
+                for(var i=0;i<this.standlist.length;i++){
+                    if(this.standlist[i][0]==hoverid){
+                        this.standlist[i][0]=mesh.id;
+                        break;
+                    }
+                }
+            }
+            else if (pickid.split('-')[0] == 'cap' && hoverid.split('-')[0] == 'needle_full') {
+                var mesh1 = this.scene.getMeshByID(pickid);
+                var po = this.getMergedPosition(hoverid);
+                mesh1.position = new BABYLON.Vector3(po[0], po[1] + 0.01, po[2]);
                 var mesh = BABYLON.Mesh.MergeMeshes(
                     [this.scene.getMeshByID(hoverid), this.scene.getMeshByID(pickid)],
                     true,
@@ -158,36 +179,19 @@ const step2Function = {
                     false,
                     true
                 );
-                mesh.id = "round_flask_cone.pot.heater";
+                mesh.id = "needle_full.cap";
                 mesh.id = this.addName(mesh.id)
                 mesh.addBehavior(
                     new BABYLON.PointerDragBehavior({
                         dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
                     })
                 );
-            } else if (pickid.split('-')[0] == 'round_flask_cone.pot.heater' && hoverid.split('-')[0] == 'stand1') {
-                var mesh1 = this.scene.getMeshByID(hoverid);
-                mesh1.removeBehavior(mesh1.behaviors[0])
-                var mesh2 = this.scene.getMeshByID(pickid);
-                mesh2.removeBehavior(mesh2.behaviors[0])
-                var po = this.getMergedPosition(hoverid)
-                mesh2.position = this.changeMergedPosition(pickid, -po[0] - 0.18, po[1] + 0.02, po[2]-0.05);
-                var mesh = BABYLON.Mesh.MergeMeshes(
-                    [mesh1, mesh2],
-                    true,
-                    true,
-                    undefined,
-                    false,
-                    true
-                );
-                mesh.id = "round_flask_cone.pot.heater.stand1";
-                mesh.id = this.addName(mesh.id)
-                mesh.addBehavior(
-                    new BABYLON.PointerDragBehavior({
-                        dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
-                    })
-                );
-            } 
+                this.activeIndex = mesh.id
+                this.needlelist[this.needlelist.indexOf(hoverid)] = mesh.id
+                this.needleprops[mesh.id] = this.needleprops[hoverid]
+                delete (this.needleprops[hoverid])
+                this.refreshComponents();
+            }
             //else if (pickid.split('-')[0] == 'thermometer' && hoverid.split('-')[0] == 'round_flask_cone.pot.heater.stand1') {
             //     var po = this.getMergedPosition(hoverid);
             //     this.scene.getMeshByID(pickid).position = new BABYLON.Vector3(po[0] - 0.15, po[1]+0.02, po[2]+0.03);
@@ -263,7 +267,7 @@ const step2Function = {
         },
         getScore_step2() {
             this.all_score = this.step2.all_score;
-            this.step2.setStepNeed(this.scene, this.weightprops, this.measuring_cylinderprops, this.needleprops, this.stand_movable_high);
+            this.step2.setStepNeed(this.scene, this.weightprops, this.measuring_cylinderprops, this.needleprops, this.stand_movable_high, this.step2node2);
             var node = this.step2.checkAllNodeScore();
             if (node != null) {
                 this.$message({
@@ -276,8 +280,8 @@ const step2Function = {
                 });
                 this.now_score = this.step2.getNowScore();
             }
-            if (this.step2node2 == 0 && this.step2.node_array[2].score == 1) {
-                this.step2node2 = 1;
+            if (this.step2.node_array[2].score == 1 && this.step2node2==1) {
+                this.step2node2 = 0
                 setTimeout(() => {
                     this.$notify({
                         title: 'Completed',

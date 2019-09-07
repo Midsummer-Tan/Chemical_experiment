@@ -391,14 +391,12 @@ const step1Function = {
     },
     methods:{
         checkPickHover1(pickid, hoverid) {
-            var x = this.scene.getMeshByID(hoverid).position.x;
-            var y = this.scene.getMeshByID(hoverid).position.y;
-            var z = this.scene.getMeshByID(hoverid).position.z;
             if (pickid.split('-')[0] == "paper" && hoverid.split('-')[0] == "weight") {
+                var po = this.getMergedPosition(hoverid)
                 this.scene.getMeshByID(pickid).position = new BABYLON.Vector3(
-                    x,
-                    y + 0.07,
-                    z
+                    -po[0]-0.15,
+                    po[1] + 0.05,
+                    po[2]+0.2
                 ); //(左右,上下,前后)
                 var mesh = BABYLON.Mesh.MergeMeshes(
                     [this.scene.getMeshByID(hoverid), this.scene.getMeshByID(pickid)],
@@ -427,6 +425,9 @@ const step1Function = {
                 );
             } 
             else if (pickid.split('-')[0] == "round_flask_cone" && hoverid.split('-')[0] == "stand") {
+                var x = this.scene.getMeshByID(hoverid).position.x;
+                var y = this.scene.getMeshByID(hoverid).position.y;
+                var z = this.scene.getMeshByID(hoverid).position.z;
                 this.scene.getMeshByID(pickid).position = this.changeMergedPosition(pickid, x - 0.21, y + 0.23, z + 0.08);
                 //不可用.position = Vector3
                 var mesh = BABYLON.Mesh.MergeMeshes(
@@ -446,6 +447,9 @@ const step1Function = {
                 );
             } 
             else if (pickid.split('-')[0] == 'tri_flask_powder_brown' && hoverid.split('-')[0] == "stand") {
+                var x = this.scene.getMeshByID(hoverid).position.x;
+                var y = this.scene.getMeshByID(hoverid).position.y;
+                var z = this.scene.getMeshByID(hoverid).position.z;
                 this.scene.getMeshByID(pickid).position = this.changeMergedPosition(pickid, x - 0.16, y + 0.4, z - 0.05);
                 //不可用.position = Vector3
                 var mesh = BABYLON.Mesh.MergeMeshes(
@@ -465,6 +469,9 @@ const step1Function = {
                 );
             } 
             else if (pickid.split('-')[0] == "round_flask" && hoverid.split('-')[0] == "stand") {
+                var x = this.scene.getMeshByID(hoverid).position.x;
+                var y = this.scene.getMeshByID(hoverid).position.y;
+                var z = this.scene.getMeshByID(hoverid).position.z;
                 this.scene.getMeshByID(pickid).position = new BABYLON.Vector3(
                     x - 0.175,
                     y + 0.18,
@@ -482,6 +489,9 @@ const step1Function = {
                 mesh.id = this.addName(mesh.id);
             } 
             else if (pickid.split('-')[0] == "tri_flask" && hoverid.split('-')[0] == "stand") {
+                var x = this.scene.getMeshByID(hoverid).position.x;
+                var y = this.scene.getMeshByID(hoverid).position.y;
+                var z = this.scene.getMeshByID(hoverid).position.z;
                 this.scene.getMeshByID(pickid).position = new BABYLON.Vector3(
                     x - 0.175,
                     y + 0.18,
@@ -499,10 +509,11 @@ const step1Function = {
                 mesh.id = this.addName(mesh.id)
             } 
             else if (pickid.split('-')[0] == "round_flask" && hoverid.split('-')[0] == "weight") {
+                var po = this.getMergedPosition(hoverid)
                 this.scene.getMeshByID(pickid).position = new BABYLON.Vector3(
-                    x,
-                    y + 0.06,
-                    z
+                    -po[0] - 0.15,
+                    po[1] + 0.06,
+                    po[2] + 0.2
                 );
                 var mesh = BABYLON.Mesh.MergeMeshes(
                     [this.scene.getMeshByID(hoverid), this.scene.getMeshByID(pickid)],
@@ -531,10 +542,11 @@ const step1Function = {
                 );
             } 
             else if (pickid.split('-')[0] == "pot" && hoverid.split('-')[0] == "weight") {
+                var po = this.getMergedPosition(hoverid)
                 this.scene.getMeshByID(pickid).position = new BABYLON.Vector3(
-                    x,
-                    y + 0.07,
-                    z - 0.02
+                    po[0] +0.15,
+                    po[1] + 0.07,
+                    po[2] + 0.25
                 );
                 var mesh = BABYLON.Mesh.MergeMeshes(
                     [this.scene.getMeshByID(hoverid), this.scene.getMeshByID(pickid)],
@@ -561,10 +573,11 @@ const step1Function = {
                 );
             } 
             else if (pickid.split('-')[0] == "tri_flask" && hoverid.split('-')[0] == "weight") {
+                var po = this.getMergedPosition(hoverid)
                 this.scene.getMeshByID(pickid).position = new BABYLON.Vector3(
-                    x,
-                    y + 0.06,
-                    z
+                    -po[0] - 0.15,
+                    po[1] + 0.06,
+                    po[2] + 0.2
                 );
                 var mesh = BABYLON.Mesh.MergeMeshes(
                     [this.scene.getMeshByID(hoverid), this.scene.getMeshByID(pickid)],
@@ -598,7 +611,7 @@ const step1Function = {
                 this.addModel(
                     "cone",
                     new BABYLON.Vector3(0.02, 0.02, 0.02),
-                    new BABYLON.Vector3(x - 0.055, y + 0.02, z),
+                    new BABYLON.Vector3(x - 0.1, y + 0.02, z),
                     null,
                     null,
                     "cone"
@@ -632,8 +645,8 @@ const step1Function = {
                 //this.scene.removeMesh(this.scene.getMeshByID('spoon'));
                 this.addModel(
                     "powder_brown",
-                    new BABYLON.Vector3(2, 2, 2),
-                    new BABYLON.Vector3(x - 0.055, y, z),
+                    new BABYLON.Vector3(2.5, 2.5, 2.5),
+                    new BABYLON.Vector3(x - 0.1, y, z),
                     null,
                     null,
                     "powder_brown"
@@ -660,36 +673,102 @@ const step1Function = {
                 }, 100);
                 //this.addSpoonMerged(new BABYLON.Vector3(-x,y,z));//右手系变左手系 谁知道这怎么回事
             } 
+            else if (pickid.split('-')[0] == "spoon_cone" && hoverid.split('-')[0] == "weight.paper") {
+                var mesh = this.scene.getMeshByID(hoverid);
+                mesh.removeBehavior(mesh.behaviors[0]);
+                var po = this.getMergedPosition(hoverid);
+                this.addModel(
+                    "cone",
+                    new BABYLON.Vector3(0.02, 0.02, 0.02),
+                    new BABYLON.Vector3(-po[0]-0.15, po[1]+0.05, po[2] + 0.18),
+                    null,
+                    null,
+                    "cone"
+                ); //右手系变左手系
+                //移出带有粉末的勺子 加空勺子
+                var mesh = this.scene.getMeshByID(pickid);
+                var po = this.getMergedPosition(pickid);
+                this.scene.removeMesh(mesh);
+                this.addModel(
+                    "spoon",
+                    new BABYLON.Vector3(2.5, 2.5, 2.5),
+                    new BABYLON.Vector3(-po[0] + 0.08, po[1], po[2]),
+                    null,
+                    ['PointerDragBehavior'],
+                    null
+                );
+                var timer = setInterval(() => {
+                    if (this.scene.getMeshByID("cone") != undefined) {
+                        var mesh = BABYLON.Mesh.MergeMeshes(
+                            [
+                                this.scene.getMeshByID(hoverid),
+                                this.scene.getMeshByID("cone")
+                            ],
+                            true,
+                            true,
+                            undefined,
+                            false,
+                            true
+                        );
+                        var id = this.weightlist.indexOf(hoverid)
+                        mesh.id = "weight.paper_cone";
+                        mesh.id = this.addName(mesh.id)
+                        this.weightlist[id] = mesh.id
+                        this.weightprops[mesh.id] = this.weightprops[hoverid]
+                        delete(this.weightprops[hoverid])
+                        this.activeIndex = mesh.id
+                        setTimeout(() => {
+                            this.modifyElectronicScale()
+                        }, 200);
+                        mesh.addBehavior(
+                            new BABYLON.PointerDragBehavior({
+                                dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+                            })
+                        );
+                        window.clearInterval(timer);
+                    }
+                }, 100);
+            } 
+            else if (pickid.split('-')[0] == "spoon_cone" && hoverid.split('-')[0] == "weight.paper_cone") {
+                var mesh = this.scene.getMeshByID(pickid);
+                mesh.updateFacetData();
+                var po = this.getMergedPosition(pickid);
+                this.scene.removeMesh(mesh);
+                setTimeout(() => {
+                    this.modifyElectronicScale()
+                }, 200);
+                //移出带有粉末的勺子 加空勺子
+                this.addModel(
+                    "spoon",
+                    new BABYLON.Vector3(2.5, 2.5, 2.5),
+                    new BABYLON.Vector3(-po[0] + 0.08, po[1], po[2]),
+                    null,
+                    ['PointerDragBehavior'],
+                    null
+                );
+
+            }
             else if (pickid.split('-')[0] == 'spoon_powder_brown' && hoverid.split('-')[0] == 'weight.paper') {
                 var mesh = this.scene.getMeshByID(hoverid);
                 mesh.removeBehavior(mesh.behaviors[0]);
-                mesh.updateFacetData();
-                var po = mesh.getFacetPosition(Math.floor(mesh.facetNb / 2));
-                var x = po.x;
-                var y = po.y;
-                var z = po.z;
+                var po = this.getMergedPosition(hoverid)
                 this.addModel(
                     "powder_brown",
-                    new BABYLON.Vector3(2.5, 2.5, 2.5),
-                    new BABYLON.Vector3(-x + 0.08, y, z + 0.18),
+                    new BABYLON.Vector3(1.5, 1.5, 1.5),
+                    new BABYLON.Vector3(-po[0]-0.15,po[1]+0.05,po[2]+0.18),
                     null,
                     null,
                     "powder_brown"
                 ); //右手系变左手系
-                mesh.disableFacetData();
+                
                 //移出带有粉末的勺子 加空勺子
                 var mesh = this.scene.getMeshByID(pickid);
-                mesh.updateFacetData();
-                var po = mesh.getFacetPosition(Math.floor(mesh.facetNb / 2));
-                var x = po.x;
-                var y = po.y;
-                var z = po.z;
-                mesh.disableFacetData();
+                var po = this.getMergedPosition(pickid)
                 this.scene.removeMesh(mesh);
                 this.addModel(
                     "spoon",
-                    new BABYLON.Vector3(1.5, 1.5, 1.5),
-                    new BABYLON.Vector3(-x + 0.08, y, z),
+                    new BABYLON.Vector3(2.5, 2.5, 2.5),
+                    new BABYLON.Vector3(-po[0] + 0.08, po[1], po[2]),
                     null,
                     ['PointerDragBehavior'],
                     null
@@ -728,12 +807,7 @@ const step1Function = {
             } 
             else if (pickid.split('-')[0] == 'spoon_powder_brown' && hoverid.split('-')[0] == 'weight.paper_powder_brown') {
                 var mesh = this.scene.getMeshByID(pickid);
-                mesh.updateFacetData();
-                var po = mesh.getFacetPosition(Math.floor(mesh.facetNb / 2));
-                var x = po.x;
-                var y = po.y;
-                var z = po.z;
-                mesh.disableFacetData();
+                var po = this.getMergedPosition(pickid)
                 this.scene.removeMesh(mesh);
                 setTimeout(() => {
                     this.modifyElectronicScale()
@@ -741,103 +815,17 @@ const step1Function = {
                 //移出带有粉末的勺子 加空勺子
                 this.addModel(
                     "spoon",
-                    new BABYLON.Vector3(1.5, 1.5, 1.5),
-                    new BABYLON.Vector3(-x + 0.08, y, z),
+                    new BABYLON.Vector3(2.5, 2.5, 2.5),
+                    new BABYLON.Vector3(-po[0] + 0.08, po[1], po[2]),
                     null,
                     ['PointerDragBehavior'],
                     null
                 );
-            } 
-            else if (pickid.split('-')[0] == "spoon_cone" && hoverid.split('-')[0] == "weight.paper") {
-                var mesh = this.scene.getMeshByID(hoverid);
-                mesh.removeBehavior(mesh.behaviors[0]);
-                mesh.updateFacetData();
-                var po = mesh.getFacetPosition(Math.floor(mesh.facetNb / 2));
-                var x = po.x;
-                var y = po.y;
-                var z = po.z;
-                this.addModel(
-                    "cone",
-                    new BABYLON.Vector3(0.04, 0.04, 0.04),
-                    new BABYLON.Vector3(-x + 0.08, y, z + 0.18),
-                    null,
-                    null,
-                    "cone"
-                ); //右手系变左手系
-                mesh.disableFacetData();
-                //移出带有粉末的勺子 加空勺子
-                var mesh = this.scene.getMeshByID(pickid);
-                mesh.updateFacetData();
-                var po = mesh.getFacetPosition(Math.floor(mesh.facetNb / 2));
-                var x = po.x;
-                var y = po.y;
-                var z = po.z;
-                mesh.disableFacetData();
-                this.scene.removeMesh(mesh);
-                this.addModel(
-                    "spoon",
-                    new BABYLON.Vector3(1.5, 1.5, 1.5),
-                    new BABYLON.Vector3(-x + 0.08, y, z),
-                    null,
-                    ['PointerDragBehavior'],
-                    null
-                );
-                var timer = setInterval(() => {
-                    if (this.scene.getMeshByID("cone")!=undefined){
-                        var mesh = BABYLON.Mesh.MergeMeshes(
-                            [
-                                this.scene.getMeshByID(hoverid),
-                                this.scene.getMeshByID("cone")
-                            ],
-                            true,
-                            true,
-                            undefined,
-                            false,
-                            true
-                        );
-                        var id = this.weightlist.indexOf(hoverid)
-                        mesh.id = "weight.paper_cone";
-                        mesh.id = this.addName(mesh.id)
-                        this.weightlist[id] = mesh.id
-                        this.weightprops[mesh.id] = this.weightprops[hoverid]
-                        delete(this.weightprops[hoverid])
-                        this.activeIndex = mesh.id
-                        setTimeout(() => {
-                            this.modifyElectronicScale()
-                        }, 200);
-                        mesh.addBehavior(
-                            new BABYLON.PointerDragBehavior({
-                                dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
-                            })
-                        );
-                        window.clearInterval(timer);
-                    }       
-                }, 100);
-            } 
-            else if (pickid.split('-')[0] == "spoon_cone" && hoverid.split('-')[0] == "weight.paper_cone") {
-                var mesh = this.scene.getMeshByID(pickid);
-                mesh.updateFacetData();
-                var po = mesh.getFacetPosition(Math.floor(mesh.facetNb / 2));
-                var x = po.x;
-                var y = po.y;
-                var z = po.z;
-                mesh.disableFacetData();
-                this.scene.removeMesh(mesh);
-                setTimeout(() => {
-                    this.modifyElectronicScale()
-                }, 200);
-                //移出带有粉末的勺子 加空勺子
-                this.addModel(
-                    "spoon",
-                    new BABYLON.Vector3(1.5, 1.5, 1.5),
-                    new BABYLON.Vector3(-x + 0.08, y, z),
-                    null,
-                    ['PointerDragBehavior'],
-                    null
-                );
-
             } 
             else if (pickid.split('-')[0] == "paper_cone" && hoverid.split('-')[0] == "round_flask") {
+                var x = this.scene.getMeshByID(hoverid).position.x;
+                var y = this.scene.getMeshByID(hoverid).position.y;
+                var z = this.scene.getMeshByID(hoverid).position.z;
                 this.scene.removeMesh(this.scene.getMeshByID(pickid));
                 var mesh = this.scene.getMeshByID(hoverid)
                 mesh.removeBehavior(mesh.behaviors[0]);
@@ -916,7 +904,7 @@ const step1Function = {
             else if (pickid.split('-')[0] == 'dropper' && hoverid.split('-')[0] == 'c3h6o') {
                 var po = this.scene.getMeshByID(pickid).position;
                 this.scene.removeMesh(this.scene.getMeshByID(pickid))
-                this.addModel('dropper_full', new BABYLON.Vector3(1.5, 1.5, 1.5), new BABYLON.Vector3(-po.x, po.y, po.z), new BABYLON.Vector3(0, 0, Math.PI), ['PointerDragBehavior'], null);
+                this.addModel('dropper_full', new BABYLON.Vector3(2, 2, 2), new BABYLON.Vector3(-po.x, po.y, po.z), new BABYLON.Vector3(0, 0, Math.PI), ['PointerDragBehavior'], null);
             } 
             else if (pickid.split('-')[0] == 'dropper_full' && hoverid.split('-')[0] == 'measuring_cylinder') {
                 this.measuring_cylinderprops[hoverid][0] += 2;
@@ -924,7 +912,7 @@ const step1Function = {
                 this.scene.removeMesh(this.scene.getMeshByID(hoverid));
                 var po1 = this.scene.getMeshByID(pickid).position;
                 this.scene.removeMesh(this.scene.getMeshByID(pickid));
-                this.addModel('dropper', new BABYLON.Vector3(1.5, 1.5, 1.5), new BABYLON.Vector3(-po1.x, po1.y, po1.z), new BABYLON.Vector3(0, 0, Math.PI), ['PointerDragBehavior'], null);
+                this.addModel('dropper', new BABYLON.Vector3(2, 2, 2), new BABYLON.Vector3(-po1.x, po1.y, po1.z), new BABYLON.Vector3(0, 0, Math.PI), ['PointerDragBehavior'], null);
                 this.addModel('measuring_cylinder_full', null, new BABYLON.Vector3(-po.x + 0.4, po.y, po.z), null, ['PointerDragBehavior'], 'measuring_cylinder_full');
                 var timer = setInterval(() => {
                     if (this.scene.getMeshByID('measuring_cylinder_full')!=undefined){
@@ -944,7 +932,7 @@ const step1Function = {
                 this.measuring_cylinderprops[hoverid][0] += 2;
                 var po1 = this.scene.getMeshByID(pickid).position;
                 this.scene.removeMesh(this.scene.getMeshByID(pickid));
-                this.addModel('dropper', new BABYLON.Vector3(1.5, 1.5, 1.5), new BABYLON.Vector3(-po1.x, po1.y, po1.z), new BABYLON.Vector3(0, 0, Math.PI), ['PointerDragBehavior'], null);
+                this.addModel('dropper', new BABYLON.Vector3(2, 2, 2), new BABYLON.Vector3(-po1.x, po1.y, po1.z), new BABYLON.Vector3(0, 0, Math.PI), ['PointerDragBehavior'], null);
                 this.refreshComponents()
             } 
             else if (pickid.split('-')[0] == 'measuring_cylinder_full' && hoverid.split('-')[0] == 'tri_flask_powder_brown') {
@@ -954,16 +942,17 @@ const step1Function = {
                 var y = poarray[1];
                 var z = poarray[2];
                 this.scene.removeMesh(this.scene.getMeshByID(hoverid));
-                this.addModel('tri_flask_full_trans', null, new BABYLON.Vector3(x, 0, z), null, null, 'tri_flask_full_trans');
+                this.addModel('tri_flask_full_trans', new BABYLON.Vector3(0.02,0.02,0.02), new BABYLON.Vector3(x, 0, z), null, null, 'tri_flask_full_trans');
                 this.addModel(
                     "powder_brown",
                     new BABYLON.Vector3(2.5, 2.5, 2.5),
-                    new BABYLON.Vector3(-x, 0.05, z),
+                    new BABYLON.Vector3(-x, 0.03, z),
                     null,
                     null,
                     "powder_brown"
                 );
                 var po1 = this.getMergedPosition(pickid);
+                this.scene.removeMesh(this.scene.getMeshByID(pickid));
                 this.addModel('measuring_cylinder', null, new BABYLON.Vector3(-po1[0], 0, po1[2]), null, null, 'measuring_cylinder');
                 var timer = setInterval(() => {
                     if (this.scene.getMeshByID('powder_brown')!=undefined && this.scene.getMeshByID('tri_flask_full_trans')!=undefined){
@@ -985,7 +974,7 @@ const step1Function = {
                         var mesh1 = this.scene.getMeshByID('measuring_cylinder');
                         mesh1.id = this.addName(mesh1.id)
                         this.activeIndex = mesh1.id
-                        this.scene.removeMesh(this.scene.getMeshByID(pickid));
+                        
                         delete(this.measuring_cylinderprops[hoverid])
                         this.measuring_cylinderlist.splice([this.measuring_cylinderlist.indexOf(hoverid)], 1)
                         this.measuring_cylinderlist.push(mesh1.id);
@@ -1047,7 +1036,7 @@ const step1Function = {
                 this.needleprops[pickid][0] += 0.05;
                 this.needleprops[pickid][0] = Math.floor(this.needleprops[pickid][0] * 100) / 100;
                 var po = this.getMergedPosition(pickid);
-                this.addModel('needle_full', null, new BABYLON.Vector3(po[0], po[1] + 0.15, po[2]), new BABYLON.Vector3(0, 0, Math.PI), null, 'needle_full');
+                this.addModel('needle_full', new BABYLON.Vector3(1.5,1.5,1.5), new BABYLON.Vector3(po[0], po[1] + 0.2, po[2]), new BABYLON.Vector3(0, 0, Math.PI), null, 'needle_full');
                 this.scene.removeMesh(this.scene.getMeshByID(pickid));
                 var timer = setInterval(() => {
                     if (this.scene.getMeshByID('needle_full')!=undefined){

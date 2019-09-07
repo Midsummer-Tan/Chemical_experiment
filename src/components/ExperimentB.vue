@@ -93,7 +93,7 @@
         class="el-tabs-color" type="border-card">
 
         <template v-for="i in weightlist">
-          <el-tab-pane :label="'电子称('+i+')'"  :name="i" :key="i">
+          <el-tab-pane :label="'电子秤('+i+')'"  :name="i" :key="i">
           <div style="height:120px;">
             <v-card>
               <electronic-scale ref="weight"></electronic-scale>
@@ -303,7 +303,7 @@
                       src="/images/weight.png"
                       aspect-ratio="1"
                     ></v-img>
-                    <div class="body-2 text-xs-center">电子称</div>
+                    <div class="body-2 text-xs-center">电子秤</div>
                   </v-card-text>
                 </v-card>
               </v-flex>
@@ -840,6 +840,9 @@ export default {
       correct_use_transferor:[0,0],
       timeout1:null,
       timeout2:null,
+      timeout3:null,
+      timeout4:null,
+      timeout5:null,
       particleSystem:null,
       fountain:null,
       fogTexture:null,
@@ -917,7 +920,7 @@ export default {
             var po = this.getMergedPosition(this.needshakeid);
             this.scene.removeMesh(this.scene.getMeshByID(this.needshakeid));
             this.needshakeid = '';
-            this.addModel('tri_flask_full_fecl3',null,new BABYLON.Vector3(po[0],0,po[2]),null,['PointerDragBehavior'],null);
+            this.addModel('tri_flask_full_fecl3',new BABYLON.Vector3(0.8,0.8,0.8),new BABYLON.Vector3(po[0],0,po[2]),null,['PointerDragBehavior'],null);
           }
         }
 
@@ -965,6 +968,38 @@ export default {
                 type: 'success',
                 duration: 0
               });
+              this.scene.removeMesh(mesh);
+              this.addModel('yellow_cylinder', new BABYLON.Vector3(0.05, 0.08, 0.12),new BABYLON.Vector3(-po[0],po[1],po[2]), new BABYLON.Vector3(0,Math.PI/2,0),null,'yc1');
+              this.addModel('glass_pad', new BABYLON.Vector3(0.01, 0.01, 0.01), new BABYLON.Vector3(-po[0]+0.06,po[1],po[2]), null,null, 'g1');
+              this.addModel('glass_pad', new BABYLON.Vector3(0.01, 0.01, 0.01), new BABYLON.Vector3(-po[0]+0.06,po[1]+0.02,po[2]), null,null, 'g2');
+              this.addModel('glass_pad', new BABYLON.Vector3(0.01, 0.01, 0.01), new BABYLON.Vector3(-po[0]-0.1-0.01,po[1],po[2]), null,null, 'g3');
+              this.addModel('glass_pad', new BABYLON.Vector3(0.01, 0.01, 0.01), new BABYLON.Vector3(-po[0]-0.1-0.01,po[1]+0.02,po[2]), null,null, 'g4'); 
+              var timer = setInterval(() => {
+                if(this.scene.getMeshByID('yc1')!=undefined &&
+                this.scene.getMeshByID('g1')!=undefined &&
+                this.scene.getMeshByID('g2')!=undefined &&
+                this.scene.getMeshByID('g3')!=undefined &&
+                this.scene.getMeshByID('g4')!=undefined
+                ){
+                  var mesh1 = BABYLON.Mesh.MergeMeshes(
+                    [this.scene.getMeshByID('yc1'), this.scene.getMeshByID('g1'),this.scene.getMeshByID('g2'),
+                    this.scene.getMeshByID('g3'),this.scene.getMeshByID('g4')],
+                    true,
+                    true,
+                    undefined,
+                    false,
+                    true
+                  );
+                  mesh1.id = 'glass_pad_yellow_cylinder_stretched';
+                  mesh1.id = this.addName(mesh1.id);
+                  mesh1.addBehavior(
+                      new BABYLON.PointerDragBehavior({
+                          dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+                      })
+                  );
+                  window.clearInterval(timer);
+                }
+              }, 100);
             }
             else {
               this.scene.removeMesh(mesh);
@@ -982,7 +1017,6 @@ export default {
                 this.scene.getMeshByID('g3')!=undefined &&
                 this.scene.getMeshByID('g4')!=undefined
                 ){
-                  console.log('kkkk')
                   var mesh1 = BABYLON.Mesh.MergeMeshes(
                     [this.scene.getMeshByID('yc1'), this.scene.getMeshByID('g1'),this.scene.getMeshByID('g2')],
                     true,
@@ -1022,11 +1056,14 @@ export default {
 
         //加热开关搅拌开关
         if(this.heater_stir_switch == true){//搅拌
+          
           this.hl.addMesh(this.scene.getMeshByID('heater_switch1'), BABYLON.Color3.Yellow());
           for(var i=0;i<this.scene.meshes.length;i++){
             if(this.scene.meshes[i].id.split('-')[0]=='magneton_stiring'){
-              var axis = new BABYLON.Vector3(0, 1, 0);
-              this.scene.meshes[i].rotate(axis, this.heater_stir_value/100, BABYLON.Space.LOCAL); 
+              this.scene.meshes[i].rotation.y+=this.heater_stir_value/100; 
+            }
+            if(this.scene.meshes[i].id.split('-')[0]=='round_flask_c8h14o2s2' && this.scene.getMeshByID('conedel')==null){
+              this.step3node1=1;
             }
           }
         }
@@ -1041,14 +1078,14 @@ export default {
           }
           if(this.heater_temp_value >= 120 && this.heater_temp_value<=160 && this.temp_stable==0){
             this.temp_stable =2;//如果这里不将它赋值为2 那么下一次渲染还是会进来 
-            setTimeout(() => {
+            this.timeout5 = setTimeout(() => {
               if(this.heater_temp_value >= 120 && this.heater_temp_value<=160){
                 this.temp_stable =1;//温度稳定为1
                 this.addFog();
-                setTimeout(() => {
+                this.timeout3 = setTimeout(() => {
                   this.scene.removeMesh(this.scene.getMeshByID('conedel'));
                 }, 60000);
-                setTimeout(() => {
+                this.timeout4 = setTimeout(() => {
                   this.addModel('round_flask_c8h14o2s2',null,new BABYLON.Vector3(-0.5,0.1,-0.3),null,null,null);
                   this.scene.removeMesh(this.scene.getMeshByID('round_flaskdel'));
                 }, 30000);
@@ -1061,7 +1098,7 @@ export default {
         }
         else {
           if(this.scene.getMeshByID('heater_switch2')!=null && this.hl.hasMesh(this.scene.getMeshByID('heater_switch2'))){
-            this.particleSystem.reset();
+            if(this.particleSystem!=null)this.particleSystem.reset();
             this.particleSystem = null;
             this.hl.removeMesh(this.scene.getMeshByID('heater_switch2'));
             this.heater_stir_switch = false;
@@ -1115,7 +1152,7 @@ export default {
             "needle_full.cap",
             "tri_flask_full_fecl3.film",
             "needle_full.tri_flask",
-            'glass_pad_yellow_cylinder'
+            'glass_pad_yellow_cylinder',
           ];
           if (pickResult.pickedMesh.id != "ground") {
             this.hl.addMesh(pickResult.pickedMesh, BABYLON.Color3.Purple());
@@ -1224,7 +1261,7 @@ export default {
           var po = this.getMergedPosition(hoverid);
           this.scene.removeMesh(this.scene.getMeshByID(hoverid));
           this.addCap(po[0],po[1]+0.02,po[2]);
-          this.addModel('needle',new BABYLON.Vector3(1.2,1.2,1.2),new BABYLON.Vector3(po[0],po[1]+0.2,po[2]),new BABYLON.Vector3(0,0,Math.PI),null,'needle');
+          this.addModel('needle',new BABYLON.Vector3(1.5,1.5,1.5),new BABYLON.Vector3(po[0],po[1]+0.23,po[2]),new BABYLON.Vector3(0,0,Math.PI),null,'needle');
           var timer = setInterval(() => {
             if(this.scene.getMeshByID('needle')!=undefined){
               var mesh = this.scene.getMeshByID('needle');
@@ -1245,7 +1282,7 @@ export default {
           var po = this.getMergedPosition(hoverid);
           this.scene.removeMesh(this.scene.getMeshByID(hoverid));
           this.addCap(po[0],po[1]-0.13,po[2]);
-          this.addModel('needle_full',new BABYLON.Vector3(1.2,1,1.2),new BABYLON.Vector3(po[0],po[1],po[2]),new BABYLON.Vector3(0,0,Math.PI),null,'needle_full');
+          this.addModel('needle_full',new BABYLON.Vector3(1.5,1.5,1.5),new BABYLON.Vector3(po[0],po[1],po[2]),new BABYLON.Vector3(0,0,Math.PI),null,'needle_full');
           var timer = setInterval(() => {
             if(this.scene.getMeshByID('needle_full')!=undefined){
               var mesh = this.scene.getMeshByID('needle_full');
@@ -1262,7 +1299,8 @@ export default {
               window.clearInterval(timer);
             }
           }, 100); 
-        }else if(hoverid.split('-')[0]=='needle_full.tri_flask'){
+        }
+        else if(hoverid.split('-')[0]=='needle_full.tri_flask'){
           this.addNeedleFull();
         }
         for (var i = 0; i < array1.length; i++) {
@@ -1275,6 +1313,9 @@ export default {
               break;
             case "round_flask":
               this.addRoundFlask();
+              break;
+            case "pot":
+              this.addPot();
               break;
             case "stand":
               this.addStand();
@@ -1306,7 +1347,7 @@ export default {
               this.stretched = 1;
               break;
             case "tri_flask_full_fecl3":
-              this.addModel('tri_flask_full_fecl3', null, null, null, ['PointerDragBehavior'], null);
+              this.addModel('tri_flask_full_fecl3', new BABYLON.Vector3(0.8,0.8,0.8), null, null, ['PointerDragBehavior'], null);
               break;
             case "film":
               this.addFilm();
@@ -1336,12 +1377,7 @@ export default {
           break;
         case 2:
           var str = '拼接';
-          if(pickid.split('-')[0] =='round_flask_cone' && hoverid.split('-')[0] == 'pot.heater'){
-            str = '浸入';
-            this.bb8warning = '注意在真实实验中，烧瓶浸没在油浴锅中的体积约为2/3'
-            this.activeIndex = 'default'
-          }
-          else if (hoverid.split('-')[0] == "trash_can") str = "移除";
+          if (hoverid.split('-')[0] == "trash_can") str = "移除";
           else if(pickid.split('-')[0] == 'thermometer' && hoverid.split('-')[0]=='round_flask_cone.pot.heater.stand1'){
             str = '插入';
             this.bb8warning = '真实实验中温度计不要触及到油浴锅底部并用铁夹悬挂'
@@ -1352,13 +1388,14 @@ export default {
           var str = '拼接';
           if (hoverid.split('-')[0] == "trash_can") str = "移除";
           else if(pickid.split('-')[0]=='magneton.tweezer' && hoverid.split('-')[0]=='round_flask_c8h14o2s2')str='放入';
-          else if(pickid.split('-')[0]=='needle_full' && hoverid.split('-')[0]=='round_flask_c8h14o2s2')str = '倒入';
+          else if(pickid.split('-')[0]=='needle_full' && hoverid.split('-')[0]=='round_flask_c8h14o2s2')str = '挤入';
           else if(pickid.split('-')[0]=='needle' && hoverid.split('-')[0]=='round_flask_c8h14o2s2')str = '吸入';
           else if( pickid.split('-')[0] =='film') str = '封口';
           else if(pickid.split('-')[0]=='liquid_transferor' && hoverid.split('-')[0] == 'tri_flask_full_fecl3')str = '准备吸入';
-          else if(pickid.split('-')[0]=='liquid_transferor' && hoverid.split('-')[0] == 'round_flask_c8h14o2s2')str = '准备倒入';
+          else if(pickid.split('-')[0]=='liquid_transferor' && hoverid.split('-')[0] == 'round_flask_c8h14o2s2')str = '准备挤入';
           else if(pickid.split('-')[0]=='needle_full' && hoverid.split('-')[0]=='tri_flask')str = '放入';      
-          else if(pickid.split('-')[0]=='tweezer' && hoverid.split('-')[0]=='magneton')str = '夹起';                
+          else if(pickid.split('-')[0]=='tweezer' && hoverid.split('-')[0]=='magneton')str = '夹起';    
+          else if(pickid.split('-')[0] == 'magneton.tweezer' && hoverid.split('-')[0] == 'round_flaskdel')str ='放入';            
           break;
         case 4:
           var str = '拼接';
@@ -1406,7 +1443,7 @@ export default {
                     10
                   ) {
                     if (i - 1 < 0) {
-                      alert("电子称量度范围不足！");
+                      alert("电子秤量度范围不足！");
                     } else array1[i - 1] += 1;
                   }
                 }
@@ -1458,7 +1495,7 @@ export default {
       var x0 = po.x;
       var y0 = po.y;
       var z0 = po.z;
-      mesh.disableFacetData();
+      //mesh.disableFacetData();
       return [x0,y0,z0];
     },
 
@@ -1483,8 +1520,26 @@ export default {
               dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
           })
       );
-      mesh.id = 'stand1';
-      mesh.id = this.addName(mesh.id);
+      if(array[0].split('-')[0]=='stand1_movable.round_flask_cone'){
+        mesh.id = 'stand1.round_flask_cone' 
+        mesh.id = this.addName(mesh.id);
+      }
+      else{
+        mesh.id = 'stand1';
+        mesh.id = this.addName(mesh.id);
+      }
+      this.bb8warning = '注意在真实实验中，烧瓶浸没在油浴锅中的体积约为2/3'
+      this.activeIndex = 'default'
+      for (var i = 0; i < this.scene.meshes.length; i++) {
+            if (this.scene.meshes[i].id.split('-').includes('pot.heater')) {
+              var po = this.getMergedPosition(this.scene.meshes[i].id);
+                if((-po[0]>=0.58 && -po[0]<=0.87) &&
+                (po[2]>=0.067 &&po[2]<=0.427)){
+                  this.step2node2 = 1;
+                  break;
+                }
+            }
+        }
     },
     addModel(name, scaling, position, rotation, behavior,id) {
       /*
@@ -1606,13 +1661,28 @@ export default {
       )
       this.e1 = 1;
       this.step = ["反应前期准备", "", "",""];
-      this.show1 = true;
-      this.show2 = true;
-      this.show3 = true;
+      this.show1 = false;
+      this.show2 = false;
+      this.show3 = false;
       this.now_score = 0;
       this.btn_nextstep = false;
       this.btn_post = true;
-      if(this.particleSystem!=null)this.particleSystem.reset();
+      if(this.timeout3!=null){
+        window.clearTimeout(this.timeout3);
+        this.timeout3 = null;
+      }
+      if(this.timeout4!=null){
+        window.clearTimeout(this.timeout4)
+        this.timeout4 = null;
+      }
+      if(this.timeout5!=null){
+        window.clearTimeout(this.timeout5)
+        this.timeout5=null;
+      }
+      if(this.particleSystem!=null){
+        this.particleSystem.reset();
+        this.particleSystem=null;
+      }
       this.activeIndex = 'default';
       this.weightlist=[]
       this.weightprops={}
@@ -1622,6 +1692,8 @@ export default {
       this.needleprops={}
       this.standlist=[]
       this.hasClock=false
+      this.shaked = 0;
+      this.stretched = 0;
       this.liquid_transferorlist=[]
       this.liquid_transferorprops={}
       this.clearAllScore1();
@@ -1630,6 +1702,7 @@ export default {
       this.clearAllScore4();
       this.removeSceneMesh();
       this.addModel('stand',null,new BABYLON.Vector3(1,0,0),new BABYLON.Vector3(0,Math.PI,0),null,null);
+      this.addTrash_can();
     },
     toStep2(){
       this.e1 = 2;
@@ -1640,7 +1713,24 @@ export default {
       this.now_score = 0;
       this.btn_nextstep = false;
       this.btn_post = true;
-      if(this.particleSystem!=null)this.particleSystem.reset();
+      this.shaked = 0;
+      this.stretched = 0;
+      if(this.timeout3!=null){
+        window.clearTimeout(this.timeout3);
+        this.timeout3 = null;
+      }
+      if(this.timeout4!=null){
+        window.clearTimeout(this.timeout4)
+        this.timeout4 = null;
+      }
+      if(this.timeout5!=null){
+        window.clearTimeout(this.timeout5)
+        this.timeout5=null;
+      }
+      if(this.particleSystem!=null){
+        this.particleSystem.reset();
+        this.particleSystem=null;
+      }
       this.activeIndex = 'default';
       this.weightlist=[]
       this.weightprops={}
@@ -1655,6 +1745,7 @@ export default {
       this.now_score = 0;
       this.removeSceneMesh();
       this.addRoundFlaskCone();
+      this.addTrash_can();
     },
     toStep3(){
       this.e1 = 3;
@@ -1665,7 +1756,24 @@ export default {
       this.btn_nextstep = false;
       this.btn_post = true;
       this.now_score = 0;
-      if(this.particleSystem!=null)this.particleSystem.reset();
+      this.shaked = 0;
+      this.stretched = 0;
+      if(this.timeout3!=null){
+        window.clearTimeout(this.timeout3);
+        this.timeout3 = null;
+      }
+      if(this.timeout4!=null){
+        window.clearTimeout(this.timeout4)
+        this.timeout4 = null;
+      }
+      if(this.timeout5!=null){
+        window.clearTimeout(this.timeout5)
+        this.timeout5=null;
+      }
+      if(this.particleSystem!=null){
+        this.particleSystem.reset();
+        this.particleSystem=null;
+      }
       this.activeIndex = 'default';
       this.weightlist=[]
       this.weightprops={}
@@ -1684,6 +1792,7 @@ export default {
       this.now_score = 0;
       this.removeSceneMesh();
       this.addRoundFlaskConePotHeaterStand1();
+      this.addTrash_can();
     },
     toStep4(){
       this.e1 = 4;
@@ -1695,7 +1804,24 @@ export default {
       this.show3 = true;
       this.show4 = true;
       this.now_score = 0;
-      if(this.particleSystem!=null)this.particleSystem.reset();
+      this.shaked = 0;
+      this.stretched = 0;
+      if(this.timeout3!=null){
+        window.clearTimeout(this.timeout3);
+        this.timeout3 = null;
+      }
+      if(this.timeout4!=null){
+        window.clearTimeout(this.timeout4);
+        this.timeout4 = null;
+      }
+      if(this.timeout5!=null){
+        window.clearTimeout(this.timeout5);
+        this.timeout5=null;
+      }
+      if(this.particleSystem!=null){
+        this.particleSystem.reset();
+        this.particleSystem=null;
+      }
       this.activeIndex = 'default';
       this.removeSceneMesh();
       this.weightlist=[]
@@ -1714,12 +1840,13 @@ export default {
       this.liquid_transferorprops={}
       this.now_score = 0;
       this.removeSceneMesh();
-      this.addNeedleFullTriFlask()
+      this.addNeedleFullTriFlask();
+      this.addTrash_can();
     },
     removeSceneMesh(){
       var list = [];
       for(var i=0;i<this.scene.meshes.length;i++){
-        if(this.scene.meshes[i].id!="foutain" && this.scene.meshes[i].id!="ground" && this.scene.meshes[i].id.split('-')[0]!="trash_can")
+        if(this.scene.meshes[i].id!="foutain" && this.scene.meshes[i].id!="ground")
         {
           list.push(this.scene.meshes[i].id)
         }
@@ -1817,8 +1944,13 @@ export default {
 
       // limit zoom
       this.camera.setPosition(new BABYLON.Vector3(0, Math.PI / 3, -2));
-      this.camera.lowerRadiusLimit = 0;
-      //this.camera.upperRadiusLimit = 60;
+     
+      this.camera.upperAlphaLimit = -Math.PI/2;
+      this.camera.lowerAlphaLimit = -Math.PI/2;
+      this.camera.upperBetaLimit = 1.2;
+      this.camera.lowerBetaLimit = 1.2;
+      
+      this.camera.inputs.remove(this.camera.inputs.attached.mousewheel)
       this.camera.useBouncingBehavior = true;
       this.camera.attachControl(canvas, true);
     },
@@ -1840,7 +1972,6 @@ export default {
       var groundMaterial = new BABYLON.StandardMaterial("ground", scene);
       groundMaterial.specularColor = BABYLON.Color3.Black();
       ground.material = groundMaterial;
-      this.addTrash_can();
     },
     startTouchBtn(){
       this.timeout1 = setTimeout(() => {
@@ -1941,12 +2072,22 @@ export default {
     this.axios.request({
       url:'/experiment/',
       method:'GET'}).then(data=>{
-        data=data.data[0];
-        var nowstep = data.nowstep;
-        var step1score = data.step1score;
-        var step2score = data.step2score;
-        var step3score = data.step3score;
-        var step4score = data.step4score;
+        data=data.data;
+        var nowstep;
+        var step1score;
+        var step2score;
+        var step3score;
+        var step4score;
+        for(var i=0;i<data.length;i++){
+          if(data[i].username_id==sessionStorage.getItem('username')){
+            nowstep = data[i].nowstep;
+            step1score = data[i].step1score;
+            step2score = data[i].step2score;
+            step3score = data[i].step3score;
+            step4score = data[i].step4score;
+            break;
+          }
+        }
         for(var i=0;i<step1score.split(',').length;i++){
           this.step1.node_array[i].score=parseInt(step1score.split(',')[i]);
         }

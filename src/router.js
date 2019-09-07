@@ -2,7 +2,6 @@ import Vue from "vue";
 import Router from "vue-router";
 
 Vue.use(Router);
-
 export default new Router({
   routes: [
     {
@@ -10,8 +9,16 @@ export default new Router({
       component:resolve => require(["./views/Login"],resolve)
     },
     {
-      path: "/adminchemistry",
-      component: resolve => require(["./views/admin"], resolve)
+      path: "/admin",
+      component: resolve => require(["./views/admin_login"], resolve)
+    },
+    {
+      path: "/adminadduser",
+      component: resolve => require(["./views/admin_adduser"], resolve)
+    },
+    {
+      path: "/adminindex",
+      component: resolve => require(["./views/admin_index"], resolve)
     },
     {
       path: "index",
