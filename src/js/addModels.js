@@ -39,16 +39,16 @@ const addModels = {
 
         },
         addC8h14o2s2() {
-            this.addModel('c8h14o2s2', null, null, new BABYLON.Vector3(0, Math.PI, 0), ['PointerDragBehavior'], null);
+            this.addModel('c8h14o2s2', new BABYLON.Vector3(0.03,0.03,0.03), null, new BABYLON.Vector3(0, Math.PI, 0), ['PointerDragBehavior'], null);
         },
         addFecl3() {
-            this.addModel('fecl3', null, null, new BABYLON.Vector3(0, Math.PI, 0), ['PointerDragBehavior'], null);
+            this.addModel('fecl3', new BABYLON.Vector3(0.03, 0.03, 0.03), null, new BABYLON.Vector3(0, Math.PI, 0), ['PointerDragBehavior'], null);
         },
         addAsetone() {
-            this.addModel('c3h6o', null, null, new BABYLON.Vector3(0, Math.PI, 0), ['PointerDragBehavior'], null);
+            this.addModel('c3h6o', new BABYLON.Vector3(0.03, 0.03, 0.03), null, new BABYLON.Vector3(0, Math.PI, 0), ['PointerDragBehavior'], null);
         },
         addDib() {
-            this.addModel('dib', null, null, new BABYLON.Vector3(0, Math.PI, 0), ['PointerDragBehavior'], null);
+            this.addModel('dib', new BABYLON.Vector3(0.03, 0.03, 0.03), null, new BABYLON.Vector3(0, Math.PI, 0), ['PointerDragBehavior'], null);
         },
         addStand() {
             if(this.e1==2){
