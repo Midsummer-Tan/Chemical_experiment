@@ -31,7 +31,7 @@ export default new Router({
         {
           path: "/experiment_b/:id",
           component: resolve => require(["./components/ExperimentB"], resolve)
-        }
+        },
       ]
     }
   ]

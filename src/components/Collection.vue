@@ -13,9 +13,11 @@
               height="200px"
               src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
             ></v-img>
-            <v-card-title class="subheading font-weight-black">{{item.title}}</v-card-title>
+            <v-card-title class="subheading font-weight-black">{{item.title}}<v-spacer></v-spacer>
+            <v-btn color="blue" @click="pptPreview()">点击查看课件</v-btn></v-card-title>
           </v-card>
         </v-hover>
+        
       </v-flex>
     </v-layout>
   </v-container>
@@ -32,6 +34,11 @@ export default {
         }
       ]
     };
+  },
+  methods:{
+    pptPreview(){
+      window.location.href="/pptpreview/index.html"
+    }
   }
 };
 </script>

@@ -1,3 +1,4 @@
+
 <template>
   <v-container
     fluid
@@ -1167,6 +1168,10 @@ export default {
             "tri_flask_full_fecl3.film",
             "needle_full.tri_flask",
             'glass_pad_yellow_cylinder',
+            "dib.bottle_cap",
+            "fecl3.bottle_cap",
+            "c3h6o.bottle_cap",
+            "c8h14o2s2.bottle_cap"
           ];
           if (pickResult.pickedMesh.id != "ground") {
             this.hl.addMesh(pickResult.pickedMesh, BABYLON.Color3.Purple());
@@ -1344,6 +1349,21 @@ export default {
             case "stand":
               this.addStand();
               break;
+            case "dib":
+              this.addDibNoCap();
+              break;
+            case "c3h6o":
+              this.addAsetoneNoCap();
+              break;
+            case "c8h14o2s2":
+              this.addC8h14o2s2NoCap();
+              break;
+            case "fecl3":
+              this.addFecl3NoCap();
+              break;
+            case "bottle_cap":
+              this.addBottleCap();
+              break;
             case "tri_flask":
               this.addTriFlask();
               break;
@@ -1399,6 +1419,7 @@ export default {
           else if(pickid.split('-')[0] == 'dropper' && hoverid.split('-')[0] == 'c3h6o') str = '吸入';
           else if(pickid.split('-')[0] == 'needle' && hoverid.split('-')[0] == 'dib')str = '准备吸入';
           else if( pickid.split('-')[0] =='film') str = '封口';
+          else if(pickid.split("-")[0]=='bottle_cap') str = '盖上';
           break;
         case 2:
           var str = '拼接';

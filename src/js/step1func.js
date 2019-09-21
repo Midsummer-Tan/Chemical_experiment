@@ -1,3 +1,5 @@
+import { timingSafeEqual } from "crypto";
+
 class Node {
     score = 0;
     errortext = ''
@@ -427,6 +429,29 @@ const step1Function = {
                     })
                 );
             } 
+            else if (pickid.split('-')[0] == "bottle_cap" &&
+             (hoverid.split('-')[0] == "dib" || hoverid.split('-')[0] == "c3h6o" 
+             || hoverid.split('-')[0] == "c8h14o2s2" || hoverid.split('-')[0] == "fecl3")) {
+                 var mesh = this.scene.getMeshByID(hoverid)
+                 mesh.updateFacetData();
+                 var po = mesh.getFacetPosition(1);
+                 this.scene.getMeshByID(pickid).position = new BABYLON.Vector3(-po.x + 0.043, po.y + 0.18, po.z+0.01 );
+                 var mesh = BABYLON.Mesh.MergeMeshes(
+                     [this.scene.getMeshByID(hoverid), this.scene.getMeshByID(pickid)],
+                     true,
+                     true,
+                     undefined,
+                     false,
+                     true
+                 );
+                 mesh.id = hoverid.split('-')[0]+".bottle_cap";
+                 mesh.id = this.addName(mesh.id)
+                 mesh.addBehavior(
+                     new BABYLON.PointerDragBehavior({
+                         dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+                     })
+                 );
+             }
             else if (pickid.split('-')[0] == "round_flask_cone" && hoverid.split('-')[0] == "stand") {
                 var x = this.scene.getMeshByID(hoverid).position.x;
                 var y = this.scene.getMeshByID(hoverid).position.y;

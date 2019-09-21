@@ -39,16 +39,119 @@ const addModels = {
 
         },
         addC8h14o2s2() {
-            this.addModel('c8h14o2s2', new BABYLON.Vector3(0.03,0.03,0.03), null, new BABYLON.Vector3(0, Math.PI, 0), ['PointerDragBehavior'], null);
+            this.addModel('c8h14o2s2', new BABYLON.Vector3(0.03, 0.03, 0.03), null, new BABYLON.Vector3(0, Math.PI, 0), null, 'c8h14o2s2');
+            this.addModel('bottle_cap', new BABYLON.Vector3(0.03, 0.03, 0.03), new BABYLON.Vector3(0,0.18,0), new BABYLON.Vector3(0, 0, Math.PI), null, 'bottle_cap');
+            var timer = setInterval(() => {
+                if (this.scene.getMeshByID('bottle_cap') != undefined && this.scene.getMeshByID('c8h14o2s2') != undefined) {
+                    var mesh = BABYLON.Mesh.MergeMeshes(
+                        [this.scene.getMeshByID('bottle_cap'), this.scene.getMeshByID('c8h14o2s2')
+                        ],
+                        true,
+                        true,
+                        undefined,
+                        false,
+                        true
+                    );
+                    mesh.id = 'c8h14o2s2.bottle_cap';
+                    mesh.id = this.addName(mesh.id);
+                    mesh.addBehavior(
+                        new BABYLON.PointerDragBehavior({
+                            dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+                        })
+                    );
+                    window.clearInterval(timer);
+                }
+            }, 100);           
         },
         addFecl3() {
-            this.addModel('fecl3', new BABYLON.Vector3(0.03, 0.03, 0.03), null, new BABYLON.Vector3(0, Math.PI, 0), ['PointerDragBehavior'], null);
+            this.addModel('fecl3', new BABYLON.Vector3(0.03, 0.03, 0.03), null, new BABYLON.Vector3(0, Math.PI, 0),null, 'fecl3');
+            this.addModel('bottle_cap', new BABYLON.Vector3(0.03, 0.03, 0.03), new BABYLON.Vector3(0, 0.18, 0), new BABYLON.Vector3(0, 0, Math.PI), null, 'bottle_cap');
+            var timer = setInterval(() => {
+                if (this.scene.getMeshByID('bottle_cap') != undefined && this.scene.getMeshByID('fecl3') != undefined) {
+                    var mesh = BABYLON.Mesh.MergeMeshes(
+                        [this.scene.getMeshByID('bottle_cap'), this.scene.getMeshByID('fecl3')
+                        ],
+                        true,
+                        true,
+                        undefined,
+                        false,
+                        true
+                    );
+                    mesh.id = 'fecl3.bottle_cap';
+                    mesh.id = this.addName(mesh.id);
+                    mesh.addBehavior(
+                        new BABYLON.PointerDragBehavior({
+                            dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+                        })
+                    );
+                    window.clearInterval(timer);
+                }
+            }, 100);
         },
         addAsetone() {
-            this.addModel('c3h6o', new BABYLON.Vector3(0.03, 0.03, 0.03), null, new BABYLON.Vector3(0, Math.PI, 0), ['PointerDragBehavior'], null);
+            this.addModel('c3h6o', new BABYLON.Vector3(0.03, 0.03, 0.03), null, new BABYLON.Vector3(0, Math.PI, 0), null, 'c3h6o');
+            this.addModel('bottle_cap', new BABYLON.Vector3(0.03, 0.03, 0.03), new BABYLON.Vector3(0, 0.18, 0), new BABYLON.Vector3(0, 0, Math.PI), null, 'bottle_cap');
+            var timer = setInterval(() => {
+                if (this.scene.getMeshByID('bottle_cap') != undefined && this.scene.getMeshByID('c3h6o') != undefined) {
+                    var mesh = BABYLON.Mesh.MergeMeshes(
+                        [this.scene.getMeshByID('bottle_cap'), this.scene.getMeshByID('c3h6o')
+                        ],
+                        true,
+                        true,
+                        undefined,
+                        false,
+                        true
+                    );
+                    mesh.id = 'c3h6o.bottle_cap';
+                    mesh.id = this.addName(mesh.id);
+                    mesh.addBehavior(
+                        new BABYLON.PointerDragBehavior({
+                            dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+                        })
+                    );
+                    window.clearInterval(timer);
+                }
+            }, 100);
         },
         addDib() {
-            this.addModel('dib', new BABYLON.Vector3(0.03, 0.03, 0.03), null, new BABYLON.Vector3(0, Math.PI, 0), ['PointerDragBehavior'], null);
+            this.addModel('dib', new BABYLON.Vector3(0.03, 0.03, 0.03), null, new BABYLON.Vector3(0, Math.PI, 0), null, 'dib');
+            this.addModel('bottle_cap', new BABYLON.Vector3(0.03, 0.03, 0.03), new BABYLON.Vector3(0, 0.18, 0), new BABYLON.Vector3(0, 0, Math.PI), null, 'bottle_cap');
+            var timer = setInterval(() => {
+                if (this.scene.getMeshByID('bottle_cap') != undefined && this.scene.getMeshByID('dib') != undefined) {
+                    var mesh = BABYLON.Mesh.MergeMeshes(
+                        [this.scene.getMeshByID('bottle_cap'), this.scene.getMeshByID('dib')
+                        ],
+                        true,
+                        true,
+                        undefined,
+                        false,
+                        true
+                    );
+                    mesh.id = 'dib.bottle_cap';
+                    mesh.id = this.addName(mesh.id);
+                    mesh.addBehavior(
+                        new BABYLON.PointerDragBehavior({
+                            dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+                        })
+                    );
+                    window.clearInterval(timer);
+                }
+            }, 100);
+        },
+        addC8h14o2s2NoCap(){
+            this.addModel('c8h14o2s2', new BABYLON.Vector3(0.03, 0.03, 0.03), null, new BABYLON.Vector3(0, Math.PI, 0),['PointerDragBehavior'], null);
+        },
+        addFecl3NoCap(){
+            this.addModel('fecl3', new BABYLON.Vector3(0.03, 0.03, 0.03), null, new BABYLON.Vector3(0, Math.PI, 0), ['PointerDragBehavior'], null);
+        },
+        addAsetoneNoCap(){
+            this.addModel('c3h6o', new BABYLON.Vector3(0.03, 0.03, 0.03), null, new BABYLON.Vector3(0, Math.PI, 0), ['PointerDragBehavior'], null);
+        },
+        addDibNoCap(){
+            this.addModel('dib', new BABYLON.Vector3(0.03, 0.03, 0.03), null, new BABYLON.Vector3(0, Math.PI, 0), ['PointerDragBehavior'], null);            
+        },
+        addBottleCap(){
+            this.addModel('bottle_cap', new BABYLON.Vector3(0.03, 0.03, 0.03), new BABYLON.Vector3(0, 0.1, 0), new BABYLON.Vector3(0, 0, Math.PI), ['PointerDragBehavior'], null);
         },
         addStand() {
             if(this.e1==2){
