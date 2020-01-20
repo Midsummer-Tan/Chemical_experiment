@@ -52,7 +52,9 @@ export default {
   data() {
     return {
       username: "",
-      password: ""
+      password: "",
+      flag:"1",//直接登录flag=1 其他平台0,
+      role:'1' //教师or学生 学生为1 教师为2
     };
   },
   methods: {
@@ -63,13 +65,17 @@ export default {
           method:'POST',
           data:{
             username:this.username,
-            password:this.password
+            password:this.password,
+            flag:this.flag,
+            role:this.role
           }
         }
       ).then(response=>{
         var response=response.data
         if(response['flag']>0){
-          this.$message({message:'登陆成功',type:'success'});
+          if(this.flag=="1"){
+            this.$message({message:'登陆成功',type:'success'});
+          }
           sessionStorage.setItem("username",this.username);
           this.$router.push({ path: "/collection" });
         }
@@ -79,6 +85,30 @@ export default {
     }
   },
   mounted(){
+    this.token = this.$route.query.token;
+    if(this.token!=null){
+      this.token = window.btoa(JSON.stringify({'token':this.token}))
+      this.host = "http://ecust.rofall.net/virexp/";
+      this.axios.request(
+        {
+          url:this.host + 'outer/getMessageByToken',
+          method:'GET',
+          params:{
+            "param":this.token
+          }
+        }
+      ).then(response=>{
+        var response=response.data
+        var result = JSON.parse(window.atob(response));
+        this.flag = "0";
+        this.username = result['numberId'];
+        if(result.role=="teacher"){
+          this.role='2'
+        }
+        this.login();
+      })
+    }
+    
     if(sessionStorage.getItem("username")!=null)this.$router.push({ path: "/collection" });
   }
 };

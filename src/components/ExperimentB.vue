@@ -899,7 +899,7 @@ export default {
       await this.createModel(this.scene, this.canvas);
       this.fountain = BABYLON.Mesh.CreateBox("foutain", .01, this.scene);
       this.fountain.visibility = 0;
-      this.fogTexture = new BABYLON.Texture("images/smoke_15.png", this.scene);
+      this.fogTexture = new BABYLON.Texture("/images/smoke_15.png", this.scene);
       this.advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI(
         "UI"
       );
@@ -1411,19 +1411,22 @@ export default {
       switch (this.e1) {
         case 1:
           var str = "拼接";
-          if (hoverid.split('-')[0] == "weight" || (pickid.split('-')[0] =='pot' && hoverid.split('-')[0] == 'heater')) str = "放置";
+          if (hoverid.split('-')[0] == "weight" ||pickid.split("-")[0]=='spoon_cone'||pickid.split("-")[0]=='spoon_powder_brown'
+           ||(pickid.split('-')[0] =='pot' && hoverid.split('-')[0] == 'heater')) str = "放置";
           else if (hoverid.split('-')[0] == "trash_can") str = "移除";
           else if (pickid.split('-')[0] == "spoon") str = "拾取";
-          else if ( hoverid.split('-')[0] == "round_flask" ||hoverid.split('-')[0] == 'tri_flask') str = "倒入";
-          else if(pickid.split('-')[0] == 'dropper_full' && hoverid.split('-')[0] == 'tri_flask_powder_brown')str = '挤入';
+          else if ( hoverid.split('-')[0] == "round_flask" ||hoverid.split('-')[0] == 'tri_flask'||
+           pickid.split('-')[0]=='measuring_cylinder_full') str = "倒入";
+          else if(pickid.split('-')[0] == 'dropper_full')str = '挤入';
           else if(pickid.split('-')[0] == 'dropper' && hoverid.split('-')[0] == 'c3h6o') str = '吸入';
           else if(pickid.split('-')[0] == 'needle' && hoverid.split('-')[0] == 'dib')str = '准备吸入';
           else if( pickid.split('-')[0] =='film') str = '封口';
-          else if(pickid.split("-")[0]=='bottle_cap') str = '盖上';
+          else if(pickid.split("-")[0]=='bottle_cap'||pickid.split("-")[0]=='cap') str = '盖上';
           break;
         case 2:
           var str = '拼接';
           if (hoverid.split('-')[0] == "trash_can") str = "移除";
+          else if(pickid.split('-')[0] == 'pot')str = "放置";
           else if(pickid.split('-')[0] == 'thermometer' && hoverid.split('-')[0]=='round_flask_cone.pot.heater.stand1'){
             str = '插入';
             this.bb8warning = '真实实验中温度计不要触及到油浴锅底部并用铁夹悬挂'
@@ -2095,7 +2098,7 @@ export default {
     async createModel(scene, canvas) {
       var ground = BABYLON.Mesh.CreateGround("ground", 8, 8, 2, scene, false);
       var groundMaterial = new BABYLON.StandardMaterial("ground", scene);
-      groundMaterial.specularColor = BABYLON.Color3.Black();
+      groundMaterial.diffuseColor = new BABYLON.Color3(0.253, 0.340, 0.407);
       ground.material = groundMaterial;
     },
     startTouchBtn(){
@@ -2196,23 +2199,14 @@ export default {
     this.init();
     this.axios.request({
       url:'/experiment/',
+      params:{'username':sessionStorage.getItem('username')},
       method:'GET'}).then(data=>{
         data=data.data;
-        var nowstep;
-        var step1score;
-        var step2score;
-        var step3score;
-        var step4score;
-        for(var i=0;i<data.length;i++){
-          if(data[i].username_id==sessionStorage.getItem('username')){
-            nowstep = data[i].nowstep;
-            step1score = data[i].step1score;
-            step2score = data[i].step2score;
-            step3score = data[i].step3score;
-            step4score = data[i].step4score;
-            break;
-          }
-        }
+        var nowstep = data[0].nowstep;
+        var step1score = data[0].step1score;
+        var step2score = data[0].step2score;
+        var step3score = data[0].step3score;
+        var step4score = data[0].step4score;
         for(var i=0;i<step1score.split(',').length;i++){
           this.step1.node_array[i].score=parseInt(step1score.split(',')[i]);
         }
