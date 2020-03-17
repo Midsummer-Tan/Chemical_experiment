@@ -1,21 +1,18 @@
 <template>
   <v-container fluid grid-list-md>
     <v-layout row wrap>
-      <v-flex xs12 sm4 md3 v-for="(item,i) in expList" :key="i">
+      <v-flex xs12 sm4 md4 v-for="(item,i) in expList" :key="i">
         <v-hover>
-          <v-card
-            slot-scope="{ hover }"
-            :class="`elevation-${hover ? 12 : 2}`"
-          >
+          <v-card>
             <v-img
               class="white--text"
-              height="200px"
+              aspect-ratio="2"
               src="/images/ex_pic1.jpg"
             ></v-img>
             <v-card-title class="subheading font-weight-black">{{item.title}}<v-spacer></v-spacer></v-card-title>
             <v-card-actions>
               <v-btn flat :color="btnColor[pptVideoQues[0]]" @click="pptPreview()" >看课件&nbsp;<v-icon>{{btnClass[pptVideoQues[0]]}}</v-icon></v-btn>
-              <v-btn flat :color="btnColor[pptVideoQues[1]]" @click="ToVideo()">看视频&nbsp; <v-icon>{{btnClass[pptVideoQues[1]]}}</v-icon></v-btn>
+              z
               <v-dialog v-model="dialog" width="600" persistent>
                 <template v-slot:activator="{ on }">
                   <v-btn flat :color="btnColor[pptVideoQues[2]]" v-on="on">预习题 &nbsp; <v-icon>{{btnClass[pptVideoQues[2]]}}</v-icon></v-btn>
@@ -210,9 +207,9 @@ export default {
           "username":sessionStorage.getItem('username')
       }}).then(data=>{
         data=data.data[0];
-        this.pptVideoQues[0] = data.ppt;
-        this.pptVideoQues[1] = data.video;
-        this.pptVideoQues[2] = data.question;
+        this.pptVideoQues[0] = parseInt(data.ppt);
+        this.pptVideoQues[1] = parseInt(data.video);
+        this.pptVideoQues[2] = parseInt(data.question);
         if(this.pptVideoQues.indexOf(0)==-1){
         this.allowExperiment = false;
       } 

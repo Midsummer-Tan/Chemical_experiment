@@ -82,13 +82,29 @@ export default {
         else 
           this.$message({message:'用户名或密码有误',type:'error'});
       })
-    }
+    },
+    getUrlParam(name){
+      var url =unescape(window.location.search.substr(1)).split('?');
+      var param = '';
+      if(name=='token'){
+        param = url[0];
+      }
+      else if(name=='host'){
+        param = url[1];
+      }
+      var reg = new RegExp("(^|&)"+name+"=([^&]*)(&|$)");
+      if(param[0]==undefined){
+        return null;
+      }
+      var r = param.match(reg)[2];
+      return r;
+    },
   },
   mounted(){
-    this.token = this.$route.query.token;
+    this.token = this.getUrlParam("token");
     if(this.token!=null){
-      this.token = window.btoa(JSON.stringify({'token':this.token}))
-      this.host = "http://ecust.rofall.net/virexp/";
+      this.token = window.btoa(JSON.stringify({'token':this.token}));
+      this.host = this.getUrlParam("host");
       this.axios.request(
         {
           url:this.host + 'outer/getMessageByToken',
@@ -98,7 +114,7 @@ export default {
           }
         }
       ).then(response=>{
-        var response=response.data
+        var response=response.data;
         var result = JSON.parse(window.atob(response));
         this.flag = "0";
         this.username = result['numberId'];
