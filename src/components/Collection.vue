@@ -12,7 +12,7 @@
             <v-card-title class="subheading font-weight-black">{{item.title}}<v-spacer></v-spacer></v-card-title>
             <v-card-actions>
               <v-btn flat :color="btnColor[pptVideoQues[0]]" @click="pptPreview()" >看课件&nbsp;<v-icon>{{btnClass[pptVideoQues[0]]}}</v-icon></v-btn>
-              z
+              <v-btn flat :color="btnColor[pptVideoQues[1]]" @click="ToVideo()">看视频&nbsp; <v-icon>{{btnClass[pptVideoQues[1]]}}</v-icon></v-btn>
               <v-dialog v-model="dialog" width="600" persistent>
                 <template v-slot:activator="{ on }">
                   <v-btn flat :color="btnColor[pptVideoQues[2]]" v-on="on">预习题 &nbsp; <v-icon>{{btnClass[pptVideoQues[2]]}}</v-icon></v-btn>
