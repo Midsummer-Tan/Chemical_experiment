@@ -247,7 +247,7 @@ const addModels = {
             }, 100);
         },
         addNeedle() {
-            this.addModel('needle', new BABYLON.Vector3(1.5, 1.5, 1.5), new BABYLON.Vector3(0, 0.23, 0), new BABYLON.Vector3(0, 0, Math.PI), ['PointerDragBehavior'], null);
+            this.addModel('needle', new BABYLON.Vector3(2, 2, 2), new BABYLON.Vector3(0, 0.23, 0), new BABYLON.Vector3(0, 0, Math.PI), ['PointerDragBehavior'], null);
         },
         //addCap(0,0.01,0)
         addCap(x, y, z) {
@@ -274,9 +274,9 @@ const addModels = {
             this.addModel('film', null, null, null, ['PointerDragBehavior'], null);
         },
         addNeedleCap() {
-            this.addModel('needle', new BABYLON.Vector3(1.5, 1.5, 1.5), new BABYLON.Vector3(0, 0.23, 0), new BABYLON.Vector3(0, 0, Math.PI), null, 'needle');
+            this.addModel('needle', new BABYLON.Vector3(2, 2, 2), new BABYLON.Vector3(0, 0.25, 0), new BABYLON.Vector3(0, 0, Math.PI), null, 'needle');
             BABYLON.Mesh.CreateCylinder("cap", 0.01, 0.01, 0.01, 10, 1, this.scene, false, BABYLON.Mesh.DEFAULTSIDE);
-            this.scene.getMeshByID('cap').position = new BABYLON.Vector3(0.002, 0.05, 0);
+            this.scene.getMeshByID('cap').position = new BABYLON.Vector3(0.002, 0, 0);
             var mater = new BABYLON.StandardMaterial("texture1", this.scene);
             mater.diffuseColor = new BABYLON.Color3(0.134, 0.331, 0.535);
             this.scene.getMeshByID('cap').material = mater;
@@ -434,8 +434,8 @@ const addModels = {
             }, 100);
         },
         addNeedleFullCap() {
-            this.addModel('needle_full', new BABYLON.Vector3(1.5,1.5,1.5), new BABYLON.Vector3(0, 0 + 0.23, 0), new BABYLON.Vector3(0, 0, Math.PI), null, 'needle_full');
-            var mesh1 = this.addCap(0, 0.05, 0);
+            this.addModel('needle_full', new BABYLON.Vector3(2,2,2), new BABYLON.Vector3(0, 0 + 0.25, 0), new BABYLON.Vector3(0, 0, Math.PI), null, 'needle_full');
+            var mesh1 = this.addCap(0, 0, 0);
             mesh1.removeBehavior(mesh1.behaviors[0]);
             mesh1.id = 'cap'
             var timer = setInterval(() => {
@@ -463,7 +463,7 @@ const addModels = {
             }, 100);
         },
         addNeedleFull(){
-            this.addModel('needle_full', new BABYLON.Vector3(1.5,1.5,1.5), new BABYLON.Vector3(0,0.23, 0), new BABYLON.Vector3(0, 0, Math.PI), ['PointerDragBehavior'], 'needle_full_glue');
+            this.addModel('needle_full', new BABYLON.Vector3(2,2,2), new BABYLON.Vector3(0,0.23, 0), new BABYLON.Vector3(0, 0, Math.PI), ['PointerDragBehavior'], 'needle_full_glue');
             var timer = setInterval(() => {
                 if (this.scene.getMeshByID('needle_full_glue')!=undefined){
                     var mesh = this.scene.getMeshByID('needle_full_glue');

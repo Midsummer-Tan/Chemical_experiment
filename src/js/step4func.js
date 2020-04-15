@@ -106,7 +106,7 @@ const step4Function = {
                     delete(this.needleprops[hoverid])
                 }
                 this.activeIndex = 'default';
-                this.addModel('yellow_cylinder', new BABYLON.Vector3(0.08, 0.08, 0.08), new BABYLON.Vector3(-po[0], po[1], po[2]), new BABYLON.Vector3(0, Math.PI / 2, 0), ['PointerDragBehavior'], null);
+                this.addModel('yellow_cylinder', new BABYLON.Vector3(0.08, 0.08, 0.08), new BABYLON.Vector3(-po[0], po[1]+0.3, po[2]), new BABYLON.Vector3(0, Math.PI / 2, 0), ['PointerDragBehavior'], null);
             } else if (pickid.split('-')[0] == 'glass_pad' && hoverid.split('-')[0] == 'yellow_cylinder') {
                 var mesh = this.scene.getMeshByID(hoverid);
                 var po = mesh.position;

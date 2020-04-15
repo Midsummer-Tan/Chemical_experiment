@@ -95,7 +95,7 @@
 
         <template v-for="i in weightlist">
           <el-tab-pane :label="'电子秤('+i+')'"  :name="i" :key="i">
-          <div style="height:120px;">
+          <div style="height:150px;">
             <v-card>
               <electronic-scale ref="weight"></electronic-scale>
               <v-btn
@@ -111,6 +111,8 @@
               <v-icon>fa fa-refresh</v-icon>
               </v-btn>
             </v-card>
+            <br>
+            <span style="color:orange;font-size:14px">若称量错误可以移除仪器重新进行称取操作</span>
           </div>
         </el-tab-pane>
         </template>
@@ -120,6 +122,7 @@
             <div style="height:150px;">
               <my-progress :valueNow="measuring_cylinderprops[i][0]"></my-progress>
             </div>
+            <span style="color:orange;font-size:14px">若称量错误可以移除仪器重新进行称取操作</span>
           </el-tab-pane>
         </template>
 
@@ -139,6 +142,8 @@
               &emsp;
               <v-btn color='pink' large @click="finishChangeNeedleValue(i)" :disabled='needle_value_btn_post'>确定</v-btn>
             </div>
+            <br>
+            <span style="color:orange;font-size:14px">若吸取错误可以移除仪器重新进行吸取操作</span>
           </el-tab-pane>
         </template>
 
@@ -239,6 +244,7 @@
               </v-layout>
               <my-pipette-progress :valueNow="liquid_transferorprops[i][0]"></my-pipette-progress>
             </div>
+            <span style="color:orange;font-size:14px">若吸取错误可以移除仪器重新进行吸取操作</span>
           </el-tab-pane>
         </template>
 
@@ -1017,6 +1023,16 @@ export default {
               }, 100);
             }
             else {
+              const h = this.$createElement;
+              this.$notify({
+                title: '出现了一点小问题',
+                message:h('p', null, [
+                  h('i', { style: 'color: red' }, '你没有做出强度高的胶黏物'),
+                  h('span',{ style: 'color: teal' }, '，这可能是因为你在量取，吸取，称量，温度、时间控制等过程中出现了差错，仔细分析一下错误原因，下一次你会做的更好。')
+                ]) ,
+                type:'warning',
+                duration: 0
+              });
               this.scene.removeMesh(mesh);
               this.addModel('yellow_cylinder', new BABYLON.Vector3(0.08, 0.08, 0.04),new BABYLON.Vector3(-po[0],po[1],po[2]), new BABYLON.Vector3(0,Math.PI/2,0),null,'yc1');
               this.addModel('yellow_cylinder', new BABYLON.Vector3(0.08, 0.08, 0.04),new BABYLON.Vector3(-po[0]-0.1,po[1],po[2]), new BABYLON.Vector3(0,Math.PI/2,0),null, 'yc2');
@@ -1279,8 +1295,8 @@ export default {
           //将针管 针管冒分离之后不分离到原点
           var po = this.getMergedPosition(hoverid);
           this.scene.removeMesh(this.scene.getMeshByID(hoverid));
-          this.addCap(po[0],po[1]+0.02,po[2]);
-          this.addModel('needle',new BABYLON.Vector3(1.5,1.5,1.5),new BABYLON.Vector3(po[0],po[1]+0.23,po[2]),new BABYLON.Vector3(0,0,Math.PI),null,'needle');
+          this.addCap(po[0],po[1]+0.5,po[2]);
+          this.addModel('needle',new BABYLON.Vector3(2,2,2),new BABYLON.Vector3(po[0],po[1]+0.3,po[2]),new BABYLON.Vector3(0,0,Math.PI),null,'needle');
           var timer = setInterval(() => {
             if(this.scene.getMeshByID('needle')!=undefined){
               var mesh = this.scene.getMeshByID('needle');
@@ -1301,7 +1317,7 @@ export default {
           var po = this.getMergedPosition(hoverid);
           this.scene.removeMesh(this.scene.getMeshByID(hoverid));
           this.addCap(po[0],po[1]-0.13,po[2]);
-          this.addModel('needle_full',new BABYLON.Vector3(1.5,1.5,1.5),new BABYLON.Vector3(po[0],po[1],po[2]),new BABYLON.Vector3(0,0,Math.PI),null,'needle_full');
+          this.addModel('needle_full',new BABYLON.Vector3(2,2,2),new BABYLON.Vector3(po[0],po[1],po[2]),new BABYLON.Vector3(0,0,Math.PI),null,'needle_full');
           var timer = setInterval(() => {
             if(this.scene.getMeshByID('needle_full')!=undefined){
               var mesh = this.scene.getMeshByID('needle_full');
@@ -1442,9 +1458,10 @@ export default {
           else if( pickid.split('-')[0] =='film') str = '封口';
           else if(pickid.split('-')[0]=='liquid_transferor' && hoverid.split('-')[0] == 'tri_flask_full_fecl3')str = '准备吸入';
           else if(pickid.split('-')[0]=='liquid_transferor' && hoverid.split('-')[0] == 'round_flask_c8h14o2s2')str = '准备挤入';
-          else if(pickid.split('-')[0]=='needle_full' && hoverid.split('-')[0]=='tri_flask')str = '放入';      
+          else if((pickid.split('-')[0]=='needle_full'||pickid.split('-')[0]=='needle_full_glue') && hoverid.split('-')[0]=='tri_flask')str = '放入';      
           else if(pickid.split('-')[0]=='tweezer' && hoverid.split('-')[0]=='magneton')str = '夹起';    
-          else if(pickid.split('-')[0] == 'magneton.tweezer' && hoverid.split('-')[0] == 'round_flaskdel')str ='放入';            
+          else if(pickid.split('-')[0] == 'magneton.tweezer' && hoverid.split('-')[0] == 'round_flaskdel')str ='放入';  
+          else if(pickid.split("-")[0]=='bottle_cap'||pickid.split("-")[0]=='cap') str = '盖上';
           break;
         case 4:
           var str = '拼接';
@@ -1671,7 +1688,7 @@ export default {
             this.needleprops[id][0] = Math.floor(this.needleprops[id][0] * 100) / 100;
             var po = this.getMergedPosition(id);
             this.scene.removeMesh(this.scene.getMeshByID(id));
-            this.addModel('needle_full', new BABYLON.Vector3(1.5,1.5,1.5), new BABYLON.Vector3(po[0], po[1] + 0.2, po[2]), new BABYLON.Vector3(0, 0, Math.PI), null, 'needle_full');
+            this.addModel('needle_full', new BABYLON.Vector3(2,2,2), new BABYLON.Vector3(po[0], po[1] + 0.23, po[2]), new BABYLON.Vector3(0, 0, Math.PI), null, 'needle_full');
             var timer = setInterval(() => {
               if (this.scene.getMeshByID('needle_full')!=undefined){
                 var mesh = this.scene.getMeshByID('needle_full')
@@ -1829,7 +1846,6 @@ export default {
       this.clearAllScore3();
       this.clearAllScore4();
       this.removeSceneMesh();
-      this.addModel('stand',null,new BABYLON.Vector3(1,0,0),new BABYLON.Vector3(0,Math.PI,0),null,null);
       this.addTrash_can();
     },
     toStep2(){
@@ -2157,6 +2173,8 @@ export default {
     post(){
       this.axios.request({
       url:'/experiment/',
+      params:{
+        username:sessionStorage.getItem('username')},
       method:'GET'}).then(data=>{
         data=data.data[0];
         var step1score = data.step1score;

@@ -275,6 +275,29 @@ const step3Function = {
                 this.scene.getMeshByID(id1).id = 'magneton_stiring'
                 this.scene.getMeshByID('magneton_stiring').id = this.addName('magneton_stiring')
             }
+            else if (pickid.split('-')[0] == 'cap' && hoverid.split('-')[0] == 'needle') {
+                var mesh = this.scene.getMeshByID(pickid);
+                var po = this.getMergedPosition(hoverid);
+                mesh.position = new BABYLON.Vector3(po[0], po[1] + 0.01, po[2]);
+                mesh = BABYLON.Mesh.MergeMeshes(
+                    [this.scene.getMeshByID(hoverid), this.scene.getMeshByID(pickid)],
+                    true,
+                    true,
+                    undefined,
+                    false,
+                    true
+                );
+                mesh.id = "needle.cap";
+                mesh.id = this.addName(mesh.id)
+                this.needlelist[this.needlelist.indexOf(hoverid)] = mesh.id
+                this.needleprops[mesh.id] = this.needleprops[hoverid]
+                delete(this.needleprops[hoverid])
+                mesh.addBehavior(
+                    new BABYLON.PointerDragBehavior({
+                        dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+                    })
+                );
+            }
             else if (pickid.split('-')[0] == 'cap' && hoverid.split('-')[0] == 'needle_full') {
                 var mesh1 = this.scene.getMeshByID(pickid);
                 var po = this.getMergedPosition(hoverid);
@@ -329,10 +352,10 @@ const step3Function = {
                 this.step3node3 = 1;
                 setTimeout(() => {
                     this.dib_in_flask_5min = 1;
-                }, 60000*5);
+                }, 1000);
                 var po = this.getMergedPosition(pickid);
                 this.scene.removeMesh(this.scene.getMeshByID(pickid))
-                this.addModel('needle', new BABYLON.Vector3(1.5, 1.5, 1.5), new BABYLON.Vector3(po[0], po[1] + 0.23, po[2]), new BABYLON.Vector3(0, 0, Math.PI), ['PointerDragBehavior'], 'needle');
+                this.addModel('needle', new BABYLON.Vector3(2, 2, 2), new BABYLON.Vector3(po[0], po[1] + 0.3, po[2]), new BABYLON.Vector3(0, 0, Math.PI), ['PointerDragBehavior'], 'needle');
                 var timer = setInterval(() => {
                     if (this.scene.getMeshByID('needle')!=undefined){
                         var mesh = this.scene.getMeshByID('needle');
@@ -351,7 +374,7 @@ const step3Function = {
                 this.step3node8 = 1;
                 var po = this.getMergedPosition(pickid);
                 this.scene.removeMesh(this.scene.getMeshByID(pickid))
-                this.addModel('needle_full', new BABYLON.Vector3(1.5, 1.5, 1.5), new BABYLON.Vector3(po[0], po[1] + 0.3, po[2]), new BABYLON.Vector3(0, 0, Math.PI), ['PointerDragBehavior'], 'needle_full');
+                this.addModel('needle_full', new BABYLON.Vector3(2, 2, 2), new BABYLON.Vector3(po[0], po[1] + 0.3, po[2]), new BABYLON.Vector3(0, 0, Math.PI), ['PointerDragBehavior'], 'needle_full');
                 var po1 = this.getMergedPosition(hoverid);
                 this.scene.removeMesh(this.scene.getMeshByID(hoverid))
                 this.addModel('round_flask', null, new BABYLON.Vector3(-po1[0]+0.03, po1[1]-0.05, po1[2]-0.08), null, null, null);                
@@ -404,6 +427,7 @@ const step3Function = {
             } 
             else if (pickid.split('-')[0] == 'needle_full' && hoverid.split('-')[0] == 'tri_flask') {
                 var po = this.scene.getMeshByID(hoverid).position;
+                this.scene.getMeshByID(pickid).scaling = new BABYLON.Vector3(1.5, 1.5, 1.5);
                 this.scene.getMeshByID(pickid).position = new BABYLON.Vector3(-po.x-0.07, po.y + 0.01, po.z);
                 this.scene.getMeshByID(pickid).rotation.z += 5 * Math.PI / 6;
                 var mesh = BABYLON.Mesh.MergeMeshes(

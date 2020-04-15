@@ -101,10 +101,11 @@ export default {
     },
   },
   mounted(){
-    this.token = this.getUrlParam("token");
+    this.token = this.$route.query.token;
+    this.host = this.$route.query.host;
     if(this.token!=null){
       this.token = window.btoa(JSON.stringify({'token':this.token}));
-      this.host = this.getUrlParam("host");
+      
       this.axios.request(
         {
           url:this.host + 'outer/getMessageByToken',

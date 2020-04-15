@@ -32,10 +32,6 @@ export default new Router({
         {
           path: "/experiment_b/:id",
           component: resolve => require(["./components/ExperimentB"], resolve)
-        },
-        {
-          path: "/video",
-          component: resolve => require(["./components/Video"], resolve)
         }
       ]
     }
