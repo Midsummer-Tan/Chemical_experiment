@@ -880,7 +880,14 @@ export default {
       reset_dialog:false,
       needle_value_btn_up:true,
       needle_value_btn_down:true,
-      needle_value_btn_post:true
+      needle_value_btn_post:true,
+      //以下6个数值要发到后台进行计算。以验证是否能做出成品
+      C8H14O2S2:'',
+      Fecl3:'',
+      C3H6O:'',
+      DIB:'',
+      temperature:'',
+      pipette:''
     };
   },
   components:{
@@ -979,10 +986,21 @@ export default {
             var po = this.getMergedPosition(mesh.id);
             this.rotateflag = 1;
             this.needstretchid = '';
-            if(this.step1.node_array[2].score ==1 && this.step1.node_array[6].score ==1&&
-            this.step1.node_array[9].score ==1 && this.step1.node_array[14].score ==1 &&
-            this.step3.node_array[0].score ==1 && this.step3.node_array[4].score ==1 &&
-            this.step3.node_array[5].score ==1 && this.step3.node_array[6].score ==1){
+            //往后台发东西 发6个东西
+            this.axios.request({
+              url:'/experiment/',
+              method:'POST',
+              data:{
+                C8H14O2S2:this.C8H14O2S2,
+                Fecl3:this.Fecl3,
+                C3H6O:this.C3H6O,
+                DIB:this.DIB,
+                temperature:this.temperature,
+                pipette:this.pipette
+              }
+            }).then(data=>{
+              var result = data.data['result'];
+              if(result==1){
               this.$notify({
                 title: '解锁成就!',
                 message: '你做出了拉伸后不会断裂，强度高，有弹性的胶黏物！',
@@ -1082,6 +1100,8 @@ export default {
                 }
               }, 100);
             }
+            })
+            
           }
         }
 
@@ -1104,6 +1124,7 @@ export default {
           }
         }
         if(this.heater_temp_switch == true){//加热
+          this.temperature = this.heater_temp_value+'';
           if(!this.hl.hasMesh(this.scene.getMeshByID('heater_switch2'))){
             this.hl.addMesh(this.scene.getMeshByID('heater_switch2'), BABYLON.Color3.Yellow());
           }
@@ -1339,11 +1360,33 @@ export default {
           this.addNeedleFull();
         }
         else if(hoverid.split('-')[0]=='weight.paper_cone'){
+          var i = 0;
+          var str = '';
+          for(i;i<this.weightprops[hoverid][0].length;i++){
+            if(i==3){
+              str+='.';
+            }
+            if(this.weightprops[hoverid][0][i]!=null){
+              str += this.weightprops[hoverid][0][i];
+            }
+          }
+          this.C8H14O2S2 = str;
           if(this.weightprops[hoverid][0].toString() == [null, null, 2, 0, 0, 0].toString()){
             this.step1node2 = 1;
           }
         }
         else if(hoverid.split('-')[0]=='weight.paper_powder_brown'){
+          var i = 0;
+          var str = '';
+          for(i;i<this.weightprops[hoverid][0].length;i++){
+            if(i==3){
+              str+='.';
+            }
+            if(this.weightprops[hoverid][0][i]!=null){
+              str += this.weightprops[hoverid][0][i];
+            }
+          }
+          this.Fecl3 = str;
           if(this.weightprops[hoverid][0].toString() == [null, null, 0, 1, 0, 0].toString()){
             this.step1node6 = 1;
           }
@@ -1741,6 +1784,7 @@ export default {
       this.needle_value_btn_up = true;
       this.needle_value_btn_down = true;
       this.needle_value_btn_post = true;
+      this.DIB = this.needleprops[id][0]+'';
       if(this.needleprops[id][0]==0.45){
         this.step1node14 = 1;
       }
@@ -2152,6 +2196,7 @@ export default {
           }
           else this.liquid_transferorprops[id][0]=this.liquid_transferorprops[id][1]+1 
         }
+        this.pipette = this.liquid_transferorprops[id][1]+'';
       }
       else{
         if(this.liquid_transferor_btn_color == 'orange'){
@@ -2168,7 +2213,7 @@ export default {
       this.liquid_transferorprops[id][2] = true;
       this.liquid_transferor_btn_color = 'green';
       this.liquid_transferorprops[id][3] = ''; 
-      this.refreshComponents()
+      this.refreshComponents();
     },
     post(){
       this.axios.request({

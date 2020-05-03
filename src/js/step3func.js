@@ -42,7 +42,7 @@ class Node {
         //该方法是判断你有没有得到1分的条件
     }
 }
-class Node0 extends Node {
+class Node0 extends Node {//120-160 
     errortext = '未将磁力搅拌器温度调至120-160℃';
     successtext = "将磁力搅拌器温度调至120-160℃";
     getScore() {
@@ -103,7 +103,7 @@ class Node4 extends Node {
         return 0;
     }
 }
-class Node5 extends Node {
+class Node5 extends Node { //19-21
     errortext = '未将移液枪量程调至20微升';
     successtext = '将移液枪量程调至20微升';
     in = 0;
@@ -352,7 +352,7 @@ const step3Function = {
                 this.step3node3 = 1;
                 setTimeout(() => {
                     this.dib_in_flask_5min = 1;
-                }, 1000);
+                }, 300000);
                 var po = this.getMergedPosition(pickid);
                 this.scene.removeMesh(this.scene.getMeshByID(pickid))
                 this.addModel('needle', new BABYLON.Vector3(2, 2, 2), new BABYLON.Vector3(po[0], po[1] + 0.3, po[2]), new BABYLON.Vector3(0, 0, Math.PI), ['PointerDragBehavior'], 'needle');

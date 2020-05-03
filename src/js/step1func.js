@@ -78,7 +78,7 @@ class Node1 extends Node {
         return 0;
     }
 }
-class Node2 extends Node {
+class Node2 extends Node { // 1.500-2.200
     errortext = '硫辛酸药品未到2.000g';
     successtext = '量取2.000g硫辛酸药品';
     getScore() {
@@ -160,7 +160,7 @@ class Node5 extends Node {
         return 0;
     }
 }
-class Node6 extends Node {
+class Node6 extends Node { //0.080-0.130
     errortext = '六水合三氯化铁质量未达到0.100g';
     successtext = '六水合三氯化铁质量达到0.100g';
     getScore() {
@@ -205,7 +205,7 @@ class Node8 extends Node {
         return 0;
     }
 }
-class Node9 extends Node {
+class Node9 extends Node { //13-15
     errortext = "丙酮液面未达到量筒的14ml刻度处";
     successtext = "量取14ml丙酮";
     getScore() {
@@ -278,7 +278,7 @@ class Node13 extends Node {
         return 0;
     }
 }
-class Node14 extends Node {
+class Node14 extends Node {//0.40-0.50
     errortext = 'DIB试剂并未达到针管的0.45ml刻度处';
     successtext = '量取0.45mlDIB试剂';
     getScore() {
@@ -964,6 +964,7 @@ const step1Function = {
                 this.refreshComponents()
             } 
             else if (pickid.split('-')[0] == 'measuring_cylinder_full' && hoverid.split('-')[0] == 'tri_flask_powder_brown') {
+                this.C3H6O = this.measuring_cylinderprops[pickid][0]+'';
                 if (this.measuring_cylinderprops[pickid][0] == 14){
                     this.step1node9 = 1;
                 }

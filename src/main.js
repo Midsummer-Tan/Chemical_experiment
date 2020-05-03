@@ -9,7 +9,7 @@ import 'font-awesome/css/font-awesome.min.css'
 import axios from 'axios'
 Vue.config.productionTip = false
 Vue.use(ElementUI)
-axios.defaults.baseURL = 'http://chemistryapi.3d1.top/api'
+axios.defaults.baseURL = 'http://chemistryapi.3d1.top/api' //'http://chemistryapi.3d1.top/api' 'http://localhost:9000/api'
 Vue.prototype.axios = axios;
 new Vue({
   router,
