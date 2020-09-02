@@ -54,7 +54,7 @@ export default {
       username: "",
       password: "",
       flag:"1",//直接登录flag=1 其他平台0,
-      role:'1' //教师or学生 学生为1 教师为2
+      role:'1' //教师or学生 学生为1 教师为2 管理员为3
     };
   },
   methods: {
@@ -77,6 +77,7 @@ export default {
             this.$message({message:'登陆成功',type:'success'});
           }
           sessionStorage.setItem("username",this.username);
+          sessionStorage.setItem("flag",response['flag']);
           this.$router.push({ path: "/collection" });
         }
         else 

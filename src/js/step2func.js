@@ -221,48 +221,7 @@ const step2Function = {
             // } 
             else if (hoverid.split('-')[0] == "trash_can") {
                 this.scene.removeMesh(this.scene.getMeshByID(pickid));
-                if (this.weightlist.indexOf(pickid) != -1) {
-                    var index = this.weightlist.indexOf(pickid);
-                    //删除
-                    {
-                        this.weightlist.splice(index, 1)
-                        delete(this.weightlist[pickid])
-                    }
-                } else if (this.measuring_cylinderlist.indexOf(pickid) != -1) {
-                    var index = this.measuring_cylinderlist.indexOf(pickid);
-                    //删除
-                    {
-                        this.measuring_cylinderlist.splice(index, 1)
-                        delete(this.measuring_cylinderlist[pickid])
-                    }
-                } else if (this.needlelist.indexOf(pickid) != -1) {
-                    var index = this.needlelist.indexOf(pickid);
-                    //删除
-                    {
-                        this.needlelist.splice(index, 1)
-                        delete(this.needlelist[pickid])
-                    }
-                } else if (pickid.split('-')[0] == 'stand1_pole' || pickid.split('-')[0] == 'stand1_movable') {
-                    for (var i = 0; i < this.standlist.length; i++) {
-                        if (this.standlist[i].indexOf(pickid) != -1) {
-                            this.standlist.splice(i, 1);
-                            break;
-                        }
-                    }
-                } else if (pickid.split('-')[0] == 'clock') {
-                    this.hasClock = false;
-                }
-                setTimeout(() => {
-                    for (var i = 0; i < this.weightlist.length; i++) {
-                        var re = this.weightprops[this.weightlist[i]][0]
-                        this.$refs.weight[i].setAllNumber(re[0], re[1], re[2], re[3], re[4], re[5], this.weightlist[i]);
-                    }
-                    if (this.weightlist.length != 0) this.activeIndex = this.weightlist[this.weightlist.length - 1];
-                    else if (this.measuring_cylinderlist.length != 0) this.activeIndex = this.measuring_cylinderlist[this.measuring_cylinderlist.length - 1]
-                    else if (this.needlelist.length != 0) this.activeIndex = this.needlelist[this.needlelist.length - 1]
-                    else if (this.standlist.length != 0) this.activeIndex = this.standlist[this.standlist.length - 1][1]
-                    else this.activeIndex = 'default'
-                }, 200);
+                this.WhenNotSetModelsOnDesk(pickid);
             }
         },
         getScore_step2() {

@@ -259,10 +259,15 @@
          <el-tab-pane label="BB8's warning"  name = 'default'>
           <div style="height:100px;">
             <v-alert :value="true" type="warning" outline>
-            <v-avatar size="60px">
+              <v-layout>
+                <v-flex xs3>
+                <v-avatar size="60px">
               <img src="/images/bb8.png" alt="avatar" >
             </v-avatar>
-            &emsp;{{this.bb8warning}}
+              </v-flex>
+              <v-flex xs9><p v-html="bb8warning"></p></v-flex>
+              </v-layout>
+              
           </v-alert>
           </div>
         </el-tab-pane>
@@ -285,7 +290,7 @@
                       src="/images/round_flask.png"
                       aspect-ratio="1">
                     </v-img>
-                    <div class="body-2 text-xs-center">圆底烧瓶(10ml)</div>
+                    <div class="body-2 text-xs-center">圆底烧瓶</div>
                   </v-card-text>
                 </v-card>
               </v-flex>
@@ -869,7 +874,7 @@ export default {
       show2:false,
       show3:false,
       show4:false,
-      bb8warning:'实验中请穿好实验服，戴好护目镜',
+      bb8warning:'真实实验中请穿好实验服，戴好护目镜。请把模型放在实验台上，不然它会消失的！',
       stand_movable_high:0,
       post_dialog:false,
       post_score:0,
@@ -887,7 +892,7 @@ export default {
       C3H6O:'',
       DIB:'',
       temperature:'',
-      pipette:''
+      pipette:'',
     };
   },
   components:{
@@ -1210,7 +1215,7 @@ export default {
             "c3h6o.bottle_cap",
             "c8h14o2s2.bottle_cap"
           ];
-          if (pickResult.pickedMesh.id != "ground") {
+          if (pickResult.pickedMesh.id != "ground" && pickResult.pickedMesh.id != "desk") {
             this.hl.addMesh(pickResult.pickedMesh, BABYLON.Color3.Purple());
             if (
               this.pickingObj != null &&
@@ -1250,8 +1255,9 @@ export default {
           this.scene.pointerX,
           this.scene.pointerY
         );
+
         if (pickResult.hit) {
-          if (pickResult.pickedMesh.id != "ground") {
+          if (pickResult.pickedMesh.id != "ground" && pickResult.pickedMesh.id != "desk") {
             if(this.weightlist.indexOf(pickResult.pickedMesh.id)!= -1 || this.measuring_cylinderlist.indexOf(pickResult.pickedMesh.id)!=-1 || this.needlelist.indexOf(pickResult.pickedMesh.id)!= -1 ||pickResult.pickedMesh.id.split('-')[0]=='stand1_pole' || this.liquid_transferorlist.indexOf(pickResult.pickedMesh.id)!= -1){
               this.activeIndex = pickResult.pickedMesh.id
             }
@@ -1264,11 +1270,64 @@ export default {
         }
       });
       window.addEventListener("pointerup", () => {
-        if (this.pickingObj != null) {
-          this.hl.removeMesh(this.pickingObj);
-          this.pickingObj = null;
+        var pickResult = this.scene.pick(
+          this.scene.pointerX,
+          this.scene.pointerY
+        );
+        var ray = new BABYLON.Ray(pickResult.ray.origin,pickResult.ray.direction,100);
+        var pickThing = this.scene.multiPickWithRay(ray);
+        var state = 0;
+        for(var i=0;i<pickThing.length;i++){
+          if(pickThing[i].pickedMesh.id=='desk'){
+            state = 1;
+          }
         }
+        if(this.pickingObj != null){
+          this.hl.removeMesh(this.pickingObj);
+          if(state==0){
+            this.scene.removeMesh(this.pickingObj);
+            this.WhenNotSetModelsOnDesk(this.pickingObj.id);
+            }
+          }
+          this.pickingObj = null;
       });
+    },
+    WhenNotSetModelsOnDesk(id){
+      //模型会消失
+       if (this.weightlist.indexOf(id) != -1) {
+                    var index = this.weightlist.indexOf(id);
+                    //删除
+                    {
+                        this.weightlist.splice(index, 1)
+                        delete(this.weightlist[id])
+                    }
+                } else if (this.measuring_cylinderlist.indexOf(id) != -1) {
+                    var index = this.measuring_cylinderlist.indexOf(id);
+                    //删除
+                    {
+                        this.measuring_cylinderlist.splice(index, 1)
+                        delete(this.measuring_cylinderlist[id])
+                    }
+                } else if (this.needlelist.indexOf(id) != -1) {
+                    var index = this.needlelist.indexOf(id);
+                    //删除
+                    {
+                        this.needlelist.splice(index, 1)
+                        delete(this.needlelist[id])
+                    }
+                } else if (id.split('-')[0] == 'clock') {
+                    this.hasClock = false;
+                }
+                setTimeout(() => {
+                    for (var i = 0; i < this.weightlist.length; i++) {
+                        var re = this.weightprops[this.weightlist[i]][0]
+                        this.$refs.weight[i].setAllNumber(re[0], re[1], re[2], re[3], re[4], re[5], this.weightlist[i]);
+                    }
+                    if (this.weightlist.length != 0) this.activeIndex = this.weightlist[this.weightlist.length - 1];
+                    else if (this.measuring_cylinderlist.length != 0) this.activeIndex = this.measuring_cylinderlist[this.measuring_cylinderlist.length - 1]
+                    else if (this.needlelist.length != 0) this.activeIndex = this.needlelist[this.needlelist.length - 1]
+                    else this.activeIndex = 'default'
+                }, 200);
     },
     addGui_separation(hoverid) {
       if (this.controller != null) {
@@ -1682,7 +1741,9 @@ export default {
             var mesh = array1[0];
           }
           mesh.id = name;
-          mesh.id  = this.addName(mesh.id);
+          if(mesh.id!="desk"){
+            mesh.id  = this.addName(mesh.id);
+          }
           var code1 = new BABYLON.PointerDragBehavior({
             dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
           })//前后
@@ -1891,6 +1952,8 @@ export default {
       this.clearAllScore4();
       this.removeSceneMesh();
       this.addTrash_can();
+      this.addModel('desk', new BABYLON.Vector3(0.7, 0.5, 1.2),new BABYLON.Vector3(0, -0.4, -0.1), new BABYLON.Vector3(0, Math.PI, 0), null, null);
+      
     },
     toStep2(){
       this.e1 = 2;
@@ -1934,6 +1997,7 @@ export default {
       this.removeSceneMesh();
       this.addRoundFlaskCone();
       this.addTrash_can();
+      this.addModel('desk', new BABYLON.Vector3(0.7, 0.5, 1.2),new BABYLON.Vector3(0, -0.4, -0.1), new BABYLON.Vector3(0, Math.PI, 0), null, null);
     },
     toStep3(){
       this.e1 = 3;
@@ -1981,6 +2045,7 @@ export default {
       this.removeSceneMesh();
       this.addRoundFlaskConePotHeaterStand1();
       this.addTrash_can();
+      this.addModel('desk', new BABYLON.Vector3(0.7, 0.5, 1.2),new BABYLON.Vector3(0, -0.4, -0.1), new BABYLON.Vector3(0, Math.PI, 0), null, null);
     },
     toStep4(){
       this.e1 = 4;
@@ -2030,11 +2095,13 @@ export default {
       this.removeSceneMesh();
       this.addNeedleFullTriFlask();
       this.addTrash_can();
+      this.addModel('desk', new BABYLON.Vector3(0.7, 0.5, 1.2),new BABYLON.Vector3(0, -0.4, -0.1), new BABYLON.Vector3(0, Math.PI, 0), null, null);
+
     },
     removeSceneMesh(){
       var list = [];
       for(var i=0;i<this.scene.meshes.length;i++){
-        if(this.scene.meshes[i].id!="foutain" && this.scene.meshes[i].id!="ground")
+        if(this.scene.meshes[i].id!="foutain" && this.scene.meshes[i].id!="ground" && this.scene.meshes[i].id!="desk")
         {
           list.push(this.scene.meshes[i].id)
         }
@@ -2125,8 +2192,8 @@ export default {
         "Camera",
         0,
         0,
-        10,
-        BABYLON.Vector3.Zero(),
+        0,
+        new BABYLON.Vector3(0, 0.7, -1.2),
         scene
       );
 
@@ -2156,10 +2223,15 @@ export default {
       light2.intensity = 0.15;
     },
     async createModel(scene, canvas) {
-      var ground = BABYLON.Mesh.CreateGround("ground", 8, 8, 2, scene, false);
+      var ground = BABYLON.Mesh.CreateGround("ground", 8, 8, 0, scene, false);
       var groundMaterial = new BABYLON.StandardMaterial("ground", scene);
-      groundMaterial.diffuseColor = new BABYLON.Color3(0.253, 0.340, 0.407);
+      groundMaterial.diffuseTexture = new BABYLON.Texture("/images/floor_map.png", scene);
+      groundMaterial.diffuseTexture.uScale = 10.0;
+      groundMaterial.diffuseTexture.vScale = 10.0;
       ground.material = groundMaterial;
+      ground.position = new BABYLON.Vector3(0, -1, 0); 
+      
+
     },
     startTouchBtn(){
       this.timeout1 = setTimeout(() => {
@@ -2260,6 +2332,7 @@ export default {
 
   mounted() {
     this.init();
+    console.log("本化学实验向伟大的星球大战致敬！May the force be with you !");
     this.axios.request({
       url:'/experiment/',
       params:{'username':sessionStorage.getItem('username')},

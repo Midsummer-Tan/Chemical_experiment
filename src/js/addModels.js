@@ -4,7 +4,7 @@ const addModels = {
             this.addModel('paper', null, new BABYLON.Vector3(0, 0.05, 0), null, ['PointerDragBehavior'], null);
         },
         addTrash_can() {
-            this.addModel('trash_can', new BABYLON.Vector3(2, 2, 2), new BABYLON.Vector3(-200, 0, 200), new BABYLON.Vector3(0, Math.PI, 0), null, null);
+            this.addModel('trash_can', new BABYLON.Vector3(2, 2, 2), new BABYLON.Vector3(-115, 0, 40), new BABYLON.Vector3(0, Math.PI, 0), null, null);
         },
         addBB8() {
             this.addModel('bb8', new BABYLON.Vector3(0.26, 0.26, 0.26), new BABYLON.Vector3(-0.85, 0.33, 0), new BABYLON.Vector3(0, Math.PI, 0), null, null);

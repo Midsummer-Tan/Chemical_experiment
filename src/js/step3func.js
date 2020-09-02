@@ -474,49 +474,7 @@ const step3Function = {
             } 
             else if (hoverid.split('-')[0] == "trash_can") {
                 this.scene.removeMesh(this.scene.getMeshByID(pickid));
-                if (this.weightlist.indexOf(pickid) != -1) {
-                    var index = this.weightlist.indexOf(pickid);
-                    //删除
-                    {
-                        this.weightlist.splice(index, 1)
-                        delete(this.weightprops[pickid])
-                    }
-                } else if (this.measuring_cylinderlist.indexOf(pickid) != -1) {
-                    var index = this.measuring_cylinderlist.indexOf(pickid);
-                    //删除
-                    {
-                        this.measuring_cylinderlist.splice(index, 1)
-                        delete(this.measuring_cylinderprops[pickid])
-                    }
-                } else if (this.needlelist.indexOf(pickid) != -1) {
-                    var index = this.needlelist.indexOf(pickid);
-                    //删除
-                    {
-                        this.needlelist.splice(index, 1)
-                        delete(this.needleprops[pickid])
-                    }
-                } else if (pickid.split('-')[0] == 'clock') {
-                    this.hasClock = false;
-                } else if (this.liquid_transferorlist.indexOf(pickid) != -1) {
-                    var index = this.liquid_transferorlist.indexOf(pickid);
-                    //删除
-                    {
-                        this.liquid_transferorlist.splice(index, 1)
-                        delete(this.liquid_transferorprops[pickid])
-                    }
-                }
-                setTimeout(() => {
-                    for (var i = 0; i < this.weightlist.length; i++) {
-                        var re = this.weightprops[this.weightlist[i]][0]
-                        this.$refs.weight[i].setAllNumber(re[0], re[1], re[2], re[3], re[4], re[5], this.weightlist[i]);
-                    }
-                    if (this.weightlist.length != 0) this.activeIndex = this.weightlist[this.weightlist.length - 1];
-                    else if (this.measuring_cylinderlist.length != 0) this.activeIndex = this.measuring_cylinderlist[this.measuring_cylinderlist.length - 1]
-                    else if (this.needlelist.length != 0) this.activeIndex = this.needlelist[this.needlelist.length - 1]
-                    else if (this.liquid_transferorlist.length != 0) this.activeIndex = this.liquid_transferorlist[this.liquid_transferorlist.length - 1]
-                    else if (this.e1 == 3) this.activeIndex = 'heater';
-                    else this.activeIndex = 'default'
-                }, 200);
+                this.WhenNotSetModelsOnDesk(pickid);
             }
         },
         getScore_step3() {

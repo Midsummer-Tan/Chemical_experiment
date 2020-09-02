@@ -9,6 +9,10 @@
           <v-toolbar-title>自修复超分子材料的制备与测试</v-toolbar-title>
           <v-spacer></v-spacer>
 
+          <v-btn flat v-show="flag!=1"   @click="$router.push('/adminindex');">
+            后台管理系统
+          </v-btn>
+
           <v-btn flat :color="video.color" @click="watchVideo()">
             看视频
             <v-icon>{{video.icon}}</v-icon>
@@ -131,6 +135,7 @@
 export default {
   data() {
     return {
+      flag:1,//权限 为2 3可看到后台管理按钮
       dialog:false,
       window:0,
       quesNumber:1,
@@ -231,10 +236,15 @@ export default {
     },
     submitAnswere(){
       this.submitDialog = false;
-      if(this.video['status']==0){
+      if(this.flag==2 || this.flag==3){
+          this.teacherAdministrator();
+        }
+      else{
+        if(this.video['status']==0){
         this.resultDialog = true;
         this.resulttext="你还没有看完视频，不能提交自测题哦。"
         return;
+      }
       }
       var rightnum = 0;
       this.remark['show']=1;
@@ -300,7 +310,21 @@ export default {
         this.video['icon']='fa fa-close';
         this.modifyExperimentDB();
       }
-      
+      if(this.flag==2 || this.flag==3){
+          this.teacherAdministrator();
+        }
+    },
+    teacherAdministrator(){
+      this.ppt['status']=1;
+      this.video['status']=1;
+      this.question['status']=1;
+      this.ppt['color']='green';
+      this.ppt['icon']='fa fa-check';
+      this.video['color']='green';
+      this.video['icon']='fa fa-check';
+      this.question['color']='green';
+      this.question['icon']='fa fa-check';
+      this.experiment['status'] = false;
     },
     modifyExperimentDB(){
       if(this.question['status']==1 && this.ppt['status']==1) this.experiment['status']=false;
@@ -319,7 +343,12 @@ export default {
     }
   },
   mounted(){
-     this.axios.request({
+    this.flag = sessionStorage.getItem('flag')
+    if(this.flag==2 || this.flag==3){
+      this.teacherAdministrator();
+    }
+    else{
+      this.axios.request({
       url:'/experiment/',
       method:'GET',
       params:{
@@ -346,6 +375,8 @@ export default {
         }
       })
         this.$forceUpdate();
+    }
+    
     }
   }
 </script>

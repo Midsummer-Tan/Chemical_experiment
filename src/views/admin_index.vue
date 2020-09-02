@@ -265,6 +265,7 @@ export default {
         this.userscorelist=[];
         for(var i=0;i<data.length;i++){
           if(data[i].flag==1){
+            //是学生
             var dict = {} 
             dict['username'] = data[i].username_id;
             var array1 = data[i].step1score.split(',');
@@ -440,8 +441,8 @@ export default {
     }
   },
   beforeMount(){
-    if(sessionStorage.getItem('adminuser')==null){
-          this.$router.push({ path: "/admin" });
+    if(sessionStorage.getItem('adminuser')==null && (sessionStorage.getItem('flag')!=2 && sessionStorage.getItem('flag')!=3)){
+      this.$router.push({ path: "/admin" });
     }
   },
   mounted(){
