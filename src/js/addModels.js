@@ -4,7 +4,7 @@ const addModels = {
             this.addModel('paper', null, new BABYLON.Vector3(0, 0.05, 0), null, ['PointerDragBehavior'], null);
         },
         addTrash_can() {
-            this.addModel('trash_can', new BABYLON.Vector3(2, 2, 2), new BABYLON.Vector3(-115, 0, 40), new BABYLON.Vector3(0, Math.PI, 0), null, null);
+            this.addModel('trash_can', new BABYLON.Vector3(2, 2, 2), new BABYLON.Vector3(-115, 0, 40), new BABYLON.Vector3(0, Math.PI, 0), null,'trash_can');
         },
         addBB8() {
             this.addModel('bb8', new BABYLON.Vector3(0.26, 0.26, 0.26), new BABYLON.Vector3(-0.85, 0.33, 0), new BABYLON.Vector3(0, Math.PI, 0), null, null);
@@ -249,6 +249,12 @@ const addModels = {
         addNeedle() {
             this.addModel('needle', new BABYLON.Vector3(2, 2, 2), new BABYLON.Vector3(0, 0.23, 0), new BABYLON.Vector3(0, 0, Math.PI), ['PointerDragBehavior'], null);
         },
+        addNMR_tube() {
+            this.addModel('nmr_tube', new BABYLON.Vector3(2, 1, 1.5), new BABYLON.Vector3(0, 0.03, 0), null, ['PointerDragBehavior'], null);
+        },
+        addC3D6O(){
+            this.addModel('c3d6o', null, null, new BABYLON.Vector3(0, Math.PI, 0), ['PointerDragBehavior'], null);
+        },
         //addCap(0,0.01,0)
         addCap(x, y, z) {
             var mesh = BABYLON.Mesh.CreateCylinder("cap", 0.01, 0.01, 0.01, 10, 1, this.scene, false, BABYLON.Mesh.DEFAULTSIDE);
@@ -263,6 +269,52 @@ const addModels = {
                 })
             );
             return mesh;
+        },
+        addSampleFilm(x,y,z){
+            var mesh= BABYLON.MeshBuilder.CreateBox("sample_film", {height: 0.01, width: 0.05, depth: 0.05}, this.scene);
+            mesh.id = this.addName('sample_film');
+            var myMaterial = new BABYLON.StandardMaterial("myMaterial", this.scene);
+            myMaterial.diffuseColor = new BABYLON.Color3(0.5, 0.5, 0);
+            myMaterial.alpha = 0.5;
+            mesh.material = myMaterial;
+            mesh.addBehavior(
+                new BABYLON.PointerDragBehavior({
+                    dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+                })
+            );
+            return mesh;
+        },
+        addBrukerBulb(x, y, z) {
+            var mesh = BABYLON.Mesh.CreateCylinder("bulb", 0.05, 0.1, 0.1, 10, 1, this.scene, false, BABYLON.Mesh.DEFAULTSIDE);
+            mesh.id = "bulb";
+            mesh.rotation = new BABYLON.Vector3(Math.PI/2, -Math.PI/4, 0);
+            this.scene.getMeshByID(mesh.id).position = new BABYLON.Vector3(x, y, z);
+            var mater = new BABYLON.StandardMaterial("texture1", this.scene);
+            mater.diffuseColor = new BABYLON.Color3(0.745, 0.077, 0.177);
+            this.scene.getMeshByID(mesh.id).material = mater; //-0.7, 0.7, 0.8 Math.PI / 2, -Math.PI / 4, 0
+            this.light = new BABYLON.SpotLight("spotLight", new BABYLON.Vector3(-0.6, 0.7, 0.8), new BABYLON.Vector3(Math.PI / 2, -Math.PI / 4, 0), Math.PI*2 , 1, this.scene);
+            this.light.diffuse = new BABYLON.Color3(0.745, 0.077, 0.177);
+            this.light.specular = new BABYLON.Color3(0.745, 0.077, 0.177);
+            this.light.id = 'light';
+            return mesh;
+        },
+        addFpir(){
+            this.addModel('fpir', new BABYLON.Vector3(1.5, 1.5, 1.5),null, new BABYLON.Vector3(0, Math.PI, 0),null, 'fpir');
+            var timer = setInterval(() => {
+                if (this.scene.getMeshByID('fpir')!=undefined){
+                    var mesh = this.scene.getMeshByID('fpir');
+                    mesh.id = this.addName(mesh.id);
+                    this.scene.getMeshByID(mesh.id).addBehavior(
+                        new BABYLON.PointerDragBehavior({
+                            dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+                        })
+                    );
+                    this.activeIndex = mesh.id;
+                    var name = '红外光谱仪' + mesh.id.split('-')[1];
+                    this.fpirlist.push([mesh.id,true]);
+                    window.clearInterval(timer);
+                }
+            }, 100);
         },
         addSpoon() {
             this.addModel('spoon', new BABYLON.Vector3(2.5, 2.5, 2.5), new BABYLON.Vector3(0, 0.05, 0), null, ['PointerDragBehavior'], null);

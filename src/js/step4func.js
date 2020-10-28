@@ -138,8 +138,187 @@ const step4Function = {
                             );
                             window.clearInterval(timer);
                         } 
+                }, 100); //(pickid.split('-')[0] == 'glass_pad_yellow_cylinder_break' || pickid.split('-')[0] == 'glass_pad_yellow_cylinder_stretched')
+            } else if ((pickid.split('-')[0] == 'glass_pad_yellow_cylinder_break' || pickid.split('-')[0] == 'glass_pad_yellow_cylinder_stretched')&& hoverid.split('-')[0] == 'nmr_tube') {
+                this.bb8warning = "称取大约6mg样品放置于核磁管中";
+                this.scene.removeMesh(this.scene.getMeshByID(pickid));
+                this.WhenNotSetModelsOnDesk(pickid);
+                var po = this.getMergedPosition(hoverid);
+                this.addModel(
+                    "cone",
+                    new BABYLON.Vector3(0.006, 0.01, 0.006),
+                    new BABYLON.Vector3(-po[0]+0.003, po[1] - 0.08, po[2]),
+                    null,
+                    null,
+                    "cone"
+                );
+                var timer = setInterval(() => {
+                    if (this.scene.getMeshByID('cone') != undefined) {
+                        var mesh = BABYLON.Mesh.MergeMeshes(
+                            [this.scene.getMeshByID(hoverid), this.scene.getMeshByID('cone')],
+                            true,
+                            true,
+                            undefined,
+                            false,
+                            true
+                        );
+                        mesh.id = 'nmr_tube_cone';
+                        mesh.id = this.addName(mesh.id);
+                        mesh.addBehavior(
+                            new BABYLON.PointerDragBehavior({
+                                dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+                            })
+                        );
+                        window.clearInterval(timer);
+                    }
                 }, 100);
-            } else if (hoverid.split('-')[0] == "trash_can") {
+            } else if (pickid.split('-')[0] == 'c3d6o' && hoverid.split('-')[0] == 'nmr_tube_cone'){
+                //溶解前
+                this.bb8warning = "取约0.5 mL氘代丙酮倒入核磁管";
+                var po = this.getMergedPosition(hoverid);
+                this.addModel('trans_cylinder', new BABYLON.Vector3(0.04, 0.02, 0.04), new BABYLON.Vector3(-po[0], po[1] - 0.07, po[2]), new BABYLON.Vector3(Math.PI / 2, 0, 0), ['PointerDragBehavior'], 'trans_cylinder');
+                var timer = setInterval(() => {
+                    if (this.scene.getMeshByID('trans_cylinder') != undefined) {
+                        var mesh = BABYLON.Mesh.MergeMeshes(
+                            [this.scene.getMeshByID(hoverid), this.scene.getMeshByID('trans_cylinder')],
+                            true,
+                            true,
+                            undefined,
+                            false,
+                            true
+                        );
+                        mesh.id = 'nmr_tube_cone_c3d6o';
+                        mesh.id = this.addName(mesh.id);
+                        mesh.addBehavior(
+                            new BABYLON.PointerDragBehavior({
+                                dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+                            })
+                        );
+                        window.clearInterval(timer);
+                    }
+                }, 100);
+            } else if (pickid.split('-')[0] == 'nmr_tube_yellow_cylinder' && hoverid == 'bruker') {
+                this.scene.removeMesh(this.scene.getMeshByID(pickid));
+                this.changeBulbColor(0, 1, 0);
+                this.scene.getMeshByID('bruker').id = 'bruker_tube';
+                this.H_NMR_graph='/images/H-NMR_sample.png';
+                this.show_bruker_dialog_btn = false;
+                this.show_contrast_button[0] = 1;
+                if(this.show_contrast_button[1]==1) {
+                    this.show_contrast_dialog_btn = false; 
+                }
+            } else if(pickid.split('-')[0] == 'nmr_tube_yellow_cylinder_c8h14o2s2' && hoverid == 'bruker'){
+                this.scene.removeMesh(this.scene.getMeshByID(pickid));
+                this.changeBulbColor(0, 1, 0);
+                this.scene.getMeshByID('bruker').id = 'bruker_tube_c8h14o2s2';
+                this.H_NMR_graph = '/images/H-NMR_c8h14o2s2.png';
+                this.show_bruker_dialog_btn = false;
+                this.show_contrast_button[1] = 1;
+                if(this.show_contrast_button[0]==1) {
+                    this.show_contrast_dialog_btn = false; 
+                }
+            } else if(pickid.split('-')[0] == 'spoon' && hoverid.split('-')[0] == 'c8h14o2s2'){
+                var x = this.scene.getMeshByID(pickid).position.x;
+                var y = this.scene.getMeshByID(pickid).position.y;
+                var z = this.scene.getMeshByID(pickid).position.z;
+                this.addModel(
+                    "cone",
+                    new BABYLON.Vector3(0.02, 0.02, 0.02),
+                    new BABYLON.Vector3(x - 0.1, y + 0.02, z),
+                    null,
+                    null,
+                    "cone"
+                );
+                var timer = setInterval(() => {
+                    if (this.scene.getMeshByID("cone")!=undefined){
+                        var mesh = BABYLON.Mesh.MergeMeshes(
+                            [this.scene.getMeshByID("cone"), this.scene.getMeshByID(pickid)],
+                            true,
+                            true,
+                            undefined,
+                            false,
+                            true
+                        );
+                        mesh.id = "spoon_cone";
+                        mesh.id = this.addName(mesh.id)
+                        mesh.addBehavior(
+                            new BABYLON.PointerDragBehavior({
+                                dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+                            })
+                        );
+                        window.clearInterval(timer);
+                    }  
+                }, 100);
+            } else if(pickid.split('-')[0] == 'spoon_cone' && hoverid.split('-')[0] == 'nmr_tube'){
+                this.scene.removeMesh(this.scene.getMeshByID(pickid));
+                //this.WhenNotSetModelsOnDesk(pickid);
+                var po = this.getMergedPosition(hoverid);
+                this.addModel(
+                    "cone",
+                    new BABYLON.Vector3(0.006, 0.01, 0.006),
+                    new BABYLON.Vector3(-po[0]+0.003, po[1] - 0.08, po[2]),
+                    null,
+                    null,
+                    "cone"
+                );
+                var timer = setInterval(() => {
+                    if (this.scene.getMeshByID('cone') != undefined) {
+                        var mesh = BABYLON.Mesh.MergeMeshes(
+                            [this.scene.getMeshByID(hoverid), this.scene.getMeshByID('cone')],
+                            true,
+                            true,
+                            undefined,
+                            false,
+                            true
+                        );
+                        mesh.id = 'nmr_tube_cone_c8h14o2s2';
+                        mesh.id = this.addName(mesh.id);
+                        mesh.addBehavior(
+                            new BABYLON.PointerDragBehavior({
+                                dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+                            })
+                        );
+                        window.clearInterval(timer);
+                    }
+                }, 100);
+            } else if(pickid.split('-')[0] == 'c3d6o' && hoverid.split('-')[0] == 'nmr_tube_cone_c8h14o2s2'){
+                //溶解前
+                this.bb8warning = "取约0.5 mL氘代丙酮倒入核磁管";
+                var po = this.getMergedPosition(hoverid);
+                this.addModel('trans_cylinder', new BABYLON.Vector3(0.04, 0.02, 0.04), new BABYLON.Vector3(-po[0], po[1] - 0.07, po[2]), new BABYLON.Vector3(Math.PI / 2, 0, 0), ['PointerDragBehavior'], 'trans_cylinder');
+                var timer = setInterval(() => {
+                    if (this.scene.getMeshByID('trans_cylinder') != undefined) {
+                        var mesh = BABYLON.Mesh.MergeMeshes(
+                            [this.scene.getMeshByID(hoverid), this.scene.getMeshByID('trans_cylinder')],
+                            true,
+                            true,
+                            undefined,
+                            false,
+                            true
+                        );
+                        mesh.id = 'nmr_tube_cone_c3d6o_c8h14o2s2';
+                        mesh.id = this.addName(mesh.id);
+                        mesh.addBehavior(
+                            new BABYLON.PointerDragBehavior({
+                                dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+                            })
+                        );
+                        window.clearInterval(timer);
+                    }
+                }, 100);
+            } else if(pickid.split('-')[0] == 'sample_film' && hoverid.split('-')[0] == 'fpir'){
+                this.scene.removeMesh(this.scene.getMeshByID(pickid));
+                var id = this.addName("fpir.sample_film");
+                this.scene.getMeshByID(hoverid).id=id;
+                for(var i=0;i<this.fpirlist.length;i++){
+                    if(this.fpirlist[i][0]==hoverid){
+                        this.fpirlist[i][0] = id;
+                        this.fpirlist[i][1] = false;
+                        this.activeIndex = id;
+                    }
+                }
+            }
+            else if (pickid!='bruker' && hoverid== "trash_can") {
                 this.scene.removeMesh(this.scene.getMeshByID(pickid));
                 this.WhenNotSetModelsOnDesk(pickid);
             }

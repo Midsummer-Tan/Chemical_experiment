@@ -43,7 +43,12 @@
                 :complete="e1 > 4"              
                 step="4"
               >{{step[3]}}</v-stepper-step>
-            </v-stepper-header>
+              <v-divider></v-divider>
+              <v-stepper-step
+                :complete="e1 > 5"              
+                step="5"
+              >{{step[4]}}</v-stepper-step>
+              </v-stepper-header>
             <v-btn
               style="float:right"
               :disabled="btn_post"
@@ -248,6 +253,30 @@
           </el-tab-pane>
         </template>
 
+        <template v-for="i in fpirlist" >
+          <!--fpirlist:[[id,false/true]]-->
+          <el-tab-pane :label="'红外光谱仪('+i[0]+')'"  :name="i[0]" :key="i[0]">
+            <div style="height:100px;text-align:center">
+              <v-btn @click="fpir_dialog=true" large color='pink' :disabled="i[1]">
+                查看光谱图和问题
+              </v-btn>
+            </div>
+          </el-tab-pane>
+        </template>
+
+        <template v-if="e1==4">
+          <el-tab-pane label="400M核磁共振氢谱仪" name='bruker'>
+            <div style="height:100px;text-align:center">
+              <v-btn @click="bruker_dialog=true" large color='blue' :disabled="show_bruker_dialog_btn">
+                查看当前样品核磁共振氢谱
+              </v-btn>
+              <v-btn @click="contrast_dialog=true" large color='pink' :disabled="show_contrast_dialog_btn">
+                查看核磁共振氢谱对比图
+              </v-btn>
+            </div>
+          </el-tab-pane>
+        </template>
+
         <template v-if="hasClock==true" >
           <el-tab-pane label="时钟"  name="clock" >
             <div style="text-align:center">
@@ -265,7 +294,8 @@
               <img src="/images/bb8.png" alt="avatar" >
             </v-avatar>
               </v-flex>
-              <v-flex xs9><p v-html="bb8warning"></p></v-flex>
+              <v-flex xs9><p v-html="bb8warning"></p>
+              </v-flex>
               </v-layout>
               
           </v-alert>
@@ -273,360 +303,431 @@
         </el-tab-pane>
         </el-tabs>   
 
+
         <!--工具栏-->
         <v-card class="mb-4">
-          <v-card-title class="font-weight-black subheading">工具</v-card-title>
-
-          <v-container style='padding:2px;height:150px;'>
-            <v-layout
-              style="overflow-y:scroll;height:150px"
-              row
-              wrap
+          <v-card-title class="font-weight-black subheading">工具栏
+          </v-card-title>
+          <v-card >
+            <!--menu-->
+            <v-menu
+              v-model="menu"
+              :close-on-content-click="false"
+              bottom
+              origin="center center"
             >
-              <v-flex xs3>
-                <v-card @click="addRoundFlask()">
-                  <v-card-text>
-                    <v-img
-                      src="/images/round_flask.png"
-                      aspect-ratio="1">
-                    </v-img>
-                    <div class="body-2 text-xs-center">圆底烧瓶</div>
-                  </v-card-text>
-                </v-card>
-              </v-flex>
+              <template v-slot:activator="{ on }">
+                <v-btn color="silver" fab large dark v-on="on" v-on:mouseover="menu = true">
+                  <v-icon>fa fa-angle-double-left</v-icon>
+                </v-btn>
+              </template>
+              <v-card 
+              v-on:mouseleave="menu = false"
+              style="width:800px;height:500px;" 
+              color="rgba(255, 255, 255, 0)">
+                <v-container>
+                  <v-layout
+                    row
+                    wrap
+                  >
+                    <v-flex xs3>
+                      <v-card @click="addRoundFlask()"  color="rgba(255, 255, 255, 0.5)">
+                        <v-card-text>
+                          <v-img
+                            src="/images/round_flask.png"
+                            aspect-ratio="1">
+                          </v-img>
+                          <div class="body-2 text-xs-center" style="font-weight:bold">圆底烧瓶</div>
+                        </v-card-text>
+                      </v-card>
+                    </v-flex>
 
-              <v-flex xs3>
-                <v-card @click="addPaper()">
-                  <v-card-text>
-                    <v-img
-                      src="/images/paper.png"
-                      aspect-ratio="1"
-                    ></v-img>
-                    <div class="body-2 text-xs-center">称量纸</div>
-                  </v-card-text>
-                </v-card>
-              </v-flex>
+                    <v-flex xs3>
+                      <v-card @click="addPaper()"  color="rgba(255, 255, 255, 0.5)">
+                        <v-card-text>
+                          <v-img
+                            src="/images/paper.png"
+                            aspect-ratio="1"
+                          ></v-img>
+                          <div class="body-2 text-xs-center" style="font-weight:bold">称量纸</div>
+                        </v-card-text>
+                      </v-card>
+                    </v-flex>
 
-              <v-flex xs3>
-                <v-card @click="addPot()">
-                  <v-card-text>
-                    <v-img
-                      src="/images/pot.png"
-                      aspect-ratio="1"
-                    ></v-img>
-                    <div class="body-2 text-xs-center">油浴锅</div>
-                  </v-card-text>
-                </v-card>
-              </v-flex>
+                    <v-flex xs3>
+                      <v-card @click="addPot()"  color="rgba(255, 255, 255, 0.5)">
+                        <v-card-text>
+                          <v-img
+                            src="/images/pot.png"
+                            aspect-ratio="1"
+                          ></v-img>
+                          <div class="body-2 text-xs-center" style="font-weight:bold">油浴锅</div>
+                        </v-card-text>
+                      </v-card>
+                    </v-flex>
 
-              <v-flex xs3>
-                <v-card @click="addWeight()">
-                  <v-card-text>
-                    <v-img
-                      src="/images/weight.png"
-                      aspect-ratio="1"
-                    ></v-img>
-                    <div class="body-2 text-xs-center">电子秤</div>
-                  </v-card-text>
-                </v-card>
-              </v-flex>
+                    <v-flex xs3>
+                      <v-card @click="addWeight()" color="rgba(255, 255, 255, 0.5)">
+                        <v-card-text>
+                          <v-img
+                            src="/images/weight.png"
+                            aspect-ratio="1"
+                          ></v-img>
+                          <div class="body-2 text-xs-center" style="font-weight:bold">电子秤</div>
+                        </v-card-text>
+                      </v-card>
+                    </v-flex>
 
-              <v-flex xs3>
-                <v-card @click="addHeater()">
-                  <v-card-text>
-                    <v-img
-                      src="/images/heater.png"
-                      aspect-ratio="1"
-                    ></v-img>
-                    <div class="body-2 text-xs-center">磁力搅拌器</div>
-                  </v-card-text>
-                </v-card>
-              </v-flex>
+                    <v-flex xs3>
+                      <v-card @click="addHeater()" color="rgba(255, 255, 255, 0.5)">
+                        <v-card-text>
+                          <v-img
+                            src="/images/heater.png"
+                            aspect-ratio="1"
+                          ></v-img>
+                          <div class="body-2 text-xs-center" style="font-weight:bold">磁力搅拌器</div>
+                        </v-card-text>
+                      </v-card>
+                    </v-flex>
 
-              <v-flex xs3>
-                <v-card @click="addLiquidTransferor()">
-                  <v-card-text>
-                    <v-img
-                      src="/images/liquid_transferor.png"
-                      aspect-ratio="1"
-                    ></v-img>
-                    <div class="body-2 text-xs-center">移液枪</div>
-                  </v-card-text>
-                </v-card>
-              </v-flex>
+                    <v-flex xs3>
+                      <v-card @click="addLiquidTransferor()" color="rgba(255, 255, 255, 0.5)">
+                        <v-card-text>
+                          <v-img
+                            src="/images/liquid_transferor.png"
+                            aspect-ratio="1"
+                          ></v-img>
+                          <div class="body-2 text-xs-center" style="font-weight:bold">移液枪</div>
+                        </v-card-text>
+                      </v-card>
+                    </v-flex>
 
-              <v-flex xs3>
-                <v-card @click="addNeedleCap()">
-                  <v-card-text>
-                    <v-img
-                      src="/images/needle.png"
-                      aspect-ratio="1"
-                    ></v-img>
-                    <div class="body-2 text-xs-center">针管</div>
-                  </v-card-text>
-                </v-card>
-              </v-flex>
+                    <v-flex xs3>
+                      <v-card @click="addNeedleCap()" color="rgba(255, 255, 255, 0.5)">
+                        <v-card-text>
+                          <v-img
+                            src="/images/needle.png"
+                            aspect-ratio="1"
+                          ></v-img>
+                          <div class="body-2 text-xs-center" style="font-weight:bold">针管</div>
+                        </v-card-text>
+                      </v-card>
+                    </v-flex>
 
-              <v-flex xs3>
-                <v-card @click="addTriFlask()">
-                  <v-card-text>
-                    <v-img
-                      src="/images/tri_flask.png"
-                      aspect-ratio="1"
-                    ></v-img>
-                    <div class="body-2 text-xs-center">锥形瓶</div>
-                  </v-card-text>
-                </v-card>
-              </v-flex>
+                    <v-flex xs3>
+                      <v-card @click="addTriFlask()" color="rgba(255, 255, 255, 0.5)">
+                        <v-card-text>
+                          <v-img
+                            src="/images/tri_flask.png"
+                            aspect-ratio="1"
+                          ></v-img>
+                          <div class="body-2 text-xs-center" style="font-weight:bold">锥形瓶</div>
+                        </v-card-text>
+                      </v-card>
+                    </v-flex>
 
-              <v-flex xs3>
-                <v-card @click="addDropper()">
-                  <v-card-text>
-                    <v-img
-                      src="/images/dropper.png"
-                      aspect-ratio="1"
-                    ></v-img>
-                    <div class="body-2 text-xs-center">滴管</div>
-                  </v-card-text>
-                </v-card>
-              </v-flex>
+                    <v-flex xs3>
+                      <v-card @click="addDropper()" color="rgba(255, 255, 255, 0.5)">
+                        <v-card-text>
+                          <v-img
+                            src="/images/dropper.png"
+                            aspect-ratio="1"
+                          ></v-img>
+                          <div class="body-2 text-xs-center" style="font-weight:bold">滴管</div>
+                        </v-card-text>
+                      </v-card>
+                    </v-flex>
 
-              <v-flex xs3>
-                <v-card @click="addMeasuringCylinder()">
-                  <v-card-text>
-                    <v-img
-                      src="/images/measuring_cylinder.png"
-                      aspect-ratio="1"
-                    ></v-img>
-                    <div class="body-2 text-xs-center">量筒</div>
-                  </v-card-text>
-                </v-card>
-              </v-flex>
+                    <v-flex xs3>
+                      <v-card @click="addMeasuringCylinder()" color="rgba(255, 255, 255, 0.5)">
+                        <v-card-text>
+                          <v-img
+                            src="/images/measuring_cylinder.png"
+                            aspect-ratio="1"
+                          ></v-img>
+                          <div class="body-2 text-xs-center" style="font-weight:bold">量筒</div>
+                        </v-card-text>
+                      </v-card>
+                    </v-flex>
 
-              <v-flex xs3>
-                <v-card @click="addStand()">
-                  <v-card-text>
-                    <v-img
-                      src="/images/stand.png"
-                      aspect-ratio="1"
-                    ></v-img>
-                    <div class="body-2 text-xs-center">铁架台</div>
-                  </v-card-text>
-                </v-card>
-              </v-flex>
+                    <v-flex xs3>
+                      <v-card @click="addStand()" color="rgba(255, 255, 255, 0.5)">
+                        <v-card-text>
+                          <v-img
+                            src="/images/stand.png"
+                            aspect-ratio="1"
+                          ></v-img>
+                          <div class="body-2 text-xs-center" style="font-weight:bold">铁架台</div>
+                        </v-card-text>
+                      </v-card>
+                    </v-flex>
 
-              <v-flex xs3>
-                <v-card @click="addC8h14o2s2()">
-                  <v-card-text>
-                    <v-img
-                      src="/images/brown_bottle.png"
-                      aspect-ratio="1"
-                    ></v-img>
-                    <div class="body-2 text-xs-center">硫辛酸</div>
-                  </v-card-text>
-                </v-card>
-              </v-flex>
+                    <v-flex xs3>
+                      <v-card @click="addC8h14o2s2()" color="rgba(255, 255, 255, 0.5)">
+                        <v-card-text>
+                          <v-img
+                            src="/images/brown_bottle.png"
+                            aspect-ratio="1"
+                          ></v-img>
+                          <div class="body-2 text-xs-center" style="font-weight:bold">硫辛酸</div>
+                        </v-card-text>
+                      </v-card>
+                    </v-flex>
 
-              <v-flex xs3>
-                <v-card @click="addFecl3()">
-                  <v-card-text>
-                    <v-img
-                      src="/images/brown_bottle.png"
-                      aspect-ratio="1"
-                    ></v-img>
-                    <div class="body-2 text-xs-center">六水合三氯化铁</div>
-                  </v-card-text>
-                </v-card>
-              </v-flex>
+                    <v-flex xs3>
+                      <v-card @click="addFecl3()" color="rgba(255, 255, 255, 0.5)">
+                        <v-card-text>
+                          <v-img
+                            src="/images/brown_bottle.png"
+                            aspect-ratio="1"
+                          ></v-img>
+                          <div class="body-2 text-xs-center" style="font-weight:bold">六水合三氯化铁</div>
+                        </v-card-text>
+                      </v-card>
+                    </v-flex>
 
-              <v-flex xs3>
-                <v-card @click="addAsetone()">
-                  <v-card-text>
-                    <v-img
-                      src="/images/brown_bottle.png"
-                      aspect-ratio="1"
-                    ></v-img>
-                    <div class="body-2 text-xs-center">丙酮</div>
-                  </v-card-text>
-                </v-card>
-              </v-flex>
+                    <v-flex xs3>
+                      <v-card @click="addAsetone()" color="rgba(255, 255, 255, 0.5)">
+                        <v-card-text>
+                          <v-img
+                            src="/images/brown_bottle.png"
+                            aspect-ratio="1"
+                          ></v-img>
+                          <div class="body-2 text-xs-center" style="font-weight:bold">丙酮</div>
+                        </v-card-text>
+                      </v-card>
+                    </v-flex>
 
-              <v-flex xs3>
-                <v-card @click="addDib()">
-                  <v-card-text>
-                    <v-img
-                      src="/images/brown_bottle.png"
-                      aspect-ratio="1"
-                    ></v-img>
-                    <div class="body-2 text-xs-center">DIB交联剂</div>
-                  </v-card-text>
-                </v-card>
-              </v-flex>
+                    <v-flex xs3>
+                      <v-card @click="addC3D6O()" color="rgba(255, 255, 255, 0.5)">
+                        <v-card-text>
+                          <v-img
+                            src="/images/brown_bottle.png"
+                            aspect-ratio="1"
+                          ></v-img>
+                          <div class="body-2 text-xs-center" style="font-weight:bold">氘代丙酮</div>
+                        </v-card-text>
+                      </v-card>
+                    </v-flex>
 
-              <v-flex xs3>
-                <v-card @click="addSpoon()">
-                  <v-card-text>
-                    <v-img
-                      src="/images/spoon.png"
-                      aspect-ratio="1"
-                    ></v-img>
-                    <div class="body-2 text-xs-center">药匙</div>
-                  </v-card-text>
-                </v-card>
-              </v-flex>
+                    <v-flex xs3>
+                      <v-card @click="addNMR_tube()" color="rgba(255, 255, 255, 0.5)">
+                        <v-card-text>
+                          <v-img
+                            src="/images/tube.png"
+                            aspect-ratio="1"
+                          ></v-img>
+                          <div class="body-2 text-xs-center" style="font-weight:bold">核磁管</div>
+                        </v-card-text>
+                      </v-card>
+                    </v-flex>
 
-              <v-flex xs3>
-                <v-card @click="addFilm()">
-                  <v-card-text>
-                    <v-img
-                      src="/images/film.png"
-                      aspect-ratio="1"
-                    ></v-img>
-                    <div class="body-2 text-xs-center">塑料薄膜</div>
-                  </v-card-text>
-                </v-card>
-              </v-flex>
+                    <v-flex xs3>
+                      <v-card @click="addDib()" color="rgba(255, 255, 255, 0.5)">
+                        <v-card-text>
+                          <v-img
+                            src="/images/brown_bottle.png"
+                            aspect-ratio="1"
+                          ></v-img>
+                          <div class="body-2 text-xs-center" style="font-weight:bold">DIB交联剂</div>
+                        </v-card-text>
+                      </v-card>
+                    </v-flex>
 
-              <v-flex xs3>
-                <v-card @click="addCap(0,0.05,0)">
-                  <v-card-text>
-                    <v-img
-                      src="/images/cap.png"
-                      aspect-ratio="1"
-                    ></v-img>
-                    <div class="body-2 text-xs-center">针管盖</div>
-                  </v-card-text>
-                </v-card>
-              </v-flex>
+                    <v-flex xs3>
+                      <v-card @click="addSpoon()" color="rgba(255, 255, 255, 0.5)">
+                        <v-card-text>
+                          <v-img
+                            src="/images/spoon.png"
+                            aspect-ratio="1"
+                          ></v-img>
+                          <div class="body-2 text-xs-center" style="font-weight:bold">药匙</div>
+                        </v-card-text>
+                      </v-card>
+                    </v-flex>
 
-              <v-flex xs3>
-                <v-card @click="addThermometer()">
-                  <v-card-text>
-                    <v-img
-                      src="/images/temperature.png"
-                      aspect-ratio="1"
-                    ></v-img>
-                    <div class="body-2 text-xs-center">温度计</div>
-                  </v-card-text>
-                </v-card>
-              </v-flex>
+                    <v-flex xs3>
+                      <v-card @click="addFilm()" color="rgba(255, 255, 255, 0.5)">
+                        <v-card-text>
+                          <v-img
+                            src="/images/film.png"
+                            aspect-ratio="1"
+                          ></v-img>
+                          <div class="body-2 text-xs-center" style="font-weight:bold">塑料薄膜</div>
+                        </v-card-text>
+                      </v-card>
+                    </v-flex>
 
-              <v-flex xs3>
-                <v-card @click="addClock()">
-                  <v-card-text>
-                    <v-img
-                      src="/images/clock.png"
-                      aspect-ratio="1"
-                    ></v-img>
-                    <div class="body-2 text-xs-center">时钟</div>
-                  </v-card-text>
-                </v-card>
-              </v-flex>
+                    <v-flex xs3>
+                      <v-card @click="addCap(0,0.05,0)" color="rgba(255, 255, 255, 0.5)">
+                        <v-card-text>
+                          <v-img
+                            src="/images/cap.png"
+                            aspect-ratio="1"
+                          ></v-img>
+                          <div class="body-2 text-xs-center" style="font-weight:bold">针管盖</div>
+                        </v-card-text>
+                      </v-card>
+                    </v-flex>
 
-              <v-flex xs3>
-                <v-card @click="addMagneton()">
-                  <v-card-text>
-                    <v-img
-                      src="/images/vibrate.png"
-                      aspect-ratio="1"
-                    ></v-img>
-                    <div class="body-2 text-xs-center">小磁子</div>
-                  </v-card-text>
-                </v-card>
-              </v-flex>
+                    <v-flex xs3>
+                      <v-card @click="addThermometer()" color="rgba(255, 255, 255, 0.5)">
+                        <v-card-text>
+                          <v-img
+                            src="/images/temperature.png"
+                            aspect-ratio="1"
+                          ></v-img>
+                          <div class="body-2 text-xs-center" style="font-weight:bold">温度计</div>
+                        </v-card-text>
+                      </v-card>
+                    </v-flex>
 
-              <v-flex xs3>
-                <v-card @click="addTweezer()">
-                  <v-card-text>
-                    <v-img
-                      src="/images/tweezer.png"
-                      aspect-ratio="1"
-                    ></v-img>
-                    <div class="body-2 text-xs-center">镊子</div>
-                  </v-card-text>
-                </v-card>
-              </v-flex>
+                    <v-flex xs3>
+                      <v-card @click="addClock()" color="rgba(255, 255, 255, 0.5)">
+                        <v-card-text>
+                          <v-img
+                            src="/images/clock.png"
+                            aspect-ratio="1"
+                          ></v-img>
+                          <div class="body-2 text-xs-center" style="font-weight:bold">时钟</div>
+                        </v-card-text>
+                      </v-card>
+                    </v-flex>
 
-              <v-flex xs3>
-                <v-card @click="addScissors()">
-                  <v-card-text>
-                    <v-img
-                      src="/images/scissors.png"
-                      aspect-ratio="1"
-                    ></v-img>
-                    <div class="body-2 text-xs-center">剪刀</div>
-                  </v-card-text>
-                </v-card>
-              </v-flex>
+                    <v-flex xs3>
+                      <v-card @click="addMagneton()" color="rgba(255, 255, 255, 0.5)">
+                        <v-card-text>
+                          <v-img
+                            src="/images/vibrate.png"
+                            aspect-ratio="1"
+                          ></v-img>
+                          <div class="body-2 text-xs-center" style="font-weight:bold">小磁子</div>
+                        </v-card-text>
+                      </v-card>
+                    </v-flex>
 
-              <v-flex xs3>
-                <v-card @click="addGlassPad()">
-                  <v-card-text>
-                    <v-img
-                      src="/images/glass_pad.png"
-                      aspect-ratio="1"
-                    ></v-img>
-                    <div class="body-2 text-xs-center">玻璃片</div>
-                  </v-card-text>
-                </v-card>
-              </v-flex>
+                    <v-flex xs3>
+                      <v-card @click="addTweezer()" color="rgba(255, 255, 255, 0.5)">
+                        <v-card-text>
+                          <v-img
+                            src="/images/tweezer.png"
+                            aspect-ratio="1"
+                          ></v-img>
+                          <div class="body-2 text-xs-center" style="font-weight:bold">镊子</div>
+                        </v-card-text>
+                      </v-card>
+                    </v-flex>
 
-              <v-flex xs4>
-                <v-card @click="addRoundFlaskCone()" v-show="show1">
-                  <v-card-text>
-                    <v-img
-                      src="/images/flask_with_powder.png"
-                      aspect-ratio="1"
-                    ></v-img>
-                    <div class="body-2 text-xs-center">装有硫辛酸的圆底烧瓶</div>
-                  </v-card-text>
-                </v-card>
-              </v-flex>
+                    <v-flex xs3>
+                      <v-card @click="addScissors()" color="rgba(255, 255, 255, 0.5)">
+                        <v-card-text>
+                          <v-img
+                            src="/images/scissors.png"
+                            aspect-ratio="1"
+                          ></v-img>
+                          <div class="body-2 text-xs-center" style="font-weight:bold">剪刀</div>
+                        </v-card-text>
+                      </v-card>
+                    </v-flex>
 
-              <v-flex xs4>
-                <v-card @click="addTriFlaskFullFecl3Film()" v-show="show2">
-                  <v-card-text>
-                    <v-img
-                      src="/images/flask_with_liquid.png"
-                      aspect-ratio="1"
-                    ></v-img>
-                    <div class="body-2 text-xs-center">三氯化铁丙酮溶液</div>
-                  </v-card-text>
-                </v-card>
-              </v-flex>
+                    <v-flex xs3>
+                      <v-card @click="addGlassPad()" color="rgba(255, 255, 255, 0.5)">
+                        <v-card-text>
+                          <v-img
+                            src="/images/glass_pad.png"
+                            aspect-ratio="1"
+                          ></v-img>
+                          <div class="body-2 text-xs-center" style="font-weight:bold">玻璃片</div>
+                        </v-card-text>
+                      </v-card>
+                    </v-flex>
 
-              <v-flex xs4>
-                <v-card @click="addNeedleFullCap()" v-show="show3">
-                  <v-card-text>
-                    <v-img
-                      src="/images/needle_with_cap.png"
-                      aspect-ratio="1"
-                    ></v-img>
-                    <div class="body-2 text-xs-center">装有dib试剂的针管</div>
-                  </v-card-text>
-                </v-card>
-              </v-flex>
+                    <v-flex xs3>
+                      <v-card @click="addFpir()" color="rgba(255, 255, 255, 0.5)">
+                        <v-card-text>
+                          <v-img
+                            src="/images/fpir.png"
+                            aspect-ratio="1"
+                          ></v-img>
+                          <div class="body-2 text-xs-center" style="font-weight:bold">红外光谱仪</div>
+                        </v-card-text>
+                      </v-card>
+                    </v-flex>
 
-              <v-flex xs4>
-                <v-card @click="addNeedleFullTriFlask()" v-show="show4">
-                  <v-card-text>
-                    <v-img
-                      src="/images/flask_with_needle.png"
-                      aspect-ratio="1"
-                    ></v-img>
-                    <div class="body-2 text-xs-center">装有胶黏生成物针管的锥形瓶</div>
-                  </v-card-text>
-                </v-card>
-              </v-flex>
+                    <v-flex xs3>
+                      <v-card @click="addSampleFilm(0,0,0)" v-show="show4" color="rgba(255, 255, 255, 0.5)">
+                        <v-card-text>
+                          <v-img
+                            src="/images/sample_film.png"
+                            aspect-ratio="1"
+                          ></v-img>
+                          <div class="body-2 text-xs-center" style="font-weight:bold">产品薄膜</div>
+                        </v-card-text>
+                      </v-card>
+                    </v-flex>
 
-            </v-layout>
-          </v-container>
+                    <v-flex xs3>
+                      <v-card @click="addRoundFlaskCone()" v-show="show1" color="rgba(255, 255, 255, 0.5)">
+                        <v-card-text>
+                          <v-img
+                            src="/images/flask_with_powder.png"
+                            aspect-ratio="1"
+                          ></v-img>
+                          <div class="body-2 text-xs-center" style="font-weight:bold">圆底烧瓶-硫辛酸</div>
+                        </v-card-text>
+                      </v-card>
+                    </v-flex>
+
+                    <v-flex xs3>
+                      <v-card @click="addTriFlaskFullFecl3Film()" v-show="show2" color="rgba(255, 255, 255, 0.5)">
+                        <v-card-text>
+                          <v-img
+                            src="/images/flask_with_liquid.png"
+                            aspect-ratio="1"
+                          ></v-img>
+                          <div class="body-2 text-xs-center">三氯化铁丙酮溶液</div>
+                        </v-card-text>
+                      </v-card>
+                    </v-flex>
+
+                    <v-flex xs3>
+                      <v-card @click="addNeedleFullCap()" v-show="show3" color="rgba(255, 255, 255, 0.5)">
+                        <v-card-text>
+                          <v-img
+                            src="/images/needle_with_cap.png"
+                            aspect-ratio="1"
+                          ></v-img>
+                          <div class="body-2 text-xs-center">针管-dib试剂</div>
+                        </v-card-text>
+                      </v-card>
+                    </v-flex>
+
+                    <v-flex xs3>
+                      <v-card @click="addNeedleFullTriFlask()" v-show="show4" color="rgba(255, 255, 255, 0.5)">
+                        <v-card-text>
+                          <v-img
+                            src="/images/flask_with_needle.png"
+                            aspect-ratio="1"
+                          ></v-img>
+                          <div class="body-2 text-xs-center">锥形瓶-生成物针管</div>
+                        </v-card-text>
+                      </v-card>
+                    </v-flex>
+
+                  </v-layout>
+                </v-container>
+              </v-card>
+            </v-menu>
+            
+          </v-card>
+          
         </v-card>
       </v-flex>
     </v-layout>
-
+    
     <!--对话框-->
     <v-dialog
+      :persistent='dialog_persistent'
       v-model="dialog_nextstep"
       max-width="290"
     >
@@ -650,6 +751,7 @@
     </v-dialog>
     <!--对话框-->
     <v-dialog
+      :persistent='dialog_persistent'
       v-model="dialog_result"
       max-width="500"
     >
@@ -683,6 +785,7 @@
     </v-dialog>
     <!--对话框-->
     <v-dialog
+      :persistent='dialog_persistent'
       v-model="post_dialog"
       max-width="500"
     >
@@ -763,6 +866,7 @@
     </v-dialog>
     <!--对话框-->
     <v-dialog
+      :persistent='dialog_persistent'
       v-model="reset_dialog"
       max-width="290"
     >
@@ -784,6 +888,106 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <!--核磁共振氢谱仪-->
+    <v-dialog
+      v-model="bruker_dialog"
+      :persistent='dialog_persistent'
+    >
+      <v-card>
+        <v-card-title class="headline">核磁共振氢谱</v-card-title>
+        <v-card-text>
+          <v-img
+            :src="H_NMR_graph"
+          ></v-img>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="green darken-1"
+            flat="flat"
+            @click="bruker_dialog = false;"
+          >确定</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog
+      max-width = "50%" 
+      v-model="contrast_dialog"
+      :persistent='dialog_persistent'
+    >
+      <v-card>
+        <v-card-title class="headline">核磁共振氢谱对比图</v-card-title>
+        <v-card-text>
+          <v-img
+            src="/images/contrast.png"
+          ></v-img>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="green darken-1"
+            flat="flat"
+            @click="contrast_dialog = false;"
+          >确定</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog
+      v-model="fpir_dialog" max-width = "40%" :persistent='dialog_persistent'
+    >
+      <v-card>
+        <v-card-title class="headline">红外光谱仪对比图</v-card-title>
+        <v-card-text>
+          <v-img
+            src="/images/fpir_graph.png"
+          ></v-img>
+          <br>
+          <span style="color:orange">请结合产品的化学结构分别说明产品在3466cm^(-1)处的宽吸收峰及1625cm^(-1)的强吸收峰的归属？</span>
+          <br>
+          <span style="color:green" v-show="fpir_graph_answere">前者是羧基的氢键，后者是羰基-Fe(III)络合产生的。</span>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="blue darken-1"
+            flat="flat"
+            @click="fpir_graph_answere=true"
+          >查看答案</v-btn>
+          <v-btn
+            color="green darken-1"
+            flat="flat"
+            @click="fpir_dialog = false;fpir_graph_answere=false;"
+          >确定</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <!--轮播-->
+    <v-dialog
+      v-model="carousel_dialog" :persistent='dialog_persistent' max-width = "50%" 
+    >
+      <v-card >
+        <v-card-text>
+          <v-carousel :cycle='carousel_cycle'>
+            <v-carousel-item
+              v-for="i in carouselpiclist"
+              :key="i"
+              :src="i"
+            ></v-carousel-item>
+          </v-carousel>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="green darken-1"
+            flat="flat"
+            @click="carousel_dialog = false;"
+          >确定</v-btn>
+        </v-card-actions>
+      </v-card> 
+      </v-dialog>
 
   </v-container>
 </template>
@@ -832,7 +1036,7 @@ export default {
       btn_nextstep: false,
       btn_post: true,
       advancedTexture: null,
-      controller: null,
+      controller: [],
       stable: 0, //产生分离按钮的时候鼠标滑动不太稳定 这个等于一个flag
       shake_count:0,
       rotateflag:1,
@@ -843,6 +1047,7 @@ export default {
       needstretch:0,
       needstretchid:'',
       stretched:0,
+      light:null,
       activeIndex:"default",
       weightlist:[],
       weightprops:{}, //所有电子称属性 {id:[示数,name]}
@@ -851,6 +1056,7 @@ export default {
       needlelist:[],
       needleprops:{},
       standlist:[],
+      fpirlist:[],
       heater_temp_switch:false,
       heater_temp_value:0,
       heater_stir_switch:false,
@@ -886,6 +1092,19 @@ export default {
       needle_value_btn_up:true,
       needle_value_btn_down:true,
       needle_value_btn_post:true,
+      bruker_dialog:false,
+      H_NMR_graph:'/images/H-NMR_sample.png',
+      show_contrast_button:[0,0],
+      contrast_dialog:false,
+      fpir_dialog:false,
+      fpir_graph_answere:false,
+      dialog_persistent:true,
+      show_contrast_dialog_btn:true,
+      show_bruker_dialog_btn:true,
+      carouselpiclist:['/images/e1.png','/images/e2.png','/images/e3.png'],
+      carousel_dialog:false,
+      carousel_cycle:false,
+      menu:false,
       //以下6个数值要发到后台进行计算。以验证是否能做出成品
       C8H14O2S2:'',
       Fecl3:'',
@@ -921,6 +1140,10 @@ export default {
       this.advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI(
         "UI"
       );
+      this.addModel('desk', new BABYLON.Vector3(0.7, 0.5, 1.2),new BABYLON.Vector3(0, -0.4, -0.1), new BABYLON.Vector3(0, Math.PI, 0), null,'desk');
+      this.addBrukerBulb(-0.7,0.7,0.8);
+      //this.changeBulbColor(0,1,0);
+      this.addTrash_can();
       this.engine.runRenderLoop(() => {
         //摇晃
         if(this.needshake == 1){
@@ -1213,7 +1436,12 @@ export default {
             "dib.bottle_cap",
             "fecl3.bottle_cap",
             "c3h6o.bottle_cap",
-            "c8h14o2s2.bottle_cap"
+            "c8h14o2s2.bottle_cap",
+            "nmr_tube_cone_c3d6o",
+            "nmr_tube_cone_c3d6o_c8h14o2s2",
+            "bruker_tube",
+            "bruker_tube_c8h14o2s2",
+            "fpir.sample_film"
           ];
           if (pickResult.pickedMesh.id != "ground" && pickResult.pickedMesh.id != "desk") {
             this.hl.addMesh(pickResult.pickedMesh, BABYLON.Color3.Purple());
@@ -1221,15 +1449,19 @@ export default {
               this.pickingObj != null &&
               this.pickingObj.id != pickResult.pickedMesh.id
             ) {
-              if(this.weightlist.indexOf(pickResult.pickedMesh.id)!=-1 || this.measuring_cylinderlist.indexOf(pickResult.pickedMesh.id)!=-1) this.activeIndex = pickResult.pickedMesh.id;
+              if(this.weightlist.indexOf(pickResult.pickedMesh.id)!=-1 
+              || this.measuring_cylinderlist.indexOf(pickResult.pickedMesh.id)!=-1
+              || this.findIDinFpirlist(pickResult.pickedMesh.id)==1) {
+                this.activeIndex = pickResult.pickedMesh.id;
+              }
               this.stable = 0;
               this.addGui_combination(this.pickingObj.id, pickResult.pickedMesh.id);
             } else if (
               array1.includes(pickResult.pickedMesh.id.split('-')[0]) &&
               this.stable == 0 &&
-              this.controller == null
+              this.controller.length == 0
             ) {
-              //this.controller==null is neccesary!
+              //this.controller.length == 0 is neccesary!
               this.addGui_separation(pickResult.pickedMesh.id);
               this.stable = 1;
               //由于merge需要时间 所以可能会导致merge之前就出现分离按钮 导致未能移除网格 （bug）
@@ -1237,15 +1469,21 @@ export default {
             this.hoveredObj = pickResult.pickedMesh;
           } else {
             this.stable = 0;
-            if (this.pickingObj != null && this.controller != null) {
-              this.advancedTexture.removeControl(this.controller);
-              this.controller = null;
+            if (this.pickingObj != null && this.controller.length != 0) {
+              //拖拽着物体移动
+              for(var i = 0;i<this.controller.length;i++){
+                this.advancedTexture.removeControl(this.controller[i]);
+              }
+              this.controller.length = 0;
             } else if (
-              this.controller != null &&
-              this.controller.name == "btn2"
+              this.controller.length != 0 &&
+              (this.controller[0].name == "btn2" || this.controller[0].name == "btn3")
             ) {
-              this.advancedTexture.removeControl(this.controller);
-              this.controller = null;
+              //仅滑动光标
+              for(var i = 0;i<this.controller.length;i++){
+                this.advancedTexture.removeControl(this.controller[i]);
+              }
+              this.controller.length = 0;
             }
           }
         }
@@ -1258,11 +1496,16 @@ export default {
 
         if (pickResult.hit) {
           if (pickResult.pickedMesh.id != "ground" && pickResult.pickedMesh.id != "desk") {
-            if(this.weightlist.indexOf(pickResult.pickedMesh.id)!= -1 || this.measuring_cylinderlist.indexOf(pickResult.pickedMesh.id)!=-1 || this.needlelist.indexOf(pickResult.pickedMesh.id)!= -1 ||pickResult.pickedMesh.id.split('-')[0]=='stand1_pole' || this.liquid_transferorlist.indexOf(pickResult.pickedMesh.id)!= -1){
+            if(this.weightlist.indexOf(pickResult.pickedMesh.id)!= -1 || this.measuring_cylinderlist.indexOf(pickResult.pickedMesh.id)!=-1 
+            || this.needlelist.indexOf(pickResult.pickedMesh.id)!= -1 ||pickResult.pickedMesh.id.split('-')[0]=='stand1_pole'
+            || this.liquid_transferorlist.indexOf(pickResult.pickedMesh.id)!= -1 || this.findIDinFpirlist(pickResult.pickedMesh.id)==1  ){
               this.activeIndex = pickResult.pickedMesh.id
             }
+            else if(this.e1==4 && pickResult.pickedMesh.id=='bruker' || pickResult.pickedMesh.id=='bruker_tube_c8h14o2s2' || pickResult.pickedMesh.id=='bruker_tube'){
+              this.activeIndex = 'bruker';
+            }
             else if(pickResult.pickedMesh.id.split('-')[0]==''){
-              this.activeIndex = 'default'
+              this.activeIndex = 'default';
             }
             this.hl.addMesh(pickResult.pickedMesh, BABYLON.Color3.Purple());
             this.pickingObj = pickResult.pickedMesh;
@@ -1274,65 +1517,90 @@ export default {
           this.scene.pointerX,
           this.scene.pointerY
         );
-        var ray = new BABYLON.Ray(pickResult.ray.origin,pickResult.ray.direction,100);
-        var pickThing = this.scene.multiPickWithRay(ray);
-        var state = 0;
-        for(var i=0;i<pickThing.length;i++){
-          if(pickThing[i].pickedMesh.id=='desk'){
-            state = 1;
-          }
-        }
+        // var ray = new BABYLON.Ray(pickResult.ray.origin,pickResult.ray.direction,100);
+        // var pickThing = this.scene.multiPickWithRay(ray);
+        // var state = 0;
+        // for(var i=0;i<pickThing.length;i++){
+        //   if(pickThing[i].pickedMesh.id=='desk'){
+        //     state = 1;
+        //   }
+        // }
         if(this.pickingObj != null){
           this.hl.removeMesh(this.pickingObj);
-          if(state==0){
-            this.scene.removeMesh(this.pickingObj);
-            this.WhenNotSetModelsOnDesk(this.pickingObj.id);
-            }
+          // if(state==0 && this.pickingObj.id!='trash_can' && this.pickingObj.id!='bruker' 
+          // && this.pickingObj.id.split('-')[0]!='nmr_tube_yellow_cylinder'
+          // && this.pickingObj.id!='bulb' && this.pickingObj.id!='light'
+          // && this.pickingObj.id!='bruker_tube' && this.pickingObj.id!='bruker_tube_c8h14o2s2'){
+          //   this.scene.removeMesh(this.pickingObj);
+          //   this.WhenNotSetModelsOnDesk(this.pickingObj.id);
+          //   }
           }
           this.pickingObj = null;
       });
     },
+    findIDinFpirlist(id){
+      for(var i=0;i<this.fpirlist.length;i++){
+        if(this.fpirlist[i][0]==id) return 1;
+      }
+      return 0;
+    },
     WhenNotSetModelsOnDesk(id){
       //模型会消失
-       if (this.weightlist.indexOf(id) != -1) {
-                    var index = this.weightlist.indexOf(id);
-                    //删除
-                    {
-                        this.weightlist.splice(index, 1)
-                        delete(this.weightlist[id])
-                    }
-                } else if (this.measuring_cylinderlist.indexOf(id) != -1) {
-                    var index = this.measuring_cylinderlist.indexOf(id);
-                    //删除
-                    {
-                        this.measuring_cylinderlist.splice(index, 1)
-                        delete(this.measuring_cylinderlist[id])
-                    }
-                } else if (this.needlelist.indexOf(id) != -1) {
-                    var index = this.needlelist.indexOf(id);
-                    //删除
-                    {
-                        this.needlelist.splice(index, 1)
-                        delete(this.needlelist[id])
-                    }
-                } else if (id.split('-')[0] == 'clock') {
-                    this.hasClock = false;
-                }
-                setTimeout(() => {
-                    for (var i = 0; i < this.weightlist.length; i++) {
-                        var re = this.weightprops[this.weightlist[i]][0]
-                        this.$refs.weight[i].setAllNumber(re[0], re[1], re[2], re[3], re[4], re[5], this.weightlist[i]);
-                    }
-                    if (this.weightlist.length != 0) this.activeIndex = this.weightlist[this.weightlist.length - 1];
-                    else if (this.measuring_cylinderlist.length != 0) this.activeIndex = this.measuring_cylinderlist[this.measuring_cylinderlist.length - 1]
-                    else if (this.needlelist.length != 0) this.activeIndex = this.needlelist[this.needlelist.length - 1]
-                    else this.activeIndex = 'default'
-                }, 200);
+      if (this.weightlist.indexOf(id) != -1) {
+        var index = this.weightlist.indexOf(id);
+        //删除
+        {
+            this.weightlist.splice(index, 1)
+            delete(this.weightlist[id])
+        }
+      } 
+      else if (this.findIDinFpirlist(id)==1){
+        for(var i=0;i<this.fpirlist.length;i++){
+          if(this.fpirlist[i][0]==id){
+            this.fpirlist.splice(i,1);
+            break;
+          }
+        }
+      }
+      else if (this.measuring_cylinderlist.indexOf(id) != -1) {
+        var index = this.measuring_cylinderlist.indexOf(id);
+        //删除
+        {
+            this.measuring_cylinderlist.splice(index, 1)
+            delete(this.measuring_cylinderlist[id])
+        }
+      } 
+      else if (this.needlelist.indexOf(id) != -1) {
+        var index = this.needlelist.indexOf(id);
+        //删除
+        {
+            this.needlelist.splice(index, 1)
+            delete(this.needlelist[id])
+        }
+      } 
+      else if (id.split('-')[0] == 'clock') {
+            this.hasClock = false;
+      }
+      setTimeout(() => {
+          for (var i = 0; i < this.weightlist.length; i++) {
+              var re = this.weightprops[this.weightlist[i]][0]
+              this.$refs.weight[i].setAllNumber(re[0], re[1], re[2], re[3], re[4], re[5], this.weightlist[i]);
+          }
+          if (this.weightlist.length != 0) this.activeIndex = this.weightlist[this.weightlist.length - 1];
+          else if (this.measuring_cylinderlist.length != 0) this.activeIndex = this.measuring_cylinderlist[this.measuring_cylinderlist.length - 1];
+          else if (this.needlelist.length != 0) this.activeIndex = this.needlelist[this.needlelist.length - 1];
+          else if(this.fpirlist.length!=0) {
+            this.activeIndex = this.fpirlist[this.fpirlist.length - 1][0];
+          }
+          else this.activeIndex = 'default';
+      }, 200);
     },
     addGui_separation(hoverid) {
-      if (this.controller != null) {
-        this.advancedTexture.removeControl(this.controller);
-        this.controller = null;
+      if (this.controller.length != 0) {
+        for(var i = 0;i<this.controller.length;i++){
+          this.advancedTexture.removeControl(this.controller[i]);
+        }
+        this.controller.length = 0;
       }
       if(hoverid.split('-').includes('tri_flask_full_trans_powder_brown')){
         var button1 = GUI.Button.CreateSimpleButton("btn2", "震荡");
@@ -1344,32 +1612,46 @@ export default {
         button1.background = "orange";
         button1.fontSize = 14;
       }
+      else if(hoverid.split('-').includes('nmr_tube_cone_c3d6o') || hoverid.split('-').includes('nmr_tube_cone_c3d6o_c8h14o2s2')){
+        var button1 = GUI.Button.CreateSimpleButton("btn2", "溶解");
+        button1.background = "orange";
+        button1.fontSize = 14;
+      }
+      else if(hoverid=='bruker_tube' || hoverid == 'bruker_tube_c8h14o2s2'){
+        var button1 = GUI.Button.CreateSimpleButton("btn2", "取出样品");
+        button1.fontSize = 20;
+        button1.background = "gray";
+        button1.width = "80px";
+        button1.height = "40px";
+      }
       else{
         var button1 = GUI.Button.CreateSimpleButton("btn2", "分离");
         button1.background = "gray";
         button1.fontSize = 16;
       }
-      button1.width = "40px";
-      button1.height = "20px";
-      
+      if(hoverid != 'bruker_tube' && hoverid !='bruker_tube_c8h14o2s2'){
+        button1.width = "40px";
+        button1.height = "20px";
+      }
       button1.cornerRadius = 20;
       this.advancedTexture.addControl(button1);
       button1.linkWithMesh(this.scene.getMeshByID(hoverid));
       button1.color = "black";
-      this.controller = button1;
+      this.controller.push(button1);
       
       button1.onPointerClickObservable.add(() => {
         var array1 = hoverid.split('-')[0].split(".");
         if(!(hoverid.split('-').includes("tri_flask_full_trans_powder_brown") 
         || hoverid.split('-')[0]=='needle.cap'
         || hoverid.split('-')[0]=='needle_full.cap'
-        || hoverid.split('-')[0]=='glass_pad_yellow_cylinder')){
-          //非这四者 都删除
+        || hoverid.split('-')[0]=='glass_pad_yellow_cylinder'
+        || hoverid.split('-')[0]=='nmr_tube_cone_c3d6o'
+        || hoverid.split('-')[0]=='nmr_tube_cone_c3d6o_c8h14o2s2'
+        || hoverid=='bruker_tube'
+        || hoverid=='bruker_tube_c8h14o2s2')){
+          //非这几个 都删除
           this.scene.removeMesh(this.scene.getMeshByID(hoverid));
-          if(this.weightlist.indexOf(hoverid)!=-1){
-            this.weightlist.splice(this.weightlist.indexOf(hoverid),1)
-            delete(this.weightlist[hoverid])
-          }
+          this.WhenNotSetModelsOnDesk(hoverid);
         }
         if(hoverid.split('-')[0]=='needle.cap'){
           //将针管 针管冒分离之后不分离到原点
@@ -1418,6 +1700,11 @@ export default {
         else if(hoverid.split('-')[0]=='needle_full.tri_flask'){
           this.addNeedleFull();
         }
+        else if(hoverid == 'bruker_tube' || hoverid == 'bruker_tube_c8h14o2s2'){
+          this.changeBulbColor(0.745, 0.077, 0.177);
+          this.scene.getMeshByID(hoverid).id = 'bruker';
+          this.show_bruker_dialog_btn = true;
+        }
         else if(hoverid.split('-')[0]=='weight.paper_cone'){
           var i = 0;
           var str = '';
@@ -1449,6 +1736,58 @@ export default {
           if(this.weightprops[hoverid][0].toString() == [null, null, 0, 1, 0, 0].toString()){
             this.step1node6 = 1;
           }
+        }
+        else if(hoverid.split('-')[0]=='nmr_tube_cone_c3d6o'){
+          var po = this.getMergedPosition(hoverid);
+          this.scene.removeMesh(this.scene.getMeshByID(hoverid));
+          this.addModel('nmr_tube', new BABYLON.Vector3(2, 1, 1.5), new BABYLON.Vector3(po[0],po[1],po[2]), null, null, 'nmr_tube');
+          this.addModel('yellow_cylinder', new BABYLON.Vector3(0.04, 0.02, 0.04), new BABYLON.Vector3(-po[0], po[1]+0.03, po[2]), new BABYLON.Vector3(Math.PI / 2, 0, 0), null, 'yellow_cylinder');
+          var timer = setInterval(() => {
+            if(this.scene.getMeshByID('yellow_cylinder')!=undefined && this.scene.getMeshByID('nmr_tube')!=undefined){
+              var mesh = BABYLON.Mesh.MergeMeshes(
+                [this.scene.getMeshByID('yellow_cylinder'), this.scene.getMeshByID('nmr_tube')],
+                true,
+                true,
+                undefined,
+                false,
+                true
+              );
+              mesh.id = 'nmr_tube_yellow_cylinder';
+              mesh.id = this.addName(mesh.id);
+              mesh.addBehavior(
+                  new BABYLON.PointerDragBehavior({
+                      dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+                  })
+              );
+              window.clearInterval(timer);
+            }
+          }, 100); 
+        }
+        else if(hoverid.split('-')[0]=='nmr_tube_cone_c3d6o_c8h14o2s2'){
+          var po = this.getMergedPosition(hoverid);
+          this.scene.removeMesh(this.scene.getMeshByID(hoverid));
+          this.addModel('nmr_tube', new BABYLON.Vector3(2, 1, 1.5), new BABYLON.Vector3(po[0],po[1],po[2]), null, null, 'nmr_tube');
+          this.addModel('yellow_cylinder', new BABYLON.Vector3(0.04, 0.02, 0.04), new BABYLON.Vector3(-po[0], po[1]+0.03, po[2]), new BABYLON.Vector3(Math.PI / 2, 0, 0), null, 'yellow_cylinder');
+          var timer = setInterval(() => {
+            if(this.scene.getMeshByID('yellow_cylinder')!=undefined && this.scene.getMeshByID('nmr_tube')!=undefined){
+              var mesh = BABYLON.Mesh.MergeMeshes(
+                [this.scene.getMeshByID('yellow_cylinder'), this.scene.getMeshByID('nmr_tube')],
+                true,
+                true,
+                undefined,
+                false,
+                true
+              );
+              mesh.id = 'nmr_tube_yellow_cylinder_c8h14o2s2';
+              mesh.id = this.addName(mesh.id);
+              mesh.addBehavior(
+                  new BABYLON.PointerDragBehavior({
+                      dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+                  })
+              );
+              window.clearInterval(timer);
+            }
+          }, 100); 
         }
         for (var i = 0; i < array1.length; i++) {
           switch (array1[i]) {
@@ -1514,24 +1853,33 @@ export default {
             case "film":
               this.addFilm();
               break;
+            case "sample_film":
+              this.addSampleFilm(0,0,0);
+              break;
+            case "fpir":
+              this.addFpir();
+              break;
             default:
               break;
           }
         }
       });
+      
+      
     },
     addGui_combination(pickid, hoverid) {
-      if (this.controller != null) {
-        this.advancedTexture.removeControl(this.controller);
-        this.controller = null;
+      if (this.controller.length != 0) {
+        for(var i = 0;i<this.controller.length;i++){
+          this.advancedTexture.removeControl(this.controller[i]);
+        }
+        this.controller.length = 0;
       }
-
       switch (this.e1) {
         case 1:
           var str = "拼接";
           if (hoverid.split('-')[0] == "weight" ||pickid.split("-")[0]=='spoon_cone'||pickid.split("-")[0]=='spoon_powder_brown'
            ||(pickid.split('-')[0] =='pot' && hoverid.split('-')[0] == 'heater')) str = "放置";
-          else if (hoverid.split('-')[0] == "trash_can") str = "移除";
+          else if (hoverid == "trash_can") str = "移除";
           else if (pickid.split('-')[0] == "spoon") str = "拾取";
           else if ( hoverid.split('-')[0] == "round_flask" ||hoverid.split('-')[0] == 'tri_flask'||
            pickid.split('-')[0]=='measuring_cylinder_full') str = "倒入";
@@ -1543,7 +1891,7 @@ export default {
           break;
         case 2:
           var str = '拼接';
-          if (hoverid.split('-')[0] == "trash_can") str = "移除";
+          if (hoverid == "trash_can") str = "移除";
           else if(pickid.split('-')[0] == 'pot')str = "放置";
           else if(pickid.split('-')[0] == 'thermometer' && hoverid.split('-')[0]=='round_flask_cone.pot.heater.stand1'){
             str = '插入';
@@ -1553,7 +1901,7 @@ export default {
           break;
         case 3:
           var str = '拼接';
-          if (hoverid.split('-')[0] == "trash_can") str = "移除";
+          if (hoverid== "trash_can") str = "移除";
           else if(pickid.split('-')[0]=='magneton.tweezer' && hoverid.split('-')[0]=='round_flask_c8h14o2s2')str='放入';
           else if(pickid.split('-')[0]=='needle_full' && hoverid.split('-')[0]=='round_flask_c8h14o2s2')str = '挤入';
           else if(pickid.split('-')[0]=='needle' && hoverid.split('-')[0]=='round_flask_c8h14o2s2')str = '吸入';
@@ -1567,8 +1915,15 @@ export default {
           break;
         case 4:
           var str = '拼接';
-          if (hoverid.split('-')[0] == "trash_can") str = "移除";
+          if (hoverid=="trash_can") str = "移除";
           else if(pickid.split('-')[0]=='scissors' && hoverid.split('-')[0]=='needle_full_glue') str='剪开';
+          else if((pickid.split('-')[0]=='glass_pad_yellow_cylinder_break' || pickid.split('-')[0]=='glass_pad_yellow_cylinder_stretched') && hoverid.split('-')[0]=='nmr_tube') str ="取6mg";
+          else if(pickid.split('-')[0]=='c3d6o' && hoverid.split('-')[0]=='nmr_tube_cone') str ="取0.5ml";
+          else if((pickid.split('-')[0]=='nmr_tube_yellow_cylinder'||pickid.split('-')[0]=='nmr_tube_yellow_cylinder_c8h14o2s2') && hoverid=='bruker') str = "放入";
+          else if(pickid.split('-')[0] == 'spoon' && hoverid.split('-')[0] == 'c8h14o2s2') str = "取6mg";
+          else if(pickid.split('-')[0] == 'spoon_cone' && hoverid.split('-')[0] == 'nmr_tube') str = '放入';
+          else if(pickid.split('-')[0] == 'c3d6o' && hoverid.split('-')[0] == 'nmr_tube_cone_c8h14o2s2') str = "取0.5ml";
+          else if(pickid.split('-')[0] == 'sample_film' && hoverid.split('-')[0] == 'fpir') str = "放入";
           break;
         default:
           break;
@@ -1584,7 +1939,7 @@ export default {
       button1.linkOffsetY = -50;
       button1.linkOffsetX = -50;
       button1.color = "black";
-      this.controller = button1;
+      this.controller.push(button1);
       button1.onPointerClickObservable.add(() => {
         //有称的话 加示数
         if (hoverid.split('-')[0] == "weight" || hoverid.split('-')[0].indexOf("weight") != -1) {
@@ -1633,8 +1988,10 @@ export default {
         else if(this.e1 == 4){
           this.checkPickHover4(pickid,hoverid);
         }
-        this.advancedTexture.removeControl(this.controller);
-        this.controller = null;
+        for(var i = 0;i<this.controller.length;i++){
+          this.advancedTexture.removeControl(this.controller[i]);
+        }
+        this.controller.length = 0;
       });
     },
     //这个方法用于merge后的物体位置的更改 我发现经过merge后 坐标由世界坐标系变成了本地坐标系
@@ -1652,7 +2009,11 @@ export default {
       var position = new BABYLON.Vector3(x1,y1,z1)
       return position;
     },
-
+    changeBulbColor(r,g,b){
+      this.scene.getMeshByID('bulb').material.diffuseColor = new BABYLON.Color3(r,g,b);
+      this.light.diffuse = new BABYLON.Color3(r,g,b);
+      this.light.specular = new BABYLON.Color3(r,g,b);
+    },
     getMergedPosition(id){
       var mesh = this.scene.getMeshByID(id)
       mesh.updateFacetData();
@@ -1910,7 +2271,7 @@ export default {
         }
       )
       this.e1 = 1;
-      this.step = ["反应前期准备", "", "",""];
+      this.step = ["反应前期准备", "", "","",""];
       this.show1 = false;
       this.show2 = false;
       this.show3 = false;
@@ -1951,13 +2312,14 @@ export default {
       this.clearAllScore3();
       this.clearAllScore4();
       this.removeSceneMesh();
-      this.addTrash_can();
-      this.addModel('desk', new BABYLON.Vector3(0.7, 0.5, 1.2),new BABYLON.Vector3(0, -0.4, -0.1), new BABYLON.Vector3(0, Math.PI, 0), null, null);
-      
+      for(var i=0;i<this.advancedTexture.getDescendants().length;i++){
+        this.advancedTexture.removeControl(this.advancedTexture.getDescendants()[i]);
+      }
+     
     },
     toStep2(){
       this.e1 = 2;
-      this.step = ["", "搭建反应装置", "",""];
+      this.step = ["", "搭建反应装置", "","",""];
       this.show1 = true;
       this.show2 = true;
       this.show3 = true;
@@ -1983,6 +2345,7 @@ export default {
         this.particleSystem=null;
       }
       this.activeIndex = 'default';
+      this.fpirlist=[]
       this.weightlist=[]
       this.weightprops={}
       this.measuring_cylinderlist=[]
@@ -1996,12 +2359,10 @@ export default {
       this.now_score = 0;
       this.removeSceneMesh();
       this.addRoundFlaskCone();
-      this.addTrash_can();
-      this.addModel('desk', new BABYLON.Vector3(0.7, 0.5, 1.2),new BABYLON.Vector3(0, -0.4, -0.1), new BABYLON.Vector3(0, Math.PI, 0), null, null);
     },
     toStep3(){
       this.e1 = 3;
-      this.step = ["", "", "聚合物合成",""];
+      this.step = ["", "", "聚合物合成","",""];
       this.show1 = true;
       this.show2 = true;
       this.show3 = true;
@@ -2044,14 +2405,12 @@ export default {
       this.now_score = 0;
       this.removeSceneMesh();
       this.addRoundFlaskConePotHeaterStand1();
-      this.addTrash_can();
-      this.addModel('desk', new BABYLON.Vector3(0.7, 0.5, 1.2),new BABYLON.Vector3(0, -0.4, -0.1), new BABYLON.Vector3(0, Math.PI, 0), null, null);
     },
     toStep4(){
       this.e1 = 4;
-      this.step = ["", "", "","鉴定表征"];
-      this.btn_nextstep = true;
-      this.btn_post = false;
+      this.step = ["", "", "","鉴定表征",""];
+      this.btn_nextstep = false;
+      this.btn_post = true;
       this.show1 = true;
       this.show2 = true;
       this.show3 = true;
@@ -2076,7 +2435,6 @@ export default {
         this.particleSystem=null;
       }
       this.activeIndex = 'default';
-      this.removeSceneMesh();
       this.weightlist=[]
       this.weightprops={}
       this.measuring_cylinderlist=[]
@@ -2094,14 +2452,72 @@ export default {
       this.now_score = 0;
       this.removeSceneMesh();
       this.addNeedleFullTriFlask();
-      this.addTrash_can();
-      this.addModel('desk', new BABYLON.Vector3(0.7, 0.5, 1.2),new BABYLON.Vector3(0, -0.4, -0.1), new BABYLON.Vector3(0, Math.PI, 0), null, null);
-
+    
+    },
+    toStep5(){
+      this.e1 = 5;
+      this.step = ["", "", "","","性能测试"];
+      this.btn_nextstep = true;
+      this.btn_post = false;
+      this.show1 = true;
+      this.show2 = true;
+      this.show3 = true;
+      this.show4 = true;
+      this.now_score = 0;
+      this.all_score = 0;
+      this.shaked = 0;
+      this.stretched = 0;
+      if(this.timeout3!=null){
+        window.clearTimeout(this.timeout3);
+        this.timeout3 = null;
+      }
+      if(this.timeout4!=null){
+        window.clearTimeout(this.timeout4);
+        this.timeout4 = null;
+      }
+      if(this.timeout5!=null){
+        window.clearTimeout(this.timeout5);
+        this.timeout5=null;
+      }
+      if(this.particleSystem!=null){
+        this.particleSystem.reset();
+        this.particleSystem=null;
+      }
+      this.activeIndex = 'default';
+      this.removeSceneMesh();
+      this.fpirlist=[]
+      this.weightlist=[]
+      this.weightprops={}
+      this.measuring_cylinderlist=[]
+      this.measuring_cylinderprops={}
+      this.needlelist=[]
+      this.needleprops={}
+      this.standlist=[]
+      this.hasClock=false
+      this.liquid_transferorlist=[]
+      this.liquid_transferorprops={}
+      this.now_score = 0;
+      var button = GUI.Button.CreateSimpleButton(
+        "achieve",
+        "查看共聚物的自修复性能实验！",
+      );
+      button.onPointerClickObservable.add(() => {
+        this.carousel_dialog=true;
+      })
+      button.background = "blue";
+      button.width = 0.3;
+      button.cornerRadius = 20;
+      button.height = "40px";
+      button.color = "white";
+      this.advancedTexture.addControl(button);
     },
     removeSceneMesh(){
       var list = [];
       for(var i=0;i<this.scene.meshes.length;i++){
-        if(this.scene.meshes[i].id!="foutain" && this.scene.meshes[i].id!="ground" && this.scene.meshes[i].id!="desk")
+        if(this.scene.meshes[i].id!="foutain" && this.scene.meshes[i].id!="ground" 
+        && this.scene.meshes[i].id!="desk" && this.scene.meshes[i].id!='bruker' 
+        && this.scene.meshes[i].id!='trash_can' && this.scene.meshes[i].id!='bulb' 
+        && this.scene.meshes[i].id!='light' && this.scene.meshes[i].id.split('-')[0]!='nmr_tube_yellow_cylinder')
         {
           list.push(this.scene.meshes[i].id)
         }
@@ -2158,6 +2574,9 @@ export default {
           break;
         case 4:         
           this.toStep4();
+          break;
+        case 5:
+          this.toStep5();
           break;
         default:
           break;
@@ -2332,7 +2751,6 @@ export default {
 
   mounted() {
     this.init();
-    console.log("本化学实验向伟大的星球大战致敬！May the force be with you !");
     this.axios.request({
       url:'/experiment/',
       params:{'username':sessionStorage.getItem('username')},

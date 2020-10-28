@@ -1096,7 +1096,7 @@ const step1Function = {
                 delete(this.needleprops[hoverid])
                 this.refreshComponents();
             }
-            else if (hoverid.split('-')[0] == "trash_can") {
+            else if (pickid!='bruker' && hoverid == "trash_can") {
                 this.scene.removeMesh(this.scene.getMeshByID(pickid));
                 this.WhenNotSetModelsOnDesk(pickid);
             }
