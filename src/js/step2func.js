@@ -219,7 +219,7 @@ const step2Function = {
             //         })
             //     );
             // } 
-            else if (pickid!='bruker' && hoverid== "trash_can") {
+            else if (pickid!='bruker' && hoverid== "drawer") {
                 this.scene.removeMesh(this.scene.getMeshByID(pickid));
                 this.WhenNotSetModelsOnDesk(pickid);
             }

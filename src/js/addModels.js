@@ -3,8 +3,8 @@ const addModels = {
         addPaper() {
             this.addModel('paper', null, new BABYLON.Vector3(0, 0.05, 0), null, ['PointerDragBehavior'], null);
         },
-        addTrash_can() {
-            this.addModel('trash_can', new BABYLON.Vector3(2, 2, 2), new BABYLON.Vector3(-115, 0, 40), new BABYLON.Vector3(0, Math.PI, 0), null,'trash_can');
+        addDrawer() {
+            this.addModel('drawer', new BABYLON.Vector3(10, 10, 10), new BABYLON.Vector3(-100, -70, 120), new BABYLON.Vector3(0, Math.PI, 0), null,'drawer');
         },
         addBB8() {
             this.addModel('bb8', new BABYLON.Vector3(0.26, 0.26, 0.26), new BABYLON.Vector3(-0.85, 0.33, 0), new BABYLON.Vector3(0, Math.PI, 0), null, null);
@@ -635,13 +635,59 @@ const addModels = {
         addGlassPad(){
             this.addModel('glass_pad', new BABYLON.Vector3(0.01, 0.01, 0.01), null, null, ['PointerDragBehavior'], null);
         },
+        addBrokenFilm(){
+            this.addModel('broken_film', new BABYLON.Vector3(4, 4, 4), new BABYLON.Vector3(0.8, 0, 0), null, null, 'broken_film');
+        },
+        addGreenYellowCylinder(){
+            this.addModel('green_yellow_cylinder', new BABYLON.Vector3(5, 5, 10), new BABYLON.Vector3(0.8, 0, 0), new BABYLON.Vector3(0, Math.PI / 2, 0), null, 'green_yellow_cylinder');
+        },
+        addGlassPaneBlock(){
+            this.addModel('sticked_glass', new BABYLON.Vector3(20, 20, 10), new BABYLON.Vector3(0.03, 0.28, -0.2), null, null, 'sticked_glass');
+            this.addModel('weight_block', new BABYLON.Vector3(4, 4, 4), new BABYLON.Vector3(0, 0.08, -0.2), null, null, 'weight_block');
+            var timer = setInterval(() => {
+                if (this.scene.getMeshByID('sticked_glass') != undefined && this.scene.getMeshByID('weight_block')!= undefined){
+                    var mesh = BABYLON.Mesh.MergeMeshes(
+                        [this.scene.getMeshByID('sticked_glass'), this.scene.getMeshByID('weight_block')],
+                        true,
+                        true,
+                        undefined,
+                        false,
+                        true
+                    );
+                    mesh.id = 'glass_pane_block';
+                    window.clearInterval(timer);
+                }
+            }, 100);
+        },
         addClock(){
             if(!this.hasClock){
                 this.hasClock = true;
                 this.activeIndex = 'clock'
                 this.addModel('clock', new BABYLON.Vector3(3, 3, 3), null, new BABYLON.Vector3(0, Math.PI, 0), ['PointerDragBehavior'],null);
             }
-        }
+        },
+        //以下加上更加有趣
+        addBunny(){
+            this.addModel('others/Bunny',new BABYLON.Vector3(3, 3, 3), new BABYLON.Vector3(-100, 38, 120), new BABYLON.Vector3(0, Math.PI*5/6, 0),null, 'bunny');
+        },
+        addChihuahua(){
+            this.addModel('others/Chihuahua',new BABYLON.Vector3(3, 3, 3), new BABYLON.Vector3(-100, 38, 120), new BABYLON.Vector3(0, Math.PI*5/6, 0),null, 'Chihuahua');
+        },
+        addDachshund(){
+            this.addModel('others/Dachshund',new BABYLON.Vector3(10, 10, 10), new BABYLON.Vector3(-100, 40, 120), new BABYLON.Vector3(0, Math.PI*7/6, 0),null, 'Dachshund');
+        },
+        addGermanShephard(){
+            this.addModel('others/GermanShephard',new BABYLON.Vector3(2, 2, 2), new BABYLON.Vector3(-100, 40, 120), new BABYLON.Vector3(0, Math.PI, 0),null, 'GermanShephard');
+        },
+        addKitten(){
+            this.addModel('others/Kitten',new BABYLON.Vector3(3, 3, 3), new BABYLON.Vector3(-100, 40, 120), new BABYLON.Vector3(0, Math.PI*7/8, 0),null, 'Kitten');
+        },
+        addMaineCoonCat(){
+            this.addModel('others/MaineCoonCat',new BABYLON.Vector3(13, 13, 13), new BABYLON.Vector3(-100, 40, 120), new BABYLON.Vector3(0, Math.PI*7/8, 0),null, 'MaineCoonCat');
+        },
+        addSchnauzer(){
+            this.addModel('others/Schnauzer',new BABYLON.Vector3(5, 5, 5), new BABYLON.Vector3(-100, 40, 120), new BABYLON.Vector3(0, Math.PI*7/8, 0),null, 'Schnauzer');
+        },
     }
 }
 export default addModels

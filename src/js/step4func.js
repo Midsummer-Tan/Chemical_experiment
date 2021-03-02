@@ -174,7 +174,7 @@ const step4Function = {
                 }, 100);
             } else if (pickid.split('-')[0] == 'c3d6o' && hoverid.split('-')[0] == 'nmr_tube_cone'){
                 //溶解前
-                this.bb8warning = "取约0.5 mL氘代丙酮倒入核磁管";
+                this.bb8warning = "取约0.5 mL氘代丙酮倒入核磁管，请大家思考，为什么要用氘代丙酮而不是丙酮做溶剂？";
                 var po = this.getMergedPosition(hoverid);
                 this.addModel('trans_cylinder', new BABYLON.Vector3(0.04, 0.02, 0.04), new BABYLON.Vector3(-po[0], po[1] - 0.07, po[2]), new BABYLON.Vector3(Math.PI / 2, 0, 0), ['PointerDragBehavior'], 'trans_cylinder');
                 var timer = setInterval(() => {
@@ -283,7 +283,7 @@ const step4Function = {
                 }, 100);
             } else if(pickid.split('-')[0] == 'c3d6o' && hoverid.split('-')[0] == 'nmr_tube_cone_c8h14o2s2'){
                 //溶解前
-                this.bb8warning = "取约0.5 mL氘代丙酮倒入核磁管";
+                this.bb8warning = "取约0.5 mL氘代丙酮倒入核磁管，请大家思考，为什么要用氘代丙酮而不是丙酮做溶剂？";
                 var po = this.getMergedPosition(hoverid);
                 this.addModel('trans_cylinder', new BABYLON.Vector3(0.04, 0.02, 0.04), new BABYLON.Vector3(-po[0], po[1] - 0.07, po[2]), new BABYLON.Vector3(Math.PI / 2, 0, 0), ['PointerDragBehavior'], 'trans_cylinder');
                 var timer = setInterval(() => {
@@ -318,7 +318,7 @@ const step4Function = {
                     }
                 }
             }
-            else if (pickid!='bruker' && hoverid== "trash_can") {
+            else if (pickid!='bruker' && hoverid== "drawer") {
                 this.scene.removeMesh(this.scene.getMeshByID(pickid));
                 this.WhenNotSetModelsOnDesk(pickid);
             }

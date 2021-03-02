@@ -100,7 +100,7 @@
 
         <template v-for="i in weightlist">
           <el-tab-pane :label="'电子秤('+i+')'"  :name="i" :key="i">
-          <div style="height:150px;">
+          <div style="height:250px;">
             <v-card>
               <electronic-scale ref="weight"></electronic-scale>
               <v-btn
@@ -279,7 +279,7 @@
 
         <template v-if="hasClock==true" >
           <el-tab-pane label="时钟"  name="clock" >
-            <div style="text-align:center">
+            <div style="float:left">
               <my-clock></my-clock>
             </div>
           </el-tab-pane>
@@ -331,7 +331,7 @@
                     wrap
                   >
                     <v-flex xs3>
-                      <v-card @click="addRoundFlask()"  color="rgba(255, 255, 255, 0.5)">
+                      <v-card @click="addRoundFlask()">
                         <v-card-text>
                           <v-img
                             src="/images/round_flask.png"
@@ -343,7 +343,7 @@
                     </v-flex>
 
                     <v-flex xs3>
-                      <v-card @click="addPaper()"  color="rgba(255, 255, 255, 0.5)">
+                      <v-card @click="addPaper()"  >
                         <v-card-text>
                           <v-img
                             src="/images/paper.png"
@@ -355,7 +355,7 @@
                     </v-flex>
 
                     <v-flex xs3>
-                      <v-card @click="addPot()"  color="rgba(255, 255, 255, 0.5)">
+                      <v-card @click="addPot()"  >
                         <v-card-text>
                           <v-img
                             src="/images/pot.png"
@@ -367,7 +367,7 @@
                     </v-flex>
 
                     <v-flex xs3>
-                      <v-card @click="addWeight()" color="rgba(255, 255, 255, 0.5)">
+                      <v-card @click="addWeight()" >
                         <v-card-text>
                           <v-img
                             src="/images/weight.png"
@@ -379,7 +379,7 @@
                     </v-flex>
 
                     <v-flex xs3>
-                      <v-card @click="addHeater()" color="rgba(255, 255, 255, 0.5)">
+                      <v-card @click="addHeater()" >
                         <v-card-text>
                           <v-img
                             src="/images/heater.png"
@@ -391,7 +391,7 @@
                     </v-flex>
 
                     <v-flex xs3>
-                      <v-card @click="addLiquidTransferor()" color="rgba(255, 255, 255, 0.5)">
+                      <v-card @click="addLiquidTransferor()" >
                         <v-card-text>
                           <v-img
                             src="/images/liquid_transferor.png"
@@ -403,7 +403,7 @@
                     </v-flex>
 
                     <v-flex xs3>
-                      <v-card @click="addNeedleCap()" color="rgba(255, 255, 255, 0.5)">
+                      <v-card @click="addNeedleCap()" >
                         <v-card-text>
                           <v-img
                             src="/images/needle.png"
@@ -415,7 +415,7 @@
                     </v-flex>
 
                     <v-flex xs3>
-                      <v-card @click="addTriFlask()" color="rgba(255, 255, 255, 0.5)">
+                      <v-card @click="addTriFlask()" >
                         <v-card-text>
                           <v-img
                             src="/images/tri_flask.png"
@@ -427,7 +427,7 @@
                     </v-flex>
 
                     <v-flex xs3>
-                      <v-card @click="addDropper()" color="rgba(255, 255, 255, 0.5)">
+                      <v-card @click="addDropper()" >
                         <v-card-text>
                           <v-img
                             src="/images/dropper.png"
@@ -439,7 +439,7 @@
                     </v-flex>
 
                     <v-flex xs3>
-                      <v-card @click="addMeasuringCylinder()" color="rgba(255, 255, 255, 0.5)">
+                      <v-card @click="addMeasuringCylinder()" >
                         <v-card-text>
                           <v-img
                             src="/images/measuring_cylinder.png"
@@ -451,7 +451,7 @@
                     </v-flex>
 
                     <v-flex xs3>
-                      <v-card @click="addStand()" color="rgba(255, 255, 255, 0.5)">
+                      <v-card @click="addStand()" >
                         <v-card-text>
                           <v-img
                             src="/images/stand.png"
@@ -463,7 +463,7 @@
                     </v-flex>
 
                     <v-flex xs3>
-                      <v-card @click="addC8h14o2s2()" color="rgba(255, 255, 255, 0.5)">
+                      <v-card @click="addC8h14o2s2()" >
                         <v-card-text>
                           <v-img
                             src="/images/brown_bottle.png"
@@ -475,7 +475,7 @@
                     </v-flex>
 
                     <v-flex xs3>
-                      <v-card @click="addFecl3()" color="rgba(255, 255, 255, 0.5)">
+                      <v-card @click="addFecl3()" >
                         <v-card-text>
                           <v-img
                             src="/images/brown_bottle.png"
@@ -487,7 +487,7 @@
                     </v-flex>
 
                     <v-flex xs3>
-                      <v-card @click="addAsetone()" color="rgba(255, 255, 255, 0.5)">
+                      <v-card @click="addAsetone()" >
                         <v-card-text>
                           <v-img
                             src="/images/brown_bottle.png"
@@ -499,7 +499,7 @@
                     </v-flex>
 
                     <v-flex xs3>
-                      <v-card @click="addC3D6O()" color="rgba(255, 255, 255, 0.5)">
+                      <v-card @click="addC3D6O()" >
                         <v-card-text>
                           <v-img
                             src="/images/brown_bottle.png"
@@ -511,7 +511,7 @@
                     </v-flex>
 
                     <v-flex xs3>
-                      <v-card @click="addNMR_tube()" color="rgba(255, 255, 255, 0.5)">
+                      <v-card @click="addNMR_tube()" >
                         <v-card-text>
                           <v-img
                             src="/images/tube.png"
@@ -523,7 +523,7 @@
                     </v-flex>
 
                     <v-flex xs3>
-                      <v-card @click="addDib()" color="rgba(255, 255, 255, 0.5)">
+                      <v-card @click="addDib()" >
                         <v-card-text>
                           <v-img
                             src="/images/brown_bottle.png"
@@ -535,7 +535,7 @@
                     </v-flex>
 
                     <v-flex xs3>
-                      <v-card @click="addSpoon()" color="rgba(255, 255, 255, 0.5)">
+                      <v-card @click="addSpoon()" >
                         <v-card-text>
                           <v-img
                             src="/images/spoon.png"
@@ -547,7 +547,7 @@
                     </v-flex>
 
                     <v-flex xs3>
-                      <v-card @click="addFilm()" color="rgba(255, 255, 255, 0.5)">
+                      <v-card @click="addFilm()" >
                         <v-card-text>
                           <v-img
                             src="/images/film.png"
@@ -559,7 +559,7 @@
                     </v-flex>
 
                     <v-flex xs3>
-                      <v-card @click="addCap(0,0.05,0)" color="rgba(255, 255, 255, 0.5)">
+                      <v-card @click="addCap(0,0.05,0)" >
                         <v-card-text>
                           <v-img
                             src="/images/cap.png"
@@ -571,7 +571,7 @@
                     </v-flex>
 
                     <v-flex xs3>
-                      <v-card @click="addThermometer()" color="rgba(255, 255, 255, 0.5)">
+                      <v-card @click="addThermometer()" >
                         <v-card-text>
                           <v-img
                             src="/images/temperature.png"
@@ -583,7 +583,7 @@
                     </v-flex>
 
                     <v-flex xs3>
-                      <v-card @click="addClock()" color="rgba(255, 255, 255, 0.5)">
+                      <v-card @click="addClock()" >
                         <v-card-text>
                           <v-img
                             src="/images/clock.png"
@@ -595,7 +595,7 @@
                     </v-flex>
 
                     <v-flex xs3>
-                      <v-card @click="addMagneton()" color="rgba(255, 255, 255, 0.5)">
+                      <v-card @click="addMagneton()" >
                         <v-card-text>
                           <v-img
                             src="/images/vibrate.png"
@@ -607,7 +607,7 @@
                     </v-flex>
 
                     <v-flex xs3>
-                      <v-card @click="addTweezer()" color="rgba(255, 255, 255, 0.5)">
+                      <v-card @click="addTweezer()" >
                         <v-card-text>
                           <v-img
                             src="/images/tweezer.png"
@@ -619,7 +619,7 @@
                     </v-flex>
 
                     <v-flex xs3>
-                      <v-card @click="addScissors()" color="rgba(255, 255, 255, 0.5)">
+                      <v-card @click="addScissors()" >
                         <v-card-text>
                           <v-img
                             src="/images/scissors.png"
@@ -631,7 +631,7 @@
                     </v-flex>
 
                     <v-flex xs3>
-                      <v-card @click="addGlassPad()" color="rgba(255, 255, 255, 0.5)">
+                      <v-card @click="addGlassPad()" >
                         <v-card-text>
                           <v-img
                             src="/images/glass_pad.png"
@@ -643,7 +643,7 @@
                     </v-flex>
 
                     <v-flex xs3>
-                      <v-card @click="addFpir()" color="rgba(255, 255, 255, 0.5)">
+                      <v-card @click="addFpir()" >
                         <v-card-text>
                           <v-img
                             src="/images/fpir.png"
@@ -655,7 +655,7 @@
                     </v-flex>
 
                     <v-flex xs3>
-                      <v-card @click="addSampleFilm(0,0,0)" v-show="show4" color="rgba(255, 255, 255, 0.5)">
+                      <v-card @click="addSampleFilm(0,0,0)" v-show="show4" >
                         <v-card-text>
                           <v-img
                             src="/images/sample_film.png"
@@ -667,7 +667,7 @@
                     </v-flex>
 
                     <v-flex xs3>
-                      <v-card @click="addRoundFlaskCone()" v-show="show1" color="rgba(255, 255, 255, 0.5)">
+                      <v-card @click="addRoundFlaskCone()" v-show="show1" >
                         <v-card-text>
                           <v-img
                             src="/images/flask_with_powder.png"
@@ -679,7 +679,7 @@
                     </v-flex>
 
                     <v-flex xs3>
-                      <v-card @click="addTriFlaskFullFecl3Film()" v-show="show2" color="rgba(255, 255, 255, 0.5)">
+                      <v-card @click="addTriFlaskFullFecl3Film()" v-show="show2" >
                         <v-card-text>
                           <v-img
                             src="/images/flask_with_liquid.png"
@@ -691,7 +691,7 @@
                     </v-flex>
 
                     <v-flex xs3>
-                      <v-card @click="addNeedleFullCap()" v-show="show3" color="rgba(255, 255, 255, 0.5)">
+                      <v-card @click="addNeedleFullCap()" v-show="show3" >
                         <v-card-text>
                           <v-img
                             src="/images/needle_with_cap.png"
@@ -703,7 +703,7 @@
                     </v-flex>
 
                     <v-flex xs3>
-                      <v-card @click="addNeedleFullTriFlask()" v-show="show4" color="rgba(255, 255, 255, 0.5)">
+                      <v-card @click="addNeedleFullTriFlask()" v-show="show4" >
                         <v-card-text>
                           <v-img
                             src="/images/flask_with_needle.png"
@@ -964,29 +964,26 @@
       </v-card>
     </v-dialog>
 
-    <!--轮播-->
+    <!--轮播卡片-->
     <v-dialog
-      v-model="carousel_dialog" :persistent='dialog_persistent' max-width = "50%" 
+      v-model="carousel_dialog" persistent max-width = "50%" 
     >
-      <v-card >
-        <v-card-text>
-          <v-carousel :cycle='carousel_cycle'>
-            <v-carousel-item
-              v-for="i in carouselpiclist"
-              :key="i"
-              :src="i"
-            ></v-carousel-item>
-          </v-carousel>
-        </v-card-text>
+     <v-card>
+        <v-img
+          :src="carousel_src"
+        ></v-img>
+        <v-card-title primary-title>
+          <div>
+            <h3 class="headline mb-0">自修复功能材料性能测试</h3>
+          </div>
+        </v-card-title>
         <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-            color="green darken-1"
-            flat="flat"
-            @click="carousel_dialog = false;"
-          >确定</v-btn>
+        <v-btn
+          color="pink"
+          dark
+          @click="carousel_dialog = false;">确定</v-btn>
         </v-card-actions>
-      </v-card> 
+      </v-card>
       </v-dialog>
 
   </v-container>
@@ -997,8 +994,6 @@ import * as BABYLON from "@babylonjs/core/Legacy/legacy";
 import "@babylonjs/loaders/glTF";
 import "@babylonjs/loaders/OBJ";
 import * as GUI from "@babylonjs/gui";
-
-import Vector3 from "@babylonjs/core/Legacy/legacy";
 import myProgress from "../packages/Progress/Progress.vue";
 import myNeedleProgress from "../packages/NeedleProgress/NeedleProgress.vue";
 import myPipetteProgress from "../packages/Pipette/PipetteProgress.vue";
@@ -1009,7 +1004,6 @@ import step1Function from '../js/step1func.js';
 import step2Function from '../js/step2func.js';
 import step3Function from '../js/step3func.js';
 import step4Function from '../js/step4func.js';
-import { clearTimeout } from 'timers';
 export default {
   data() {
     return {
@@ -1080,7 +1074,7 @@ export default {
       show2:false,
       show3:false,
       show4:false,
-      bb8warning:'真实实验中请穿好实验服，戴好护目镜。请把模型放在实验台上，不然它会消失的！',
+      bb8warning:'真实实验中请穿好实验服，戴好护目镜。不需要的仪器可拖拽至储物柜将其移除。鼠标右键拖拽可以移动视角。',
       stand_movable_high:0,
       post_dialog:false,
       post_score:0,
@@ -1103,8 +1097,8 @@ export default {
       show_bruker_dialog_btn:true,
       carouselpiclist:['/images/e1.png','/images/e2.png','/images/e3.png'],
       carousel_dialog:false,
-      carousel_cycle:false,
       menu:false,
+      carousel_src:"",
       //以下6个数值要发到后台进行计算。以验证是否能做出成品
       C8H14O2S2:'',
       Fecl3:'',
@@ -1141,10 +1135,35 @@ export default {
         "UI"
       );
       this.addModel('desk', new BABYLON.Vector3(0.7, 0.5, 1.2),new BABYLON.Vector3(0, -0.4, -0.1), new BABYLON.Vector3(0, Math.PI, 0), null,'desk');
-      this.addBrukerBulb(-0.7,0.7,0.8);
-      this.addModel('bruker',null,new BABYLON.Vector3(-1, -0.4, 1),null, null, 'bruker');
-      //this.changeBulbColor(0,1,0);
-      this.addTrash_can();
+      
+      this.addDrawer();
+      //一些有趣的东西
+      var num = Math.round(Math.random()*50)+50;
+      console.log(num);
+      if(num==64){
+        num2 =Math.ceil(Math.random()*6);
+        switch (num2) {
+          case 1:
+            this.addBunny();
+            break;
+          case 2:
+            this.addChihuahua();
+            break;
+          case 3:
+            this.addDachshund();
+            break;
+          case 4:
+            this.addKitten();
+            break;
+          case 5:
+            this.addMaineCoonCat();
+            break;
+          default:
+            this.addSchnauzer();
+            break;
+        }
+      }
+
       this.engine.runRenderLoop(() => {
         //摇晃
         if(this.needshake == 1){
@@ -1442,7 +1461,10 @@ export default {
             "nmr_tube_cone_c3d6o_c8h14o2s2",
             "bruker_tube",
             "bruker_tube_c8h14o2s2",
-            "fpir.sample_film"
+            "fpir.sample_film",
+            "glass_pane_block",
+            "green_yellow_cylinder",
+            "broken_film"
           ];
           if (pickResult.pickedMesh.id != "ground" && pickResult.pickedMesh.id != "desk") {
             this.hl.addMesh(pickResult.pickedMesh, BABYLON.Color3.Purple());
@@ -1514,27 +1536,8 @@ export default {
         }
       });
       window.addEventListener("pointerup", () => {
-        var pickResult = this.scene.pick(
-          this.scene.pointerX,
-          this.scene.pointerY
-        );
-        // var ray = new BABYLON.Ray(pickResult.ray.origin,pickResult.ray.direction,100);
-        // var pickThing = this.scene.multiPickWithRay(ray);
-        // var state = 0;
-        // for(var i=0;i<pickThing.length;i++){
-        //   if(pickThing[i].pickedMesh.id=='desk'){
-        //     state = 1;
-        //   }
-        // }
         if(this.pickingObj != null){
-          this.hl.removeMesh(this.pickingObj);
-          // if(state==0 && this.pickingObj.id!='trash_can' && this.pickingObj.id!='bruker' 
-          // && this.pickingObj.id.split('-')[0]!='nmr_tube_yellow_cylinder'
-          // && this.pickingObj.id!='bulb' && this.pickingObj.id!='light'
-          // && this.pickingObj.id!='bruker_tube' && this.pickingObj.id!='bruker_tube_c8h14o2s2'){
-          //   this.scene.removeMesh(this.pickingObj);
-          //   this.WhenNotSetModelsOnDesk(this.pickingObj.id);
-          //   }
+            this.hl.removeMesh(this.pickingObj);
           }
           this.pickingObj = null;
       });
@@ -1625,6 +1628,11 @@ export default {
         button1.width = "80px";
         button1.height = "40px";
       }
+      else if(hoverid=="glass_pane_block" || hoverid=="green_yellow_cylinder" || hoverid=="broken_film"){
+        var button1 = GUI.Button.CreateSimpleButton("btn2", "查看");
+        button1.background = "orange";
+        button1.fontSize = 14;
+      }
       else{
         var button1 = GUI.Button.CreateSimpleButton("btn2", "分离");
         button1.background = "gray";
@@ -1649,7 +1657,10 @@ export default {
         || hoverid.split('-')[0]=='nmr_tube_cone_c3d6o'
         || hoverid.split('-')[0]=='nmr_tube_cone_c3d6o_c8h14o2s2'
         || hoverid=='bruker_tube'
-        || hoverid=='bruker_tube_c8h14o2s2')){
+        || hoverid=='bruker_tube_c8h14o2s2'
+        || hoverid=="glass_pane_block" 
+        || hoverid=="green_yellow_cylinder" 
+        || hoverid=="broken_film")){
           //非这几个 都删除
           this.scene.removeMesh(this.scene.getMeshByID(hoverid));
           this.WhenNotSetModelsOnDesk(hoverid);
@@ -1705,6 +1716,34 @@ export default {
           this.changeBulbColor(0.745, 0.077, 0.177);
           this.scene.getMeshByID(hoverid).id = 'bruker';
           this.show_bruker_dialog_btn = true;
+          this.addModel('nmr_tube', new BABYLON.Vector3(2, 1, 1.5), null, null, null, 'nmr_tube');
+          this.addModel('yellow_cylinder', new BABYLON.Vector3(0.04, 0.02, 0.04), new BABYLON.Vector3(0,0.03,0), new BABYLON.Vector3(Math.PI / 2, 0, 0), null, 'yellow_cylinder');
+          var timer = setInterval(() => {
+            if(this.scene.getMeshByID('yellow_cylinder')!=undefined && this.scene.getMeshByID('nmr_tube')!=undefined){
+              var mesh = BABYLON.Mesh.MergeMeshes(
+                [this.scene.getMeshByID('yellow_cylinder'), this.scene.getMeshByID('nmr_tube')],
+                true,
+                true,
+                undefined,
+                false,
+                true
+              );
+              if(hoverid == 'bruker_tube'){
+                mesh.id = 'nmr_tube_yellow_cylinder';
+              }
+              else if(hoverid == 'bruker_tube_c8h14o2s2'){
+                mesh.id = 'nmr_tube_yellow_cylinder_c8h14o2s2';
+              }
+              mesh.id = this.addName(mesh.id);
+              mesh.addBehavior(
+                  new BABYLON.PointerDragBehavior({
+                      dragPlaneNormal: new BABYLON.Vector3(0, 1, 0)
+                  })
+              );
+              window.clearInterval(timer);
+            }
+          }, 100); 
+
         }
         else if(hoverid.split('-')[0]=='weight.paper_cone'){
           var i = 0;
@@ -1789,6 +1828,18 @@ export default {
               window.clearInterval(timer);
             }
           }, 100); 
+        }
+        else if(hoverid=="glass_pane_block"){
+          this.carousel_src = "/images/e3.png"
+          this.carousel_dialog = true;
+        }
+        else if(hoverid=="green_yellow_cylinder"){
+          this.carousel_src = "/images/e2.png"
+          this.carousel_dialog = true;
+        }
+        else if(hoverid=="broken_film"){
+          this.carousel_src = "/images/e1.png"
+          this.carousel_dialog = true;
         }
         for (var i = 0; i < array1.length; i++) {
           switch (array1[i]) {
@@ -1880,7 +1931,7 @@ export default {
           var str = "拼接";
           if (hoverid.split('-')[0] == "weight" ||pickid.split("-")[0]=='spoon_cone'||pickid.split("-")[0]=='spoon_powder_brown'
            ||(pickid.split('-')[0] =='pot' && hoverid.split('-')[0] == 'heater')) str = "放置";
-          else if (hoverid == "trash_can") str = "移除";
+          else if (hoverid == "drawer") str = "移除";
           else if (pickid.split('-')[0] == "spoon") str = "拾取";
           else if ( hoverid.split('-')[0] == "round_flask" ||hoverid.split('-')[0] == 'tri_flask'||
            pickid.split('-')[0]=='measuring_cylinder_full') str = "倒入";
@@ -1892,7 +1943,7 @@ export default {
           break;
         case 2:
           var str = '拼接';
-          if (hoverid == "trash_can") str = "移除";
+          if (hoverid == "drawer") str = "移除";
           else if(pickid.split('-')[0] == 'pot')str = "放置";
           else if(pickid.split('-')[0] == 'thermometer' && hoverid.split('-')[0]=='round_flask_cone.pot.heater.stand1'){
             str = '插入';
@@ -1902,7 +1953,7 @@ export default {
           break;
         case 3:
           var str = '拼接';
-          if (hoverid== "trash_can") str = "移除";
+          if (hoverid== "drawer") str = "移除";
           else if(pickid.split('-')[0]=='magneton.tweezer' && hoverid.split('-')[0]=='round_flask_c8h14o2s2')str='放入';
           else if(pickid.split('-')[0]=='needle_full' && hoverid.split('-')[0]=='round_flask_c8h14o2s2')str = '挤入';
           else if(pickid.split('-')[0]=='needle' && hoverid.split('-')[0]=='round_flask_c8h14o2s2')str = '吸入';
@@ -1916,7 +1967,7 @@ export default {
           break;
         case 4:
           var str = '拼接';
-          if (hoverid=="trash_can") str = "移除";
+          if (hoverid=="drawer") str = "移除";
           else if(pickid.split('-')[0]=='scissors' && hoverid.split('-')[0]=='needle_full_glue') str='剪开';
           else if((pickid.split('-')[0]=='glass_pad_yellow_cylinder_break' || pickid.split('-')[0]=='glass_pad_yellow_cylinder_stretched') && hoverid.split('-')[0]=='nmr_tube') str ="取6mg";
           else if(pickid.split('-')[0]=='c3d6o' && hoverid.split('-')[0]=='nmr_tube_cone') str ="取0.5ml";
@@ -2453,7 +2504,8 @@ export default {
       this.now_score = 0;
       this.removeSceneMesh();
       this.addNeedleFullTriFlask();
-    
+      this.addBrukerBulb(-0.7,0.7,0.8);
+      this.addModel('bruker',null,new BABYLON.Vector3(-1, -0.4, 1),null, null, 'bruker');
     },
     toStep5(){
       this.e1 = 5;
@@ -2498,27 +2550,15 @@ export default {
       this.liquid_transferorlist=[]
       this.liquid_transferorprops={}
       this.now_score = 0;
-      var button = GUI.Button.CreateSimpleButton(
-        "achieve",
-        "查看共聚物的自修复性能实验！",
-      );
-      button.onPointerClickObservable.add(() => {
-        this.carousel_dialog=true;
-      })
-      button.background = "blue";
-      button.width = 0.3;
-      button.cornerRadius = 20;
-      button.height = "40px";
-      button.color = "white";
-      this.advancedTexture.addControl(button);
+      this.addBrokenFilm();
+      this.addGreenYellowCylinder();
+      this.addGlassPaneBlock();
     },
     removeSceneMesh(){
       var list = [];
       for(var i=0;i<this.scene.meshes.length;i++){
         if(this.scene.meshes[i].id!="foutain" && this.scene.meshes[i].id!="ground" 
-        && this.scene.meshes[i].id!="desk" && this.scene.meshes[i].id!='bruker' 
-        && this.scene.meshes[i].id!='trash_can' && this.scene.meshes[i].id!='bulb' 
-        && this.scene.meshes[i].id!='light' && this.scene.meshes[i].id.split('-')[0]!='nmr_tube_yellow_cylinder')
+        && this.scene.meshes[i].id!="desk" && this.scene.meshes[i].id!='drawer')
         {
           list.push(this.scene.meshes[i].id)
         }
@@ -2776,17 +2816,19 @@ export default {
         }
         switch (nowstep) {
           case 1:
-            this.toStep1()
+            this.toStep1();
             break;
           case 2:
-            this.toStep2()
+            this.toStep2();
             break;
           case 3:
-            this.toStep3()
+            this.toStep3();
             break;
           case 4:
-            this.toStep4()
+            this.toStep4();
             break;
+          case 5:
+            this.toStep5();
           default:
             break;
         }
